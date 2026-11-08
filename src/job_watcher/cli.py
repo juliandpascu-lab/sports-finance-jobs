@@ -24,7 +24,7 @@ def _sync_site_data(root: Path) -> None:
 
 
 def _commit_data(root: Path, run_date: str) -> None:
-    subprocess.run(["git", "add", str(DATA_ROOT), "site/data"], cwd=root, check=True)
+    subprocess.run(["git", "add", str(DATA_ROOT), "site/data", "dist/data"], cwd=root, check=True)
     changed = subprocess.run(
         ["git", "diff", "--cached", "--quiet"], cwd=root, check=False
     )
