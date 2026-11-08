@@ -4,9 +4,9 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "fda-job-watcher"
-version = "0.1.0"
+version = "0.2.0"
 description = "Daily job-market watcher for the Financial Data Analytics project"
-requires-python = ">=3.11"
+requires-python = ">=3.9"
 dependencies = []
 
 [project.optional-dependencies]

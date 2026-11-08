@@ -1,0 +1,58 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="theme-color" content="#0d1b2a" />
+    <meta name="description" content="Daily early-career finance and analytics jobs across the sports industry." />
+    <link rel="manifest" href="manifest.webmanifest" />
+    <link rel="icon" href="icon.svg" type="image/svg+xml" />
+    <link rel="stylesheet" href="styles.css" />
+    <title>Sports Finance Jobs — Today</title>
+  </head>
+  <body data-page="today">
+    <header class="topbar">
+      <a class="brand" href="index.html"><span class="brand-mark">▰</span><span>SPORTS / FINANCE JOBS</span></a>
+      <nav aria-label="Main navigation">
+        <a class="nav-link" data-nav="today" href="index.html">Today</a>
+        <a class="nav-link" data-nav="browse" href="browse.html">Browse</a>
+        <a class="nav-link" data-nav="market" href="market.html">Market</a>
+      </nav>
+    </header>
+    <main class="page-shell">
+      <section class="hero hero-compact">
+        <p class="eyebrow">DAILY WATCHLIST · 15 SPORTS EMPLOYERS</p>
+        <h1>The next move is somewhere in the numbers.</h1>
+        <p class="hero-copy">Early-career finance, business, and analytics roles from teams, leagues, sports technology, media, ticketing, and sports commerce.</p>
+        <div class="run-line"><span class="live-dot"></span><span id="run-status">Loading latest snapshot…</span></div>
+      </section>
+
+      <section class="metric-grid" aria-label="Latest snapshot totals">
+        <article class="metric-card"><span class="metric-label">Days watched</span><strong id="metric-days">—</strong><span class="metric-note">successful collection dates</span></article>
+        <article class="metric-card metric-card-accent"><span class="metric-label">Open roles</span><strong id="metric-open">—</strong><span class="metric-note">across every watched board</span></article>
+        <article class="metric-card"><span class="metric-label">New today</span><strong id="metric-new">—</strong><span class="metric-note">excluding first-run inventory</span></article>
+        <article class="metric-card"><span class="metric-label">Removed today</span><strong id="metric-removed">—</strong><span class="metric-note">roles no longer listed</span></article>
+      </section>
+
+      <section class="dashboard-grid">
+        <article class="panel">
+          <div class="section-heading"><div><p class="eyebrow">SOURCE HEALTH</p><h2>Who answered today?</h2></div><span class="pill" id="source-health">—</span></div>
+          <div id="source-list" class="source-list" aria-live="polite"></div>
+        </article>
+        <article class="panel panel-dark">
+          <p class="eyebrow">HOW TO USE THIS</p>
+          <h2>Start with Browse.</h2>
+          <p>Browse defaults to titles that look like early-career finance, business, strategy, revenue, operations, or analytics work. Switch to all postings whenever you want to scan the wider sports market.</p>
+          <a class="text-link" href="browse.html">Open the role board <span>↗</span></a>
+        </article>
+      </section>
+
+      <section class="change-grid">
+        <article class="panel change-panel"><div class="section-heading"><div><p class="eyebrow">JUST IN</p><h2>New postings</h2></div><span class="count-badge" id="new-count">0</span></div><div id="new-list" class="job-list"></div></article>
+        <article class="panel change-panel"><div class="section-heading"><div><p class="eyebrow">NO LONGER LISTED</p><h2>Removed postings</h2></div><span class="count-badge count-badge-muted" id="removed-count">0</span></div><div id="removed-list" class="job-list"></div></article>
+      </section>
+    </main>
+    <footer class="footer">Official employer feeds · refreshed daily · <a href="browse.html">Find your next role</a></footer>
+    <script src="app.js"></script>
+  </body>
+</html>

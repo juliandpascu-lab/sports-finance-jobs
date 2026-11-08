@@ -1,9 +1,85 @@
 {
-  "run_time": null,
-  "first_run_date": null,
-  "days_with_success": 0,
-  "open": 0,
+  "run_time": "2026-11-08T22:42:55.132007Z",
+  "first_run_date": "2026-11-08",
+  "days_with_success": 1,
+  "open": 418,
   "new_today": 0,
   "removed_today": 0,
-  "sources": []
+  "sources": [
+    {
+      "name": "baltimoreorioles",
+      "ok": true,
+      "count": 6
+    },
+    {
+      "name": "nflcareers",
+      "ok": true,
+      "count": 44
+    },
+    {
+      "name": "lions",
+      "ok": true,
+      "count": 2
+    },
+    {
+      "name": "fccincinnati",
+      "ok": true,
+      "count": 20
+    },
+    {
+      "name": "hudl",
+      "ok": true,
+      "count": 48
+    },
+    {
+      "name": "geniussports",
+      "ok": true,
+      "count": 39
+    },
+    {
+      "name": "seatgeek",
+      "ok": true,
+      "count": 38
+    },
+    {
+      "name": "sbnation",
+      "ok": true,
+      "count": 1
+    },
+    {
+      "name": "fanaticsfbg",
+      "ok": true,
+      "count": 92
+    },
+    {
+      "name": "theathletic",
+      "ok": true,
+      "count": 10
+    },
+    {
+      "name": "legend",
+      "ok": true,
+      "count": 34
+    },
+    {
+      "name": "flosports",
+      "ok": true,
+      "count": 20
+    },
+    {
+      "name": "novig",
+      "ok": true,
+      "count": 12
+    },
+    {
+      "name": "onyx",
+      "ok": true,
+      "count": 4
+    },
+    {
+      "name": "brodie_rec_league",
+      "ok": true,
+      "count": 48
+    }
+  ]
 }
