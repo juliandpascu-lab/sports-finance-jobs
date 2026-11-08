@@ -16,10 +16,11 @@ from .status import make_status, write_status
 
 
 def _sync_site_data(root: Path) -> None:
-    site_data = root / "site" / "data"
-    site_data.mkdir(parents=True, exist_ok=True)
-    shutil.copy2(root / HISTORY_PATH, site_data / "history.csv")
-    shutil.copy2(root / STATUS_PATH, site_data / "status.json")
+    for publish_root in (root / "site", root / "dist"):
+        publish_data = publish_root / "data"
+        publish_data.mkdir(parents=True, exist_ok=True)
+        shutil.copy2(root / HISTORY_PATH, publish_data / "history.csv")
+        shutil.copy2(root / STATUS_PATH, publish_data / "status.json")
 
 
 def _commit_data(root: Path, run_date: str) -> None:

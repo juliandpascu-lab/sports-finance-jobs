@@ -1,0 +1,37 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="theme-color" content="#0d1b2a" />
+    <link rel="manifest" href="manifest.webmanifest" />
+    <link rel="icon" href="icon.svg" type="image/svg+xml" />
+    <link rel="stylesheet" href="styles.css" />
+    <title>Sports Finance Jobs — Market</title>
+  </head>
+  <body data-page="market">
+    <header class="topbar">
+      <a class="brand" href="index.html"><span class="brand-mark">▰</span><span>SPORTS / FINANCE JOBS</span></a>
+      <nav aria-label="Main navigation"><a class="nav-link" data-nav="today" href="index.html">Today</a><a class="nav-link" data-nav="browse" href="browse.html">Browse</a><a class="nav-link" data-nav="market" href="market.html">Market</a></nav>
+    </header>
+    <main class="page-shell">
+      <section class="hero hero-compact">
+        <p class="eyebrow">THE MARKET</p>
+        <h1>Read the shape of sports hiring.</h1>
+        <p class="hero-copy">Every number below is calculated in your browser from the watcher’s history file. As the daily snapshots grow, this report changes with them.</p>
+      </section>
+      <div id="market-as-of" class="market-as-of">Calculating from history…</div>
+      <section class="market-grid">
+        <article class="panel market-card"><p class="eyebrow">01 · MOMENTUM</p><h2 id="new-heading">New postings per day</h2><p id="new-explanation">—</p><div id="new-chart" class="chart" role="img" aria-label="New postings per day chart"></div></article>
+        <article class="panel market-card"><p class="eyebrow">02 · CHURN</p><h2 id="removed-heading">Removed postings per day</h2><p id="removed-explanation">—</p><div id="removed-chart" class="chart" role="img" aria-label="Removed postings per day chart"></div></article>
+        <article class="panel market-card"><p class="eyebrow">03 · EMPLOYERS</p><h2 id="employer-heading">Open postings per employer</h2><p id="employer-explanation">—</p><div id="employer-chart" class="chart chart-tall" role="img" aria-label="Open postings per employer chart"></div></article>
+        <article class="panel market-card highlight-card"><p class="eyebrow">04 · TENURE</p><h2 id="days-heading">Days open</h2><p id="days-explanation">—</p><div id="days-chart" class="stat-visual"><strong id="median-days">—</strong><span>median days for removed, non-first-run postings</span></div></article>
+        <article class="panel market-card"><p class="eyebrow">05 · SPEED</p><h2 id="seven-heading">Share removed within seven days</h2><p id="seven-explanation">—</p><div id="seven-chart" class="stat-visual"><strong id="seven-share">—</strong><span id="seven-denominator">—</span></div></article>
+        <article class="panel market-card"><p class="eyebrow">06 · GEOGRAPHY</p><h2 id="location-heading">Top locations among open postings</h2><p id="location-explanation">—</p><div id="location-chart" class="chart chart-tall" role="img" aria-label="Top locations chart"></div></article>
+      </section>
+    </main>
+    <footer class="footer">Computed from the repository history · <a href="browse.html">Browse open roles</a></footer>
+    <script src="app.js"></script>
+    <script src="market.js"></script>
+  </body>
+</html>
