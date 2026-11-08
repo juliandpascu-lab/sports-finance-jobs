@@ -1,6 +1,6 @@
 # Site
 
-This directory will contain the GitHub Pages application:
+This directory contains the GitHub Pages application:
 
 - `index.html` for the Today page;
 - `browse.html` for open-posting search and shortlisting;

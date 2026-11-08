@@ -1,24 +1,28 @@
-# FDA Job Watcher
+# Sports Finance Job Watcher
 
 An automated job-market watcher for the Financial Data Analytics project.
 
-The finished project will collect open jobs from at least 15 employers through
-their unauthenticated applicant-tracking-system JSON endpoints, maintain a
-reproducible posting history, publish daily changes through GitHub Issues, and
-serve a three-page installable site through GitHub Pages.
+The project collects open jobs from 15 sports-connected employers through their
+public applicant-tracking-system JSON endpoints, maintains a reproducible
+posting history, publishes daily changes through GitHub Issues, and serves a
+three-page installable site through GitHub Pages.
 
 ## Current status
 
-The repository now contains the source registry, daily collection pipeline,
-deterministic history builder, initial tests, and the three-page offline-capable
-site. The first live collection is the next milestone.
+The first live collection is complete. The daily workflow runs at 12:17 UTC,
+updates the raw snapshots and normalized history, opens or updates that day's
+GitHub Issue, pushes the generated data commit, and deploys the refreshed site.
+
+- Repository: <https://github.com/juliandpascu-lab/sports-finance-jobs>
+- Live site: <https://juliandpascu-lab.github.io/sports-finance-jobs/>
+- Daily report: <https://github.com/juliandpascu-lab/sports-finance-jobs/issues>
 
 ## Repository layout
 
 | Path | Purpose |
 | --- | --- |
 | `.github/workflows/tests.yml` | Runs the pytest suite on every push. |
-| `.github/workflows/pipeline.yml` | Fetches public ATS feeds, updates history, and creates the daily Issue. |
+| `.github/workflows/pipeline.yml` | Fetches public ATS feeds, updates history, creates the daily Issue, and deploys refreshed Pages. |
 | `.github/workflows/pages.yml` | Deploys the `site/` directory to GitHub Pages. |
 | `data/history.csv` | Fixed-path normalized posting history. |
 | `data/raw/` | Fixed root for dated, compressed source responses. |
@@ -58,7 +62,7 @@ The latest-run summary will be written to:
 data/status.json
 ```
 
-## Planned commands
+## Commands
 
 Run the tests locally with:
 
@@ -66,8 +70,7 @@ Run the tests locally with:
 python -m pytest
 ```
 
-The history-build command will be documented here once the pipeline module is
-implemented. It must rebuild `data/history.csv` from `data/raw/` alone.
+The history-build command rebuilds `data/history.csv` from `data/raw/` alone.
 
 ## Sources and title rule
 
