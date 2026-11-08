@@ -8,6 +8,8 @@ on:
 permissions:
   contents: write
   issues: write
+  pages: write
+  id-token: write
 
 jobs:
   collect:
@@ -31,3 +33,12 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: python -m job_watcher.cli run
+      - name: Configure Pages
+        uses: actions/configure-pages@v5
+      - name: Upload refreshed site
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: site
+      - name: Deploy refreshed site
+        id: deployment
+        uses: actions/deploy-pages@v4

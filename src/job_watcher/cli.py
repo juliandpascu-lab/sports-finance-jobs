@@ -33,6 +33,7 @@ def _commit_data(root: Path, run_date: str) -> None:
     subprocess.run(
         ["git", "commit", "-m", f"Daily job snapshot {run_date}"], cwd=root, check=True
     )
+    subprocess.run(["git", "push", "origin", "HEAD"], cwd=root, check=True)
 
 
 def run_daily(root: Path, *, skip_issues: bool = False, skip_commit: bool = False) -> int:
