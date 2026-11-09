@@ -9,4 +9,8 @@ This directory contains the GitHub Pages application:
 
 The pages fetch `data/status.json` and `data/history.csv` in the browser,
 calculate their views client-side, and cache the app shell plus the last loaded
-data through the service worker for offline use.
+data through the service worker for offline use. Today includes source-health
+filtering, duplicate-board grouping, and browser-calculated match intelligence.
+Browse includes relevance sorting, saved searches, optional browser alerts while
+the page is open, and live external-search shortcuts. Shortlists and saved
+searches are stored locally in the visitor's browser.

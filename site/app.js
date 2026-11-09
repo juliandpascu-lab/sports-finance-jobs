@@ -44,7 +44,23 @@ const NEW_YORK_ROLE_SEARCHES = [
   "Investment Banking Analyst", "M&A Analyst", "Transaction Advisory Analyst", "Valuation Analyst",
   "Equity Research Associate", "Investment Analyst", "Corporate Development Analyst"
 ];
-const state = { data: null, shortlist: new Set(JSON.parse(localStorage.getItem("sportsFinanceShortlist") || "[]")) };
+
+function readStoredJSON(key, fallback) {
+  try {
+    const value = JSON.parse(localStorage.getItem(key) || "null");
+    return value == null ? fallback : value;
+  } catch (error) {
+    return fallback;
+  }
+}
+
+const storedShortlist = readStoredJSON("sportsFinanceShortlist", []);
+const state = {
+  data: null,
+  shortlist: new Set(Array.isArray(storedShortlist) ? storedShortlist : []),
+  savedSearches: readStoredJSON("sportsFinanceSavedSearches", [])
+};
+if (!Array.isArray(state.savedSearches)) state.savedSearches = [];
 
 function escapeHTML(value) {
   return String(value ?? "").replace(/[&<>'"]/g, (char) => ({"&":"&amp;","<":"&lt;",">":"&gt;","'":"&#39;","\"":"&quot;"}[char]));
@@ -83,6 +99,7 @@ function latestDate(data) { return data.status.run_time?.slice(0, 10) || data.hi
 function formatDate(value) { return value ? new Date(`${value}T00:00:00Z`).toLocaleDateString(undefined, {month:"short", day:"numeric", year:"numeric", timeZone:"UTC"}) : "—"; }
 function formatDateTime(value) { return value ? new Date(value).toLocaleString(undefined, {month:"short", day:"numeric", hour:"numeric", minute:"2-digit", timeZoneName:"short"}) : "No completed run yet"; }
 function saveShortlist() { localStorage.setItem("sportsFinanceShortlist", JSON.stringify([...state.shortlist])); }
+function saveSavedSearches() { localStorage.setItem("sportsFinanceSavedSearches", JSON.stringify(state.savedSearches)); }
 function normalizedText(value) { return String(value || "").toLowerCase().replace(/\s+/g, " ").trim(); }
 function matchedMarkets(row) {
   const location = normalizedText(row.location);
@@ -98,6 +115,50 @@ function isPreferredRow(row) {
   return asBool(row.in_role) && markets.length > 0 && (markets.some((market) => market !== "New York") || isInvestmentBankingOrMA(row));
 }
 function marketLabel(row) { return matchedMarkets(row).join(" · "); }
+function roleFamily(row) {
+  const title = normalizedText(row.title);
+  if (title.includes("fp&a")) return "FP&A Analyst";
+  if (title.includes("financial analyst")) return "Financial Analyst";
+  if (title.includes("credit analyst")) return "Credit Analyst";
+  if (title.includes("investment banking") || title.includes("m&a") || title.includes("merger")) return "Investment Banking / M&A";
+  if (title.includes("valuation")) return "Valuation Analyst";
+  if (title.includes("treasury")) return "Treasury Analyst";
+  if (title.includes("corporate development")) return "Corporate Development Analyst";
+  if (title.includes("portfolio")) return "Portfolio Analyst";
+  if (title.includes("risk")) return "Financial Risk Analyst";
+  return "Other approved role";
+}
+function relevanceScore(row) {
+  const title = normalizedText(row.title);
+  let score = 40;
+  if (APPROVED_ROLE_SEARCHES.some((role) => title.includes(normalizedText(role)))) score += 25;
+  else if (title.includes("analyst") || title.includes("associate")) score += 15;
+  if (asBool(row.in_role)) score += 15;
+  if (isTargetMarketRow(row)) score += 10;
+  const age = postedAge(row);
+  if (age === 0) score += 10;
+  else if (age <= 1) score += 7;
+  else if (age <= 7) score += 3;
+  return Math.min(99, score);
+}
+function duplicateKey(row) { return [row.employer, row.title, row.location].map(normalizedText).join("|"); }
+function groupedRows(rows) {
+  const byKey = new Map();
+  rows.forEach((row) => {
+    const key = duplicateKey(row);
+    const candidates = byKey.get(key) || [];
+    let group = candidates.find((candidate) => !candidate.sources.has(row.source));
+    if (!group) {
+      group = { primary: row, rows: [row], sources: new Set([row.source]) };
+      candidates.push(group);
+      byKey.set(key, candidates);
+    } else {
+      group.rows.push(row);
+      group.sources.add(row.source);
+    }
+  });
+  return [...byKey.values()].flat().map((group) => ({ ...group.primary, _duplicates: group.rows }));
+}
 function externalJobSearchURL(site, query, location) {
   if (site === "Indeed") return `https://www.indeed.com/jobs?q=${encodeURIComponent(query)}&l=${encodeURIComponent(location)}&fromage=1`;
   if (site === "LinkedIn") return `https://www.linkedin.com/jobs/search/?keywords=${encodeURIComponent(query)}&location=${encodeURIComponent(location)}&f_TPR=r86400`;
@@ -133,17 +194,23 @@ function jobCard(row, options = {}) {
   const days = dateDiff(row.first_seen, latestDate(state.data));
   const postedDays = postedAge(row);
   const star = state.shortlist.has(row.posting_id);
+  const duplicates = row._duplicates || [row];
+  const sources = [...new Set(duplicates.map((item) => SOURCE_LABELS[item.source] || item.source || "Employer board"))];
+  const score = isPreferredRow(row) ? `<span class="match-score">${relevanceScore(row)}% match</span>` : "";
+  const duplicateNote = duplicates.length > 1 ? `<div class="job-duplicate"><strong>${duplicates.length} board listings</strong><span>${escapeHTML(sources.join(" · "))}</span><div class="job-duplicate-links">${duplicates.map((item) => `<a href="${escapeHTML(item.url)}" target="_blank" rel="noopener">${escapeHTML(SOURCE_LABELS[item.source] || item.source || "Source")} ↗</a>`).join("")}</div></div>` : "";
   return `<article class="job-card ${options.compact ? "job-card-compact" : ""}">
     <div class="job-card-main"><p class="job-employer">${escapeHTML(row.employer)} <span>·</span> ${escapeHTML(row.department || "Business function")}</p>
     <h3><a href="${escapeHTML(row.url)}" target="_blank" rel="noopener">${escapeHTML(row.title)}</a></h3>
+    <div class="job-signals">${score}${duplicates.length > 1 ? `<span class="duplicate-badge">${duplicates.length} sources</span>` : ""}</div>
     <p class="job-meta"><strong>Location:</strong> ${escapeHTML(row.location || "Location not provided")} · ${escapeHTML(marketLabel(row) || "Outside target markets")}</p>
-    <p class="job-meta"><strong>Posted:</strong> ${escapeHTML(formatDate(postingDate(row)))} · <strong>Source:</strong> ${escapeHTML(SOURCE_LABELS[row.source] || row.source || "Employer board")}${options.open ? ` · ${postedDays} days since posted · ${days} days observed` : ""}</p></div>
+    <p class="job-meta"><strong>Posted:</strong> ${escapeHTML(formatDate(postingDate(row)))} · <strong>Source:</strong> ${escapeHTML(SOURCE_LABELS[row.source] || row.source || "Employer board")}${options.open ? ` · ${postedDays} days since posted · ${days} days observed` : ""}</p>${duplicateNote}</div>
     <div class="job-card-actions"><button class="star-button ${star ? "saved" : ""}" data-star="${escapeHTML(row.posting_id)}" aria-label="${star ? "Remove from" : "Save to"} shortlist">${star ? "★" : "☆"}</button><a class="apply-button" href="${escapeHTML(row.url)}" target="_blank" rel="noopener">Apply ↗</a></div>
   </article>`;
 }
 
 function renderJobList(element, rows, options = {}) {
-  element.innerHTML = rows.length ? rows.map((row) => jobCard(row, options)).join("") : `<div class="empty-state"><span>◎</span><p>${escapeHTML(options.empty || "Nothing new in this snapshot.")}</p></div>`;
+  const displayRows = options.groupDuplicates === false ? rows : groupedRows(rows);
+  element.innerHTML = displayRows.length ? displayRows.map((row) => jobCard(row, options)).join("") : `<div class="empty-state"><span>◎</span><p>${escapeHTML(options.empty || "Nothing new in this snapshot.")}</p></div>`;
 }
 
 function bindStars() {
@@ -155,6 +222,139 @@ function bindStars() {
   }));
 }
 
+function renderTopbar(status) {
+  const element = document.querySelector("[data-topbar-text]");
+  if (!element) return;
+  const sources = status.sources || [];
+  const healthy = sources.filter((source) => source.ok).length;
+  element.textContent = `${healthy}/${sources.length} ATS feeds healthy · refreshed daily`;
+}
+
+function renderSourceHealth(status) {
+  const sources = status.sources || [];
+  const good = sources.filter((source) => source.ok).length;
+  const health = document.getElementById("source-health");
+  const detail = document.getElementById("source-health-detail");
+  const list = document.getElementById("source-list");
+  const errors = document.getElementById("source-errors");
+  const filter = document.getElementById("source-filter");
+  if (!health || !detail || !list || !errors) return;
+  health.textContent = `${good}/${sources.length} healthy`;
+  detail.textContent = `${sources.length} public boards · ${good} healthy · ${formatDateTime(status.run_time)}`;
+  const renderRows = () => {
+    const query = normalizedText(filter?.value);
+    const visible = sources.filter((source) => normalizedText(SOURCE_LABELS[source.name] || source.name).includes(query));
+    list.innerHTML = visible.map((source) => `<div class="source-row"><span class="source-state ${source.ok ? "ok" : "bad"}"></span><span>${escapeHTML(SOURCE_LABELS[source.name] || source.name)}</span><strong>${source.count}</strong></div>`).join("") || `<div class="empty-state"><p>No matching source.</p></div>`;
+  };
+  if (filter && !filter.dataset.bound) {
+    filter.addEventListener("input", renderRows);
+    filter.dataset.bound = "true";
+  }
+  renderRows();
+  const failed = sources.filter((source) => !source.ok);
+  errors.innerHTML = failed.length ? `<p><strong>${failed.length} source${failed.length === 1 ? "" : "s"} failed.</strong> The run still completed; failed feeds will be retried on the next daily refresh.</p>` : `<p class="source-ok-note">All watched feeds returned successfully for this run.</p>`;
+}
+
+function renderMatchInsights(rows) {
+  const marketElement = document.getElementById("insight-top-market");
+  if (!marketElement) return;
+  const markets = Object.fromEntries(TARGET_MARKETS.map((market) => [market, 0]));
+  const employers = {};
+  rows.forEach((row) => {
+    matchedMarkets(row).forEach((market) => { markets[market] += 1; });
+    employers[row.employer] = (employers[row.employer] || 0) + 1;
+  });
+  const marketEntries = Object.entries(markets).sort((a, b) => b[1] - a[1]);
+  const employerEntries = Object.entries(employers).sort((a, b) => b[1] - a[1]);
+  const topMarket = marketEntries[0];
+  const topEmployer = employerEntries[0];
+  document.getElementById("insight-top-market").textContent = topMarket && topMarket[1] ? topMarket[0] : "Waiting";
+  document.getElementById("insight-top-market-note").textContent = topMarket && topMarket[1] ? `${topMarket[1]} open approved matches` : "No current target-market matches";
+  document.getElementById("insight-top-employer").textContent = topEmployer && topEmployer[1] ? topEmployer[0] : "Waiting";
+  document.getElementById("insight-top-employer-note").textContent = topEmployer && topEmployer[1] ? `${topEmployer[1]} open match${topEmployer[1] === 1 ? "" : "es"}` : "No current employer matches";
+  document.getElementById("insight-fresh-count").textContent = rows.filter((row) => postedAge(row) <= 1).length;
+  const max = Math.max(...marketEntries.map((entry) => entry[1]), 1);
+  document.getElementById("insight-market-list").innerHTML = marketEntries.map(([label, value]) => `<div class="insight-bar-row"><span>${escapeHTML(label)}</span><span class="bar-track"><span class="bar-fill" style="width:${Math.max(value ? 4 : 0, value / max * 100)}%"></span></span><strong>${value}</strong></div>`).join("");
+}
+
+function savedSearchMatches(search, row) {
+  if (row.status !== "open") return false;
+  if (search.market && !matchedMarkets(row).includes(search.market)) return false;
+  const query = normalizedText(search.query);
+  return !query || normalizedText(row.title).includes(query);
+}
+
+function renderSavedSearches() {
+  const element = document.getElementById("saved-search-list");
+  if (!element) return;
+  const runDate = latestDate(state.data);
+  if (!state.savedSearches.length) {
+    element.innerHTML = `<div class="saved-search-empty">No saved searches yet. Add one above to keep a specific role and market one click away.</div>`;
+    return;
+  }
+  element.innerHTML = state.savedSearches.map((search) => {
+    const matches = state.data.history.filter((row) => savedSearchMatches(search, row));
+    const fresh = matches.filter((row) => row.first_seen === runDate && !asBool(row.first_run)).length;
+    const filterText = [search.query || "All titles", search.market || "All markets"].join(" · ");
+    return `<div class="saved-search-row"><div><strong>${escapeHTML(search.name)}</strong><span>${escapeHTML(filterText)}</span></div><div class="saved-search-row-actions"><span class="pill">${fresh} new today</span><button class="text-button remove-search" type="button" data-remove-search="${escapeHTML(search.id)}">Remove</button></div></div>`;
+  }).join("");
+  element.querySelectorAll("[data-remove-search]").forEach((button) => button.addEventListener("click", () => {
+    state.savedSearches = state.savedSearches.filter((search) => search.id !== button.dataset.removeSearch);
+    saveSavedSearches();
+    renderSavedSearches();
+  }));
+}
+
+function checkSavedSearchAlerts() {
+  if (!("Notification" in window) || Notification.permission !== "granted" || !state.savedSearches.length) return;
+  const runKey = state.data.status.run_time || latestDate(state.data);
+  const storageKey = `sportsFinanceAlertRun:${runKey}`;
+  if (localStorage.getItem(storageKey)) return;
+  const runDate = latestDate(state.data);
+  const alerts = state.savedSearches.map((search) => {
+    const count = state.data.history.filter((row) => row.first_seen === runDate && !asBool(row.first_run) && savedSearchMatches(search, row)).length;
+    return count ? `${search.name}: ${count} new` : "";
+  }).filter(Boolean);
+  if (alerts.length) new Notification("Finance + Sports Jobs", { body: alerts.join(" · ") });
+  localStorage.setItem(storageKey, "1");
+}
+
+function setupSavedSearches() {
+  const form = document.getElementById("saved-search-form");
+  if (!form) return;
+  const name = document.getElementById("saved-search-name");
+  const query = document.getElementById("saved-search-query");
+  const market = document.getElementById("saved-search-market");
+  const alerts = document.getElementById("enable-alerts");
+  form.addEventListener("submit", (event) => {
+    event.preventDefault();
+    const searchQuery = query.value.trim();
+    const searchMarket = market.value;
+    if (!searchQuery && !searchMarket) {
+      query.focus();
+      return;
+    }
+    state.savedSearches.unshift({ id: `${Date.now()}-${Math.random().toString(36).slice(2, 8)}`, name: name.value.trim() || searchQuery || searchMarket, query: searchQuery, market: searchMarket });
+    saveSavedSearches();
+    form.reset();
+    renderSavedSearches();
+  });
+  if (!("Notification" in window)) {
+    alerts.textContent = "Alerts unavailable in this browser";
+    alerts.disabled = true;
+  } else if (Notification.permission === "granted") {
+    alerts.textContent = "Browser alerts enabled";
+  }
+  alerts.addEventListener("click", async () => {
+    if (!("Notification" in window)) return;
+    const permission = await Notification.requestPermission();
+    alerts.textContent = permission === "granted" ? "Browser alerts enabled" : "Alerts not enabled";
+    if (permission === "granted") checkSavedSearchAlerts();
+  });
+  renderSavedSearches();
+  checkSavedSearchAlerts();
+}
+
 function renderToday() {
   const { status, history } = state.data, runDate = latestDate(state.data);
   document.getElementById("run-status").textContent = `Last refresh ${formatDateTime(status.run_time)} · data through ${formatDate(runDate)}`;
@@ -162,14 +362,14 @@ function renderToday() {
   document.getElementById("metric-open").textContent = status.open ?? 0;
   document.getElementById("metric-new").textContent = status.new_today ?? 0;
   document.getElementById("metric-removed").textContent = status.removed_today ?? 0;
-  const good = (status.sources || []).filter((source) => source.ok).length;
-  document.getElementById("source-health").textContent = `${good}/${(status.sources || []).length} healthy`;
-  document.getElementById("source-list").innerHTML = (status.sources || []).map((source) => `<div class="source-row"><span class="source-state ${source.ok ? "ok" : "bad"}"></span><span>${escapeHTML(SOURCE_LABELS[source.name] || source.name)}</span><strong>${source.count}</strong></div>`).join("") || `<div class="empty-state"><p>No source data yet.</p></div>`;
   const currentRows = history.filter((row) => row.status === "open" && isPreferredRow(row)).sort((a, b) => postingDate(b).localeCompare(postingDate(a)) || a.title.localeCompare(b.title));
   const preferredOpen = currentRows.filter((row) => postedAge(row) <= 7);
+  document.getElementById("metric-target").textContent = currentRows.length;
+  document.getElementById("metric-fresh").textContent = currentRows.filter((row) => postedAge(row) <= 1).length;
+  renderSourceHealth(status);
   document.getElementById("preference-summary").textContent = `${currentRows.length} current approved-title matches across Dallas–Fort Worth, Kansas City, Austin, Fayetteville/NWA, and New York IB/M&A · ${preferredOpen.length} posted in the last 7 days`;
   document.getElementById("current-count").textContent = currentRows.length;
-  document.getElementById("current-summary").textContent = currentRows.length ? "These are the open postings currently matching your exact role and location focus. Posted dates come from the employer feed; watcher dates show when this tool first saw them." : "No open posting currently matches both the approved role list and target locations.";
+  document.getElementById("current-summary").textContent = currentRows.length ? `These are the ${currentRows.length} open postings currently matching your exact role and location focus. ${groupedRows(currentRows).length} grouped cards reduce duplicate board listings; every source link remains available inside the card.` : "No open posting currently matches both the approved role list and target locations.";
   renderJobList(document.getElementById("current-list"), currentRows, { open: true, empty: "No current approved-title matches." });
   const newRows = history.filter((row) => row.first_seen === runDate && !asBool(row.first_run) && isPreferredRow(row));
   const removedRows = history.filter((row) => row.removed_date === runDate && isPreferredRow(row));
@@ -177,6 +377,7 @@ function renderToday() {
   document.getElementById("removed-count").textContent = removedRows.length;
   renderJobList(document.getElementById("new-list"), newRows, { compact: true, empty: "No new non-first-run postings today." });
   renderJobList(document.getElementById("removed-list"), removedRows, { compact: true, empty: "No postings were removed today." });
+  renderMatchInsights(currentRows);
   bindStars();
 }
 
@@ -195,10 +396,11 @@ function renderBrowse() {
   if (maximumPostedAge) rows = rows.filter((row) => postedAge(row) <= maximumPostedAge);
   const minimumDays = Number(controls.days.value || 0);
   if (minimumDays) rows = rows.filter((row) => dateDiff(row.first_seen, latestDate(state.data)) >= minimumDays);
-  if (controls.sort.value === "first_seen") rows.sort((a, b) => (b.first_seen || "").localeCompare(a.first_seen || "") || a.title.localeCompare(b.title));
+  if (controls.sort.value === "relevance") rows.sort((a, b) => relevanceScore(b) - relevanceScore(a) || postingDate(b).localeCompare(postingDate(a)) || a.title.localeCompare(b.title));
+  else if (controls.sort.value === "first_seen") rows.sort((a, b) => (b.first_seen || "").localeCompare(a.first_seen || "") || a.title.localeCompare(b.title));
   else if (controls.sort.value === "title") rows.sort((a, b) => a.title.localeCompare(b.title));
   else rows.sort((a, b) => postingDate(b).localeCompare(postingDate(a)) || (b.first_seen || "").localeCompare(a.first_seen || "") || a.title.localeCompare(b.title));
-  document.getElementById("browse-count").textContent = `${rows.length} open ${roleOnly ? "approved-title matches" : marketOnly ? "target-market jobs" : "tracked postings"}`;
+  document.getElementById("browse-count").textContent = `${rows.length} open ${roleOnly ? "approved-title matches" : marketOnly ? "target-market jobs" : "tracked postings"} · ${groupedRows(rows).length} cards`;
   document.getElementById("browse-as-of").textContent = `As of ${formatDate(latestDate(state.data))} · posted-date freshness is on by default · default titles are limited to the approved twenty · New York limited to IB/M&A`;
   renderJobList(document.getElementById("browse-list"), rows, { open: true, empty: "No postings match these filters." });
   bindStars();
@@ -211,6 +413,7 @@ function setupBrowse() {
   ["title-search", "employer-filter", "market-filter", "freshness-filter", "days-filter", "sort-filter"].forEach((id) => document.getElementById(id).addEventListener("input", renderBrowse));
   [["role-toggle", ["market-toggle", "all-toggle"]], ["market-toggle", ["role-toggle", "all-toggle"]], ["all-toggle", ["role-toggle", "market-toggle"]]].forEach(([activeId, inactiveIds]) => document.getElementById(activeId).addEventListener("click", () => { document.getElementById(activeId).classList.add("active"); inactiveIds.forEach((id) => document.getElementById(id).classList.remove("active")); renderBrowse(); }));
   renderExternalSearches();
+  setupSavedSearches();
   renderBrowse();
 }
 
@@ -222,4 +425,4 @@ async function loadData() {
 
 function registerServiceWorker() { if ("serviceWorker" in navigator) navigator.serviceWorker.register("service-worker.js").catch(() => {}); }
 
-window.jobWatcher = { state, ready: loadData().then(() => { registerServiceWorker(); if (document.body.dataset.page === "today") renderToday(); if (document.body.dataset.page === "browse") setupBrowse(); return state.data; }) };
+window.jobWatcher = { state, ready: loadData().then(() => { registerServiceWorker(); renderTopbar(state.data.status); if (document.body.dataset.page === "today") renderToday(); if (document.body.dataset.page === "browse") setupBrowse(); return state.data; }) };

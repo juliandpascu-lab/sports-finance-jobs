@@ -13,6 +13,7 @@
   <body data-page="today">
     <header class="topbar">
       <a class="brand" href="index.html"><span class="brand-mark">▰</span><span>FINANCE / SPORTS JOBS</span></a>
+      <div class="topbar-meta"><span class="topbar-status-dot"></span><span data-topbar-text>Daily ATS watch · loading source health</span></div>
       <nav aria-label="Main navigation">
         <a class="nav-link" data-nav="today" href="index.html">Today</a>
         <a class="nav-link" data-nav="browse" href="browse.html">Browse</a>
@@ -33,12 +34,16 @@
         <article class="metric-card metric-card-accent"><span class="metric-label">Open roles</span><strong id="metric-open">—</strong><span class="metric-note">across every watched board</span></article>
         <article class="metric-card"><span class="metric-label">New today</span><strong id="metric-new">—</strong><span class="metric-note">excluding first-run inventory</span></article>
         <article class="metric-card"><span class="metric-label">Removed today</span><strong id="metric-removed">—</strong><span class="metric-note">roles no longer listed</span></article>
+        <article class="metric-card metric-card-signal"><span class="metric-label">Target matches</span><strong id="metric-target">—</strong><span class="metric-note">open roles in your focus</span></article>
+        <article class="metric-card metric-card-signal"><span class="metric-label">Fresh matches</span><strong id="metric-fresh">—</strong><span class="metric-note">posted in the last 24 hours</span></article>
       </section>
 
       <section class="dashboard-grid">
         <article class="panel">
           <div class="section-heading"><div><p class="eyebrow">SOURCE HEALTH</p><h2>Who answered today?</h2></div><span class="pill" id="source-health">—</span></div>
+          <div class="source-tools"><span id="source-health-detail">Checking public ATS feeds…</span><input id="source-filter" type="search" placeholder="Filter sources" aria-label="Filter sources" /></div>
           <div id="source-list" class="source-list" aria-live="polite"></div>
+          <div id="source-errors" class="source-errors" aria-live="polite"></div>
         </article>
         <article class="panel panel-dark">
           <p class="eyebrow">HOW TO USE THIS</p>
@@ -49,6 +54,8 @@
       </section>
 
       <section class="panel current-match-panel"><div class="section-heading"><div><p class="eyebrow">CURRENT APPROVED MATCHES</p><h2>Open postings in your focus</h2></div><span class="count-badge" id="current-count">0</span></div><p id="current-summary" class="current-summary">Loading current approved-title matches…</p><div id="current-list" class="job-list" aria-live="polite"></div></section>
+
+      <section class="panel match-insights-panel"><div class="section-heading"><div><p class="eyebrow">MATCH INTELLIGENCE</p><h2>Where the strongest opportunities are.</h2></div><span class="pill">Browser-calculated</span></div><p class="current-summary">A transparent signal built from title fit, target-market fit, and posting freshness. It is a sorting aid, not a hiring prediction.</p><div class="insight-grid"><div class="insight-stat"><span>Top target market</span><strong id="insight-top-market">—</strong><small id="insight-top-market-note">Waiting for the latest snapshot</small></div><div class="insight-stat"><span>Top employer</span><strong id="insight-top-employer">—</strong><small id="insight-top-employer-note">Waiting for the latest snapshot</small></div><div class="insight-stat"><span>Freshest matches</span><strong id="insight-fresh-count">—</strong><small>approved roles posted in the last 24 hours</small></div></div><div id="insight-market-list" class="insight-market-list"></div></section>
 
       <section class="change-grid">
         <article class="panel change-panel"><div class="section-heading"><div><p class="eyebrow">JUST IN</p><h2>New postings</h2></div><span class="count-badge" id="new-count">0</span></div><div id="new-list" class="job-list"></div></article>
