@@ -25,6 +25,8 @@ GitHub Issue, pushes the generated data commit, and deploys the refreshed site.
 
 | Path | Purpose |
 | --- | --- |
+| `.openai/hosting.json` | Declares the static Sites deployment output. |
+| `.gitignore` | Ignores local caches and generated development files. |
 | `.github/workflows/tests.yml` | Runs the pytest suite on every push. |
 | `.github/workflows/pipeline.yml` | Fetches public ATS feeds, updates history, creates the daily Issue, and deploys refreshed Pages. |
 | `.github/workflows/pages.yml` | Deploys the `site/` directory to GitHub Pages. |
@@ -41,10 +43,16 @@ GitHub Issue, pushes the generated data commit, and deploys the refreshed site.
 | `src/job_watcher/schema.py` | Shared history/status schemas and path constants. |
 | `src/job_watcher/status.py` | Writes the latest-run status summary. |
 | `src/job_watcher/cli.py` | `run` and `build-history` commands. |
+| `src/job_watcher/__init__.py` | Package marker for the watcher modules. |
+| `tests/test_collector.py` | Tests paginated Workday, SmartRecruiters, and Oracle collection. |
 | `tests/test_history.py` | First-seen, last-seen, removal, and reopening tests. |
+| `tests/test_issues.py` | Tests detailed daily Issue listing output and role filtering. |
 | `tests/test_normalize.py` | Conversion contract for every configured source and title-rule tests. |
 | `tests/test_schema.py` | Schema contract tests. |
+| `tests/test_status.py` | Tests successful-date counting in the status file. |
 | `pyproject.toml` | Python package and test configuration. |
+| `site/` | Source site bundle: `index.html`, `browse.html`, `market.html`, shared `app.js`, `market.js`, `styles.css`, `icon.svg`, `manifest.webmanifest`, `service-worker.js`, `README.md`, and deployment marker files. |
+| `dist/` | Generated static deployment mirror of the site bundle. |
 
 ## Fixed data paths
 

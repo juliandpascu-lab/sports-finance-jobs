@@ -20,7 +20,9 @@ function renderMarket(data) {
   const newAll = groupCount(nonFirst.filter((row) => row.first_seen), "first_seen");
   const newRole = groupCount(nonFirst.filter((row) => row.first_seen && asBool(row.in_role)), "first_seen");
   const newEntries = Object.entries(newAll).sort((a, b) => a[0].localeCompare(b[0])).slice(-14);
-  chart(document.getElementById("new-chart"), newEntries);
+  const newRoleEntries = Object.entries(newRole).sort((a, b) => a[0].localeCompare(b[0])).slice(-14);
+  chart(document.getElementById("new-all-chart"), newEntries);
+  chart(document.getElementById("new-role-chart"), newRoleEntries);
   document.getElementById("new-heading").textContent = `${Object.values(newAll).reduce((a, b) => a + b, 0)} new postings tracked`;
   document.getElementById("new-explanation").textContent = `The chart shows non-first-run postings first seen on each day. ${Object.values(newRole).reduce((a, b) => a + b, 0)} of the tracked postings match one of the twenty approved job-title families.`;
 

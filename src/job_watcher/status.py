@@ -15,7 +15,11 @@ from .schema import STATUS_PATH
 def _available_dates(raw_root: Path) -> list[str]:
     if not raw_root.exists():
         return []
-    return sorted(path.name for path in raw_root.iterdir() if path.is_dir())
+    return sorted(
+        path.name
+        for path in raw_root.iterdir()
+        if path.is_dir() and any(path.glob("*.json.gz"))
+    )
 
 
 def make_status(
