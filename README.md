@@ -1,13 +1,15 @@
-# Sports Finance Job Watcher
+# Finance + Sports Job Watcher
 
 [![Tests](https://github.com/juliandpascu-lab/sports-finance-jobs/actions/workflows/tests.yml/badge.svg)](https://github.com/juliandpascu-lab/sports-finance-jobs/actions/workflows/tests.yml)
 
-An automated job-market watcher for the Financial Data Analytics project.
+An automated job-market watcher for the Financial Data Analytics project and
+an early-career finance job search.
 
-The project collects open jobs from sports-connected employers and public
-investment-banking/M&A firms through their public applicant-tracking-system JSON endpoints, maintains a reproducible
-posting history, publishes daily changes through GitHub Issues, and serves a
-three-page installable site through GitHub Pages.
+The project collects open jobs from sports-connected employers, banks, fintechs,
+startups, credit employers, and general finance employers through public
+applicant-tracking-system JSON endpoints. It maintains a reproducible posting
+history, publishes daily changes through GitHub Issues, and serves a three-page
+installable site through GitHub Pages.
 
 ## Current status
 
@@ -30,11 +32,11 @@ GitHub Issue, pushes the generated data commit, and deploys the refreshed site.
 | `data/raw/` | Fixed root for dated, compressed source responses. |
 | `data/status.json` | Fixed-path summary of the latest pipeline run. |
 | `site/` | Today, Browse, Market, PWA manifest, service worker, and generated data mirror. |
-| `src/job_watcher/config.py` | Sports and investment-banking employer watchlist and role description. |
+| `src/job_watcher/config.py` | Sports, banking, fintech, startup, and general-finance watchlist and role description. |
 | `src/job_watcher/collector.py` | Public JSON fetching and compressed raw-file persistence. |
 | `src/job_watcher/history.py` | Rebuilds history exclusively from raw files. |
 | `src/job_watcher/issues.py` | Creates or updates the dated GitHub Issue and closes the previous one. |
-| `src/job_watcher/normalize.py` | Converts Greenhouse, Lever, and Ashby responses to common columns. |
+| `src/job_watcher/normalize.py` | Converts Greenhouse, Lever, Ashby, Workday, SmartRecruiters, and Oracle responses to common columns. |
 | `src/job_watcher/role.py` | Title-only entry-level finance/FP&A/analytics/IB/M&A rule plus preferred-market matching. |
 | `src/job_watcher/schema.py` | Shared history/status schemas and path constants. |
 | `src/job_watcher/status.py` | Writes the latest-run status summary. |
@@ -76,11 +78,19 @@ The history-build command rebuilds `data/history.csv` from `data/raw/` alone.
 
 ## Sources and title rule
 
-The watchlist is deliberately broad enough for a new graduate: professional
-teams, sports technology, sports media, ticketing, sports commerce, sports
-betting/prediction markets, and public investment-banking/M&A firms. All feeds
-are public JSON endpoints and currently return fewer than 5,000 postings, so no
-search term is required.
+The watchlist is deliberately broad enough for a new graduate or someone with
+one to two years of FP&A experience: professional teams, sports technology,
+sports media, ticketing, sports commerce, sports betting/prediction markets,
+investment banking, credit, fintech, startups, higher education, and general
+finance. Every configured source is an anonymous JSON request to the employer's
+ATS; the collector never reads a job-board HTML page.
+
+The current boards return fewer than 5,000 postings per source. The paginated
+adapters still enforce the brief's large-board rule: if a Workday,
+SmartRecruiters, or Oracle response reports more than 5,000 postings and no
+source-specific term is configured, the collector repeats the request with the
+search term `finance`. That term is the documented fallback for any future
+large board.
 
 | Employer | ATS | Source key |
 | --- | --- | --- |
@@ -110,6 +120,13 @@ search term is required.
 | Capital Farm Credit | Greenhouse | `capitalfarmcredit` |
 | Success Academy Charter Schools | Greenhouse | `successacademycharterschool` |
 | Take-Two Interactive Software | Greenhouse | `taketwo` |
+| University of Texas at Austin | Workday | `utaustin` |
+| Nutrabolt | Workday | `nutrabolt` |
+| Fidelity Investments | Workday | `fidelity` |
+| Intuitive | SmartRecruiters | `intuitive` |
+| RR Donnelley | SmartRecruiters | `rrdonnelley` |
+| Experian | SmartRecruiters | `experian` |
+| Oracle | Oracle Recruiting Cloud | `oraclecareers` |
 
 The default role rule is: **include titles containing analyst, analytics,
 finance, FP&A, financial, strategy, planning, revenue, pricing, operations,

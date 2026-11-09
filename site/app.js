@@ -7,7 +7,9 @@ const SOURCE_LABELS = {
   financialtechnologypartners: "Financial Technology Partners", glcadvisors: "GLC Advisors",
   solomonpartnersprofessionals: "Solomon Partners", saxllp: "SAX Advisory Group", offdeal: "OffDeal",
   fourhands: "Four Hands", capitalfarmcredit: "Capital Farm Credit",
-  successacademycharterschool: "Success Academy", taketwo: "Take-Two Interactive"
+  successacademycharterschool: "Success Academy", taketwo: "Take-Two Interactive",
+  utaustin: "University of Texas at Austin", nutrabolt: "Nutrabolt", fidelity: "Fidelity Investments",
+  intuitive: "Intuitive", rrdonnelley: "RR Donnelley", experian: "Experian", oraclecareers: "Oracle"
 };
 
 const TARGET_MARKETS = ["Dallas-Fort Worth", "Kansas City", "Austin", "Fayetteville / Northwest Arkansas", "New York"];
@@ -102,7 +104,7 @@ function jobCard(row, options = {}) {
   const postedDays = postedAge(row);
   const star = state.shortlist.has(row.posting_id);
   return `<article class="job-card ${options.compact ? "job-card-compact" : ""}">
-    <div class="job-card-main"><p class="job-employer">${escapeHTML(row.employer)} <span>·</span> ${escapeHTML(row.department || "Sports business")}</p>
+    <div class="job-card-main"><p class="job-employer">${escapeHTML(row.employer)} <span>·</span> ${escapeHTML(row.department || "Business function")}</p>
     <h3><a href="${escapeHTML(row.url)}" target="_blank" rel="noopener">${escapeHTML(row.title)}</a></h3>
     <p class="job-meta">${escapeHTML(row.location || "Location not provided")} · ${escapeHTML(marketLabel(row) || "Outside target markets")} · Posted ${escapeHTML(formatDate(postingDate(row)))}${options.open ? ` · ${postedDays} days since posted · ${days} days observed` : ""}</p></div>
     <div class="job-card-actions"><button class="star-button ${star ? "saved" : ""}" data-star="${escapeHTML(row.posting_id)}" aria-label="${star ? "Remove from" : "Save to"} shortlist">${star ? "★" : "☆"}</button><a class="apply-button" href="${escapeHTML(row.url)}" target="_blank" rel="noopener">Apply ↗</a></div>

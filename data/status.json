@@ -1,8 +1,8 @@
 {
-  "run_time": "2026-11-09T00:45:02.113226Z",
+  "run_time": "2026-11-09T01:10:09.135522Z",
   "first_run_date": "2026-11-08",
   "days_with_success": 2,
-  "open": 649,
+  "open": 6763,
   "new_today": 0,
   "removed_today": 0,
   "sources": [
@@ -135,6 +135,41 @@
       "name": "taketwo",
       "ok": true,
       "count": 34
+    },
+    {
+      "name": "utaustin",
+      "ok": true,
+      "count": 657
+    },
+    {
+      "name": "nutrabolt",
+      "ok": true,
+      "count": 19
+    },
+    {
+      "name": "fidelity",
+      "ok": true,
+      "count": 853
+    },
+    {
+      "name": "intuitive",
+      "ok": true,
+      "count": 828
+    },
+    {
+      "name": "rrdonnelley",
+      "ok": true,
+      "count": 618
+    },
+    {
+      "name": "experian",
+      "ok": true,
+      "count": 396
+    },
+    {
+      "name": "oraclecareers",
+      "ok": true,
+      "count": 2743
     }
   ]
 }

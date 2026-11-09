@@ -39,6 +39,47 @@ def test_every_source_normalizes_to_common_columns(source) -> None:
                 }
             ]
         }
+    elif source.ats == "Workday":
+        payload = {
+            "jobPostings": [
+                {
+                    "title": "Finance Analyst",
+                    "externalPath": "/job/Finance-Analyst_R_123",
+                    "locationsText": "Remote",
+                    "jobCategory": "Finance",
+                    "postedDate": "2026-11-01T12:00:00Z",
+                }
+            ]
+        }
+    elif source.ats == "SmartRecruiters":
+        payload = {
+            "content": [
+                {
+                    "id": "smart-123",
+                    "name": "Finance Analyst",
+                    "location": {"fullLocation": "Remote"},
+                    "function": {"label": "Finance"},
+                    "releasedDate": "2026-11-01T12:00:00Z",
+                }
+            ]
+        }
+    elif source.ats == "Oracle":
+        payload = {
+            "items": [
+                {
+                    "TotalJobsCount": 1,
+                    "requisitionList": [
+                        {
+                            "Id": "oracle-123",
+                            "Title": "Finance Analyst",
+                            "PrimaryLocation": "Remote",
+                            "Category": "Finance",
+                            "PostedDate": "2026-11-01",
+                        }
+                    ],
+                }
+            ]
+        }
     else:
         payload = [
             {
@@ -76,6 +117,25 @@ def test_title_rule_prioritizes_early_career_matches() -> None:
     assert is_in_role("Senior Financial Analyst") is False
     assert is_in_role("Director of Strategy") is False
     assert is_in_role("Software Engineer") is False
+
+
+def test_workday_relative_posted_date_uses_raw_snapshot_date() -> None:
+    source = next(source for source in SOURCES if source.ats == "Workday")
+    rows = normalize_source_payload(
+        source,
+        {
+            "jobPostings": [
+                {
+                    "title": "Finance Analyst",
+                    "externalPath": "/job/Finance-Analyst_R_123",
+                    "locationsText": "Remote",
+                    "postedOn": "Posted 18 Days Ago",
+                }
+            ]
+        },
+        as_of_date="2026-11-09",
+    )
+    assert rows[0]["posted_date"] == "2026-10-22"
 
 
 def test_title_rule_includes_entry_level_ib_and_ma_but_not_senior_roles() -> None:

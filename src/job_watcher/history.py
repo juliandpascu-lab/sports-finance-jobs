@@ -81,7 +81,7 @@ def build_history(
             if source is None:
                 continue
             payload = read_raw_payload(path)
-            postings = normalize_source_payload(source, payload)
+            postings = normalize_source_payload(source, payload, as_of_date=day)
             seen_ids = set()
             for posting in postings:
                 posting_id = posting["posting_id"]

@@ -1,7 +1,7 @@
 {
-  "name": "Sports Finance Jobs",
-  "short_name": "Sports Jobs",
-  "description": "Entry-level sports finance, FP&A, analytics, and New York investment-banking jobs.",
+  "name": "Finance + Sports Jobs",
+  "short_name": "Finance Jobs",
+  "description": "Entry-level finance, FP&A, analytics, credit, sports-business, and New York investment-banking jobs.",
   "start_url": "./index.html",
   "display": "standalone",
   "background_color": "#f5f7f9",

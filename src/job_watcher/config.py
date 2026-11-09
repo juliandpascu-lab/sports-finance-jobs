@@ -14,12 +14,16 @@ class SourceConfig:
     ats: str
     endpoint: str
     board_url: str
+    method: str = "GET"
+    page_size: int = 100
+    search_term: str = ""
+    site_number: str = ""
 
 
 # These boards cover professional teams, sports technology, sports media,
-# ticketing, sports commerce, sports betting/prediction markets, and public
-# investment-banking / M&A recruiting. The endpoints are public ATS JSON feeds;
-# the pipeline never reads board HTML.
+# ticketing, sports commerce, sports betting/prediction markets, investment
+# banking, credit, fintech, startups, higher education, and general finance.
+# The endpoints are public ATS JSON feeds; the pipeline never reads board HTML.
 SOURCES: tuple[SourceConfig, ...] = (
     SourceConfig(
         "baltimoreorioles",
@@ -203,11 +207,71 @@ SOURCES: tuple[SourceConfig, ...] = (
         "https://boards-api.greenhouse.io/v1/boards/taketwo/jobs?content=true",
         "https://job-boards.greenhouse.io/taketwo",
     ),
+    SourceConfig(
+        "utaustin",
+        "University of Texas at Austin",
+        "Workday",
+        "https://utaustin.wd1.myworkdayjobs.com/wday/cxs/utaustin/UTstaff/jobs",
+        "https://utaustin.wd1.myworkdayjobs.com/en-US/UTstaff",
+        method="POST",
+        page_size=20,
+    ),
+    SourceConfig(
+        "nutrabolt",
+        "Nutrabolt",
+        "Workday",
+        "https://nutrabolt.wd108.myworkdayjobs.com/wday/cxs/nutrabolt/Nutrabolt_Careers/jobs",
+        "https://nutrabolt.wd108.myworkdayjobs.com/en-US/Nutrabolt_Careers",
+        method="POST",
+        page_size=20,
+    ),
+    SourceConfig(
+        "fidelity",
+        "Fidelity Investments",
+        "Workday",
+        "https://fmr.wd1.myworkdayjobs.com/wday/cxs/fmr/FidelityCareers/jobs",
+        "https://fmr.wd1.myworkdayjobs.com/en-US/FidelityCareers",
+        method="POST",
+        page_size=20,
+    ),
+    SourceConfig(
+        "intuitive",
+        "Intuitive",
+        "SmartRecruiters",
+        "https://api.smartrecruiters.com/v1/companies/Intuitive/postings",
+        "https://jobs.smartrecruiters.com/Intuitive",
+        page_size=100,
+    ),
+    SourceConfig(
+        "rrdonnelley",
+        "RR Donnelley",
+        "SmartRecruiters",
+        "https://api.smartrecruiters.com/v1/companies/RRDonnelley/postings",
+        "https://jobs.smartrecruiters.com/RRDonnelley",
+        page_size=100,
+    ),
+    SourceConfig(
+        "experian",
+        "Experian",
+        "SmartRecruiters",
+        "https://api.smartrecruiters.com/v1/companies/Experian/postings",
+        "https://jobs.smartrecruiters.com/Experian",
+        page_size=100,
+    ),
+    SourceConfig(
+        "oraclecareers",
+        "Oracle",
+        "Oracle",
+        "https://eeho.fa.us2.oraclecloud.com/hcmRestApi/resources/latest/recruitingCEJobRequisitions",
+        "https://careers.oracle.com/en/sites/jobsearch/",
+        page_size=100,
+        site_number="jobsearch",
+    ),
 )
 
 SOURCE_BY_NAME = {source.name: source for source in SOURCES}
 
-ROLE_NAME = "Entry-level sports finance, FP&A, analytics, and New York IB/M&A"
+ROLE_NAME = "Entry-level finance, FP&A, analytics, credit, and New York IB/M&A"
 ROLE_RULE_SUMMARY = (
     "Include titles containing analyst, analytics, finance, FP&A, financial, "
     "strategy, planning, revenue, pricing, operations, accounting, treasury, "

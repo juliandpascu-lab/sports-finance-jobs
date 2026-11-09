@@ -1,8 +1,9 @@
-"""Normalize Greenhouse, Lever, and Ashby public job feeds."""
+"""Normalize public ATS job feeds into the common history columns."""
 
 from __future__ import annotations
 
-from datetime import datetime, timezone
+from datetime import date, datetime, timedelta, timezone
+import re
 from typing import Any
 
 from .config import SourceConfig
@@ -18,7 +19,27 @@ def _date(value: Any) -> str:
     try:
         return datetime.fromisoformat(text.replace("Z", "+00:00")).date().isoformat()
     except ValueError:
-        return text[:10] if len(text) >= 10 else ""
+        match = re.match(r"^(\d{4}-\d{2}-\d{2})", text)
+        return match.group(1) if match else ""
+
+
+def _workday_date(value: Any, as_of_date: str) -> str:
+    parsed = _date(value)
+    if parsed or not as_of_date:
+        return parsed
+    text = str(value or "").casefold()
+    try:
+        current = date.fromisoformat(as_of_date)
+    except ValueError:
+        return ""
+    if "today" in text:
+        return current.isoformat()
+    if "yesterday" in text:
+        return (current - timedelta(days=1)).isoformat()
+    match = re.search(r"(\d+)\s+days?\s+ago", text)
+    if match:
+        return (current - timedelta(days=int(match.group(1)))).isoformat()
+    return ""
 
 
 def _join(values: list[Any]) -> str:
@@ -44,6 +65,22 @@ def _lever_jobs(payload: Any) -> list[dict[str, Any]]:
 
 def _ashby_jobs(payload: dict[str, Any]) -> list[dict[str, Any]]:
     return payload.get("jobs", [])
+
+
+def _workday_jobs(payload: dict[str, Any]) -> list[dict[str, Any]]:
+    return payload.get("jobPostings", [])
+
+
+def _smartrecruiters_jobs(payload: dict[str, Any]) -> list[dict[str, Any]]:
+    return payload.get("content", [])
+
+
+def _oracle_jobs(payload: dict[str, Any]) -> list[dict[str, Any]]:
+    items = payload.get("items", [])
+    if not items or not isinstance(items[0], dict):
+        return []
+    rows = items[0].get("requisitionList", [])
+    return rows if isinstance(rows, list) else []
 
 
 def _greenhouse_posting(source: SourceConfig, item: dict[str, Any]) -> dict[str, Any]:
@@ -123,6 +160,79 @@ def _lever_posting(source: SourceConfig, item: dict[str, Any]) -> dict[str, Any]
     )
 
 
+def _workday_posting(source: SourceConfig, item: dict[str, Any], as_of_date: str) -> dict[str, Any]:
+    bullet_fields = item.get("bulletFields") or []
+    if not isinstance(bullet_fields, list):
+        bullet_fields = []
+    external_path = str(item.get("externalPath") or "").strip()
+    source_id = str(item.get("id") or (bullet_fields[0] if bullet_fields else "") or external_path)
+    url = f"{source.board_url.rstrip('/')}/{external_path.lstrip('/')}" if external_path else source.board_url
+    department = str(
+        item.get("jobFamily")
+        or item.get("jobCategory")
+        or (bullet_fields[1] if len(bullet_fields) > 1 else "")
+        or ""
+    ).strip()
+    return _posting(
+        source=source,
+        source_id=source_id,
+        title=str(item.get("title", "")).strip(),
+        location=str(item.get("locationsText") or item.get("location") or "").strip(),
+        department=department,
+        posted_date=_workday_date(item.get("postedDate") or item.get("postedOn"), as_of_date),
+        url=url,
+    )
+
+
+def _smartrecruiters_posting(source: SourceConfig, item: dict[str, Any]) -> dict[str, Any]:
+    location = item.get("location") or {}
+    if isinstance(location, dict):
+        location_name = str(location.get("fullLocation") or "").strip()
+        if not location_name:
+            location_name = _join(
+                [location.get("city", ""), location.get("region", ""), location.get("country", "")]
+            )
+    else:
+        location_name = str(location).strip()
+    department = item.get("department") or item.get("function") or {}
+    if isinstance(department, dict):
+        department = department.get("label") or department.get("name") or ""
+    source_id = str(item.get("id") or item.get("uuid") or "")
+    url = f"{source.board_url.rstrip('/')}/{source_id}" if source_id else source.board_url
+    return _posting(
+        source=source,
+        source_id=source_id,
+        title=str(item.get("name") or item.get("title") or "").strip(),
+        location=location_name,
+        department=str(department).strip(),
+        posted_date=_date(item.get("releasedDate") or item.get("postedDate")),
+        url=url,
+    )
+
+
+def _oracle_posting(source: SourceConfig, item: dict[str, Any]) -> dict[str, Any]:
+    secondary = item.get("secondaryLocations") or []
+    locations = [item.get("PrimaryLocation") or item.get("PrimaryLocationCountry") or ""]
+    for entry in secondary:
+        if isinstance(entry, dict):
+            locations.append(entry.get("LocationName") or entry.get("Name") or entry.get("location") or "")
+        else:
+            locations.append(entry)
+    source_id = str(item.get("Id") or item.get("RequisitionId") or "")
+    url = f"{source.board_url.rstrip('/')}/job/{source_id}" if source_id else source.board_url
+    return _posting(
+        source=source,
+        source_id=source_id,
+        title=str(item.get("Title") or "").strip(),
+        location=_join(locations),
+        department=str(
+            item.get("Department") or item.get("Category") or item.get("JobFunction") or ""
+        ).strip(),
+        posted_date=_date(item.get("PostedDate") or item.get("ExternalPostedStartDate")),
+        url=url,
+    )
+
+
 def _posting(
     *,
     source: SourceConfig,
@@ -147,7 +257,9 @@ def _posting(
     }
 
 
-def normalize_source_payload(source: SourceConfig, payload: Any) -> list[dict[str, Any]]:
+def normalize_source_payload(
+    source: SourceConfig, payload: Any, *, as_of_date: str = ""
+) -> list[dict[str, Any]]:
     """Convert one ATS response into the common posting columns."""
 
     if source.ats == "Greenhouse":
@@ -156,4 +268,10 @@ def normalize_source_payload(source: SourceConfig, payload: Any) -> list[dict[st
         return [_ashby_posting(source, item) for item in _ashby_jobs(payload)]
     if source.ats == "Lever":
         return [_lever_posting(source, item) for item in _lever_jobs(payload)]
+    if source.ats == "Workday":
+        return [_workday_posting(source, item, as_of_date) for item in _workday_jobs(payload)]
+    if source.ats == "SmartRecruiters":
+        return [_smartrecruiters_posting(source, item) for item in _smartrecruiters_jobs(payload)]
+    if source.ats == "Oracle":
+        return [_oracle_posting(source, item) for item in _oracle_jobs(payload)]
     raise ValueError(f"Unsupported ATS: {source.ats}")
