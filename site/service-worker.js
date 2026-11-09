@@ -1,5 +1,5 @@
-const CACHE = "finance-sports-jobs-v8";
-const SHELL = ["./", "./index.html", "./browse.html", "./market.html", "./styles.css", "./app.js", "./market.js", "./manifest.webmanifest", "./icon.svg", "./us-states.json"];
+const CACHE = "finance-sports-jobs-v9";
+const SHELL = ["./", "./index.html", "./browse.html", "./market.html", "./resume.html", "./styles.css", "./app.js", "./market.js", "./resume.js", "./manifest.webmanifest", "./icon.svg", "./us-states.json"];
 
 self.addEventListener("install", (event) => {
   event.waitUntil(caches.open(CACHE).then((cache) => cache.addAll(SHELL)).then(() => self.skipWaiting()));

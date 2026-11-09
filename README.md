@@ -8,8 +8,10 @@ an early-career finance job search.
 The project collects open jobs from sports-connected employers, banks, fintechs,
 startups, credit employers, and general finance employers through public
 applicant-tracking-system JSON endpoints. It maintains a reproducible posting
-history, publishes daily changes through GitHub Issues, and serves a three-page
-installable site through GitHub Pages.
+history, publishes daily changes through GitHub Issues, and serves an
+installable site through GitHub Pages. The public site also includes a
+browser-only Resume Vault; the resume file itself is never committed or
+uploaded.
 
 ## Current status
 
@@ -33,7 +35,7 @@ GitHub Issue, pushes the generated data commit, and deploys the refreshed site.
 | `data/history.csv` | Fixed-path normalized posting history. |
 | `data/raw/` | Fixed root for dated, compressed source responses. |
 | `data/status.json` | Fixed-path summary of the latest pipeline run. |
-| `site/` | Today, Browse, Market, PWA manifest, service worker, and generated data mirror. |
+| `site/` | Today, Browse, Market, private browser-only Resume Vault, PWA manifest, service worker, and generated data mirror. |
 | `src/job_watcher/config.py` | Sports, banking, fintech, startup, and general-finance watchlist and role description. |
 | `src/job_watcher/collector.py` | Public JSON fetching and compressed raw-file persistence. |
 | `src/job_watcher/history.py` | Rebuilds history exclusively from raw files. |
@@ -51,7 +53,7 @@ GitHub Issue, pushes the generated data commit, and deploys the refreshed site.
 | `tests/test_schema.py` | Schema contract tests. |
 | `tests/test_status.py` | Tests successful-date counting in the status file. |
 | `pyproject.toml` | Python package and test configuration. |
-| `site/` | Source site bundle: `index.html`, `browse.html`, `market.html`, shared `app.js`, `market.js`, `styles.css`, `icon.svg`, `manifest.webmanifest`, `service-worker.js`, `README.md`, and deployment marker files. |
+| `site/` | Source site bundle: Today, Browse, Market, Resume Vault, shared scripts/styles, PWA files, and deployment marker files. |
 | `dist/` | Generated static deployment mirror of the site bundle. |
 
 ## Fixed data paths

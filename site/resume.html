@@ -1,0 +1,59 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="theme-color" content="#10263f" />
+    <meta name="description" content="Private, browser-only resume viewer for the Finance + Sports Job Watcher." />
+    <link rel="manifest" href="manifest.webmanifest" />
+    <link rel="icon" href="icon.svg" type="image/svg+xml" />
+    <link rel="stylesheet" href="styles.css" />
+    <title>Finance + Sports Jobs — Resume Vault</title>
+  </head>
+  <body data-page="resume">
+    <header class="topbar">
+      <a class="brand" href="index.html"><span class="brand-mark">↗</span><span>FINANCE / SPORTS WATCH</span></a>
+      <div class="topbar-meta"><span class="topbar-status-dot"></span><span data-topbar-text>Daily ATS watch · loading source health</span></div>
+      <nav aria-label="Main navigation"><a class="nav-link" data-nav="today" href="index.html">Today</a><a class="nav-link" data-nav="browse" href="browse.html">Browse</a><a class="nav-link" data-nav="market" href="market.html">Market</a><a class="nav-link active" data-nav="resume" href="resume.html">Resume Vault</a></nav>
+    </header>
+
+    <main class="page-shell">
+      <section class="hero hero-compact resume-hero">
+        <p class="eyebrow">PRIVATE WORKSPACE · LOCAL ONLY</p>
+        <h1>Your resume, on your terms.</h1>
+        <p class="hero-copy">Select the original DOCX from your computer to read it here. The file is processed in this browser tab only—it is never uploaded, placed in GitHub, or saved to the site.</p>
+        <div class="hero-details"><span><strong>Storage</strong> Browser memory only</span><span><strong>Format</strong> Original DOCX</span><span><strong>Changes</strong> None</span></div>
+      </section>
+
+      <section class="resume-workspace">
+        <article class="panel resume-control-panel">
+          <div class="section-heading"><div><p class="eyebrow">RESUME VAULT</p><h2>Choose your file</h2></div><span class="private-badge">Private</span></div>
+          <p class="resume-copy">This page does not have a copy of your resume. Choose the file directly from your computer whenever you want to review it.</p>
+          <label class="resume-file-drop" for="resume-file">
+            <span class="resume-file-icon">DOCX</span>
+            <span><strong>Select resume</strong><small>Accepts Microsoft Word .docx files</small></span>
+            <input id="resume-file" type="file" accept=".docx,application/vnd.openxmlformats-officedocument.wordprocessingml.document" />
+          </label>
+          <div id="resume-status" class="resume-status" aria-live="polite"><strong>No file selected</strong><span>Your resume will stay on this device.</span></div>
+          <div class="resume-metadata" aria-label="Selected file details">
+            <div><span>File</span><strong id="resume-name">—</strong></div>
+            <div><span>Size</span><strong id="resume-size">—</strong></div>
+            <div><span>Fingerprint</span><strong id="resume-fingerprint" class="resume-hash">—</strong></div>
+            <div><span>Integrity</span><strong id="resume-integrity">Not compared</strong></div>
+          </div>
+          <div class="resume-actions"><a id="resume-open-original" class="apply-button resume-action-button" href="#" hidden>Open original DOCX ↗</a><button id="resume-clear" class="text-button" type="button" disabled>Clear this tab</button></div>
+          <div class="resume-privacy-note"><span>⌁</span><p><strong>Private by design.</strong> The viewer does not use uploads, localStorage, or IndexedDB. Clearing the tab removes the selected file from this page.</p></div>
+        </article>
+
+        <article class="panel resume-preview-panel">
+          <div class="resume-preview-toolbar"><div><p class="eyebrow">LOCAL PREVIEW</p><h2 id="resume-preview-heading">Waiting for your file</h2></div><span id="resume-preview-state" class="pill">No file loaded</span></div>
+          <div id="resume-preview" class="resume-preview" aria-live="polite"><div class="resume-empty"><span>◫</span><strong>Your resume will appear here.</strong><p>The preview is extracted from the selected DOCX in your browser. Your original file stays unchanged.</p></div></div>
+        </article>
+      </section>
+    </main>
+
+    <footer class="footer">Your resume stays on your device · <a href="browse.html">Find roles to review</a> · <a href="index.html">Back to today</a></footer>
+    <script src="app.js"></script>
+    <script src="resume.js"></script>
+  </body>
+</html>
