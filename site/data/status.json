@@ -1,8 +1,8 @@
 {
-  "run_time": "2026-11-09T01:10:09.135522Z",
+  "run_time": "2026-11-09T01:12:24.144879Z",
   "first_run_date": "2026-11-08",
   "days_with_success": 2,
-  "open": 6763,
+  "open": 6841,
   "new_today": 0,
   "removed_today": 0,
   "sources": [
@@ -169,7 +169,7 @@
     {
       "name": "oraclecareers",
       "ok": true,
-      "count": 2743
+      "count": 2821
     }
   ]
 }
