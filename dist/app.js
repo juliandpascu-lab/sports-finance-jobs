@@ -28,6 +28,17 @@ const MARKET_MARKERS = {
   "New York": ["new york", "new york city", "nyc", "brooklyn", "bronx", "jersey city", "manhattan", "nassau county", "queens", "staten island", "suffolk county", "white plains"]
 };
 const INVESTMENT_BANKING_TERMS = ["investment banking", "investment banker", "ibd", "m&a", "merger", "corporate development", "transaction", "deals"];
+const APPROVED_ROLE_SEARCHES = [
+  "Financial Analyst", "FP&A Analyst", "Corporate Finance Analyst", "Revenue Finance Analyst",
+  "Strategic Finance Analyst", "Treasury Analyst", "Credit Analyst", "Commercial Banking Analyst",
+  "Corporate Banking Analyst", "Valuation Analyst", "Equity Research Associate", "Investment Analyst",
+  "Investment Banking Analyst", "M&A Analyst", "Transaction Advisory Analyst", "Portfolio Analyst",
+  "Financial Risk Analyst", "Asset Management Analyst", "Private Credit Analyst", "Corporate Development Analyst"
+];
+const NEW_YORK_ROLE_SEARCHES = [
+  "Investment Banking Analyst", "M&A Analyst", "Transaction Advisory Analyst", "Valuation Analyst",
+  "Equity Research Associate", "Investment Analyst", "Corporate Development Analyst"
+];
 const state = { data: null, shortlist: new Set(JSON.parse(localStorage.getItem("sportsFinanceShortlist") || "[]")) };
 
 function escapeHTML(value) {
@@ -93,9 +104,13 @@ function renderExternalSearches() {
   const bankingQueries = ["Investment Banking Analyst", "M&A Analyst", "Transaction Advisory Analyst", "Valuation Analyst"];
   element.innerHTML = TARGET_MARKETS.map((market) => {
     const searchQueries = market === "New York" ? bankingQueries : queries;
+    const approvedSearches = market === "New York" ? NEW_YORK_ROLE_SEARCHES : APPROVED_ROLE_SEARCHES;
+    const approvedQuery = approvedSearches.map((query) => `"${query}"`).join(" OR ");
     const location = MARKET_SEARCH_LOCATIONS[market];
+    const roleLabel = market === "New York" ? "Eligible IB/M&A role families" : "All 20 approved role families";
+    const allRolesLink = `<span class="external-search-item"><span>${roleLabel}</span><a href="${externalJobSearchURL("Indeed", approvedQuery, location)}" target="_blank" rel="noopener">Indeed ↗</a><a href="${externalJobSearchURL("LinkedIn", approvedQuery, location)}" target="_blank" rel="noopener">LinkedIn ↗</a></span>`;
     const links = searchQueries.map((query) => `<span class="external-search-item"><span>${escapeHTML(query)}</span><a href="${externalJobSearchURL("Indeed", query, location)}" target="_blank" rel="noopener">Indeed ↗</a><a href="${externalJobSearchURL("LinkedIn", query, location)}" target="_blank" rel="noopener">LinkedIn ↗</a></span>`).join("");
-    return `<div class="external-market"><strong>${escapeHTML(market)}</strong>${links}</div>`;
+    return `<div class="external-market"><strong>${escapeHTML(market)}</strong>${allRolesLink}${links}</div>`;
   }).join("");
 }
 
