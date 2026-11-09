@@ -1,5 +1,5 @@
-const CACHE = "finance-sports-jobs-v6";
-const SHELL = ["./", "./index.html", "./browse.html", "./market.html", "./styles.css", "./app.js", "./market.js", "./manifest.webmanifest", "./icon.svg"];
+const CACHE = "finance-sports-jobs-v7";
+const SHELL = ["./", "./index.html", "./browse.html", "./market.html", "./styles.css", "./app.js", "./market.js", "./manifest.webmanifest", "./icon.svg", "./us-states.json"];
 
 self.addEventListener("install", (event) => {
   event.waitUntil(caches.open(CACHE).then((cache) => cache.addAll(SHELL)).then(() => self.skipWaiting()));
@@ -13,7 +13,7 @@ self.addEventListener("fetch", (event) => {
   if (event.request.method !== "GET") return;
   event.respondWith(
     fetch(event.request).then((response) => {
-      if (response.ok && (event.request.url.includes("/data/") || event.request.url.endsWith(".html") || event.request.url.endsWith(".css") || event.request.url.endsWith(".js"))) {
+      if (response.ok && (event.request.url.includes("/data/") || event.request.url.endsWith(".html") || event.request.url.endsWith(".css") || event.request.url.endsWith(".js") || event.request.url.endsWith(".json"))) {
         const copy = response.clone();
         caches.open(CACHE).then((cache) => cache.put(event.request, copy));
       }

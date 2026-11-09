@@ -33,11 +33,11 @@ const MARKET_MARKERS = {
   "New York": ["new york", "new york city", "nyc", "brooklyn", "bronx", "jersey city", "manhattan", "nassau county", "queens", "staten island", "suffolk county", "white plains"]
 };
 const MAP_COORDINATES = {
-  "Dallas-Fort Worth": { x: 365, y: 285, label: "DFW" },
-  "Kansas City": { x: 405, y: 207, label: "KC" },
-  "Austin": { x: 337, y: 324, label: "Austin" },
-  "Fayetteville / Northwest Arkansas": { x: 414, y: 264, label: "NWA" },
-  "New York": { x: 650, y: 177, label: "NY" }
+  "Dallas-Fort Worth": { x: 358, y: 218, label: "DFW" },
+  "Kansas City": { x: 380, y: 150, label: "KC" },
+  "Austin": { x: 351, y: 245, label: "Austin" },
+  "Fayetteville / Northwest Arkansas": { x: 384, y: 184, label: "NWA" },
+  "New York": { x: 575, y: 132, label: "NY" }
 };
 const INVESTMENT_BANKING_TERMS = ["investment banking", "investment banker", "ibd", "m&a", "merger", "corporate development", "transaction", "deals"];
 const APPROVED_ROLE_SEARCHES = [
@@ -64,6 +64,7 @@ function readStoredJSON(key, fallback) {
 const storedShortlist = readStoredJSON("sportsFinanceShortlist", []);
 const state = {
   data: null,
+  mapGeometry: null,
   shortlist: new Set(Array.isArray(storedShortlist) ? storedShortlist : []),
   savedSearches: readStoredJSON("sportsFinanceSavedSearches", []),
   mapMarket: "all",
@@ -286,6 +287,41 @@ function renderMatchInsights(rows) {
   document.getElementById("insight-market-list").innerHTML = marketEntries.map(([label, value]) => `<div class="insight-bar-row"><span>${escapeHTML(label)}</span><span class="bar-track"><span class="bar-fill" style="width:${Math.max(value ? 4 : 0, value / max * 100)}%"></span></span><strong>${value}</strong></div>`).join("");
 }
 
+function mapProjectPoint(point, stateName) {
+  const longitude = Number(point[0]), latitude = Number(point[1]);
+  if (stateName === "Alaska") {
+    return [28 + ((longitude + 188) / 58) * 142, 350 + ((65 - latitude) / 17) * 52];
+  }
+  if (stateName === "Hawaii") return [187 + ((longitude + 161) / 8) * 68, 369 + ((23 - latitude) / 7) * 31];
+  return [94 + ((longitude + 125) / 65) * 612, 42 + ((49 - latitude) / 27) * 292];
+}
+function mapRingPath(ring, stateName) {
+  return ring.map((point, index) => {
+    const [x, y] = mapProjectPoint(point, stateName);
+    return `${index ? "L" : "M"}${x.toFixed(2)} ${y.toFixed(2)}`;
+  }).join(" ") + " Z";
+}
+function mapFeaturePath(feature) {
+  const name = feature.properties?.name || "";
+  if (!feature.geometry || name === "Puerto Rico") return "";
+  const polygons = feature.geometry.type === "Polygon" ? [feature.geometry.coordinates] : feature.geometry.coordinates;
+  return polygons.map((polygon) => polygon.map((ring) => mapRingPath(ring, name)).join(" ")).join(" ");
+}
+function renderMapGeometry() {
+  const layer = document.getElementById("map-state-layer");
+  if (!layer || layer.dataset.rendered) return;
+  if (!state.mapGeometry?.features?.length) {
+    layer.innerHTML = `<text class="map-unavailable" x="400" y="205" text-anchor="middle">Map geometry unavailable offline</text>`;
+    return;
+  }
+  layer.innerHTML = state.mapGeometry.features.map((feature) => {
+    const name = feature.properties?.name || "State";
+    const path = mapFeaturePath(feature);
+    return path ? `<path class="map-state" d="${path}" data-state="${escapeHTML(name)}"><title>${escapeHTML(name)}</title></path>` : "";
+  }).join("");
+  layer.dataset.rendered = "true";
+}
+
 function mapHealth(row) {
   const age = postedAge(row);
   return age <= 1 ? "fresh" : age <= 7 ? "active" : "aging";
@@ -313,6 +349,7 @@ function renderMap() {
   const pills = document.getElementById("map-market-pills");
   const list = document.getElementById("map-job-list");
   if (!pins || !pills || !list) return;
+  renderMapGeometry();
   const healthFilter = document.getElementById("map-health-filter")?.value || "all";
   const allRows = mapMarketRows("all", state.mapScope);
   const selectedBaseRows = mapMarketRows(state.mapMarket, state.mapScope);
@@ -499,8 +536,10 @@ function setupBrowse() {
 }
 
 async function loadData() {
-  const [statusResponse, historyResponse] = await Promise.all([fetch("data/status.json", {cache:"no-store"}), fetch("data/history.csv", {cache:"no-store"})]);
+  const mapRequest = document.body.dataset.page === "today" ? fetch("us-states.json", {cache:"no-store"}).catch(() => null) : Promise.resolve(null);
+  const [statusResponse, historyResponse, mapResponse] = await Promise.all([fetch("data/status.json", {cache:"no-store"}), fetch("data/history.csv", {cache:"no-store"}), mapRequest]);
   state.data = { status: await statusResponse.json(), history: parseCSV(await historyResponse.text()) };
+  state.mapGeometry = mapResponse?.ok ? await mapResponse.json() : null;
   return state.data;
 }
 
