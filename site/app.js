@@ -32,6 +32,13 @@ const MARKET_MARKERS = {
   "Fayetteville / Northwest Arkansas": ["northwest arkansas", "nwa", "fayetteville, ar", "fayetteville ar", "fayetteville, arkansas", "fayetteville arkansas", "bentonville, ar", "bentonville ar", "bentonville, arkansas", "bentonville arkansas", "bella vista, ar", "bella vista ar", "bella vista, arkansas", "bella vista arkansas", "rogers, ar", "rogers ar", "rogers, arkansas", "rogers arkansas", "springdale, ar", "springdale ar", "springdale, arkansas", "springdale arkansas", "lowell, ar", "lowell ar", "lowell, arkansas", "lowell arkansas", "johnson, ar", "johnson ar", "johnson, arkansas", "johnson arkansas", "tontitown, ar", "tontitown ar", "tontitown, arkansas", "tontitown arkansas", "siloam springs, ar", "siloam springs ar", "siloam springs, arkansas", "siloam springs arkansas"],
   "New York": ["new york", "new york city", "nyc", "brooklyn", "bronx", "jersey city", "manhattan", "nassau county", "queens", "staten island", "suffolk county", "white plains"]
 };
+const MAP_COORDINATES = {
+  "Dallas-Fort Worth": { x: 365, y: 285, label: "DFW" },
+  "Kansas City": { x: 405, y: 207, label: "KC" },
+  "Austin": { x: 337, y: 324, label: "Austin" },
+  "Fayetteville / Northwest Arkansas": { x: 414, y: 264, label: "NWA" },
+  "New York": { x: 650, y: 177, label: "NY" }
+};
 const INVESTMENT_BANKING_TERMS = ["investment banking", "investment banker", "ibd", "m&a", "merger", "corporate development", "transaction", "deals"];
 const APPROVED_ROLE_SEARCHES = [
   "Financial Analyst", "FP&A Analyst", "Corporate Finance Analyst", "Revenue Finance Analyst",
@@ -58,7 +65,9 @@ const storedShortlist = readStoredJSON("sportsFinanceShortlist", []);
 const state = {
   data: null,
   shortlist: new Set(Array.isArray(storedShortlist) ? storedShortlist : []),
-  savedSearches: readStoredJSON("sportsFinanceSavedSearches", [])
+  savedSearches: readStoredJSON("sportsFinanceSavedSearches", []),
+  mapMarket: "all",
+  mapScope: "focus"
 };
 if (!Array.isArray(state.savedSearches)) state.savedSearches = [];
 
@@ -277,6 +286,77 @@ function renderMatchInsights(rows) {
   document.getElementById("insight-market-list").innerHTML = marketEntries.map(([label, value]) => `<div class="insight-bar-row"><span>${escapeHTML(label)}</span><span class="bar-track"><span class="bar-fill" style="width:${Math.max(value ? 4 : 0, value / max * 100)}%"></span></span><strong>${value}</strong></div>`).join("");
 }
 
+function mapHealth(row) {
+  const age = postedAge(row);
+  return age <= 1 ? "fresh" : age <= 7 ? "active" : "aging";
+}
+function mapHealthLabel(value) { return value === "fresh" ? "Fresh" : value === "active" ? "Active" : "Aging"; }
+function mapHealthRows(rows, filter) { return filter === "all" ? rows : rows.filter((row) => mapHealth(row) === filter); }
+function mapMarketRows(market, scope) {
+  let rows = state.data.history.filter((row) => row.status === "open");
+  if (scope === "focus") rows = rows.filter(isPreferredRow);
+  else rows = rows.filter(isTargetMarketRow);
+  return market === "all" ? rows : rows.filter((row) => matchedMarkets(row).includes(market));
+}
+function mapHealthCounts(rows) {
+  return { fresh: rows.filter((row) => mapHealth(row) === "fresh").length, active: rows.filter((row) => mapHealth(row) === "active").length, aging: rows.filter((row) => mapHealth(row) === "aging").length };
+}
+function mapDominantHealth(counts) {
+  return ["fresh", "active", "aging"].sort((a, b) => counts[b] - counts[a])[0];
+}
+function mapJobRow(row) {
+  const health = mapHealth(row);
+  return `<a class="map-job-row" href="${escapeHTML(row.url)}" target="_blank" rel="noopener"><span class="job-health-dot ${health}"></span><span class="map-job-copy"><strong>${escapeHTML(row.title)}</strong><span>${escapeHTML(row.employer)} · ${escapeHTML(row.location || "Location not provided")}</span><small>${mapHealthLabel(health)} · posted ${escapeHTML(formatDate(postingDate(row)))}</small></span><span class="map-job-arrow">↗</span></a>`;
+}
+function renderMap() {
+  const pins = document.getElementById("map-pins");
+  const pills = document.getElementById("map-market-pills");
+  const list = document.getElementById("map-job-list");
+  if (!pins || !pills || !list) return;
+  const healthFilter = document.getElementById("map-health-filter")?.value || "all";
+  const allRows = mapMarketRows("all", state.mapScope);
+  const selectedBaseRows = mapMarketRows(state.mapMarket, state.mapScope);
+  const selectedRows = mapHealthRows(selectedBaseRows, healthFilter).sort((a, b) => postedAge(a) - postedAge(b) || a.title.localeCompare(b.title));
+  const mapPin = (market) => {
+    const coordinate = MAP_COORDINATES[market];
+    const baseRows = mapMarketRows(market, state.mapScope);
+    const visibleRows = mapHealthRows(baseRows, healthFilter);
+    const counts = mapHealthCounts(baseRows);
+    const radius = 8 + Math.min(16, Math.sqrt(visibleRows.length) * 2.4);
+    const selected = state.mapMarket === market ? " selected" : "";
+    return `<g class="map-pin-group${selected}" data-market-pin="${escapeHTML(market)}" tabindex="0" role="button" aria-label="${escapeHTML(market)}: ${visibleRows.length} open jobs"><circle class="map-pin-halo ${mapDominantHealth(counts)}" cx="${coordinate.x}" cy="${coordinate.y}" r="${radius + 7}"></circle><circle class="map-pin ${mapDominantHealth(counts)}" cx="${coordinate.x}" cy="${coordinate.y}" r="${radius}"></circle><text class="map-pin-count" x="${coordinate.x}" y="${coordinate.y + 4}">${visibleRows.length}</text><text class="map-pin-label" x="${coordinate.x}" y="${coordinate.y + radius + 19}">${escapeHTML(coordinate.label)}</text></g>`;
+  };
+  pins.innerHTML = TARGET_MARKETS.map(mapPin).join("");
+  const marketButtons = [{ value: "all", label: "All markets", count: mapHealthRows(allRows, healthFilter).length }, ...TARGET_MARKETS.map((market) => ({ value: market, label: market, count: mapHealthRows(mapMarketRows(market, state.mapScope), healthFilter).length }))];
+  pills.innerHTML = marketButtons.map((market) => `<button class="map-market-pill ${state.mapMarket === market.value ? "selected" : ""}" data-market-select="${escapeHTML(market.value)}" type="button"><span>${escapeHTML(market.label)}</span><strong>${market.count}</strong></button>`).join("");
+  const selectedCounts = mapHealthCounts(selectedBaseRows);
+  document.getElementById("map-selection-title").textContent = state.mapMarket === "all" ? "All target markets" : state.mapMarket;
+  document.getElementById("map-selection-count").textContent = selectedRows.length;
+  document.getElementById("map-selection-summary").textContent = `${selectedRows.length} ${state.mapScope === "focus" ? "approved-title" : "target-market"} posting${selectedRows.length === 1 ? "" : "s"} match this health filter · ${selectedBaseRows.length} open total in this view`;
+  document.getElementById("map-health-stats").innerHTML = ["fresh", "active", "aging"].map((health) => `<span class="map-health-stat ${health}"><i class="job-health-dot ${health}"></i><strong>${selectedCounts[health]}</strong> ${mapHealthLabel(health)}</span>`).join("");
+  list.innerHTML = selectedRows.length ? selectedRows.slice(0, 8).map(mapJobRow).join("") : `<div class="empty-state"><span>◎</span><p>No open jobs match this market and health filter.</p></div>`;
+  pills.querySelectorAll("[data-market-select]").forEach((button) => button.addEventListener("click", () => { state.mapMarket = button.dataset.marketSelect; renderMap(); }));
+  pins.querySelectorAll("[data-market-pin]").forEach((pin) => {
+    const select = () => { state.mapMarket = pin.dataset.marketPin; renderMap(); };
+    pin.addEventListener("click", select);
+    pin.addEventListener("keydown", (event) => { if (event.key === "Enter" || event.key === " ") { event.preventDefault(); select(); } });
+  });
+}
+function setupMap() {
+  const filter = document.getElementById("map-health-filter");
+  if (!filter) return;
+  if (!filter.dataset.bound) {
+    filter.addEventListener("change", renderMap);
+    document.querySelectorAll("[data-map-scope]").forEach((button) => button.addEventListener("click", () => {
+      state.mapScope = button.dataset.mapScope;
+      document.querySelectorAll("[data-map-scope]").forEach((item) => item.classList.toggle("active", item === button));
+      renderMap();
+    }));
+    filter.dataset.bound = "true";
+  }
+  renderMap();
+}
+
 function savedSearchMatches(search, row) {
   if (row.status !== "open") return false;
   if (search.market && !matchedMarkets(row).includes(search.market)) return false;
@@ -378,6 +458,7 @@ function renderToday() {
   renderJobList(document.getElementById("new-list"), newRows, { compact: true, empty: "No new non-first-run postings today." });
   renderJobList(document.getElementById("removed-list"), removedRows, { compact: true, empty: "No postings were removed today." });
   renderMatchInsights(currentRows);
+  setupMap();
   bindStars();
 }
 

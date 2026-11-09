@@ -57,6 +57,29 @@
 
       <section class="panel match-insights-panel"><div class="section-heading"><div><p class="eyebrow">MATCH INTELLIGENCE</p><h2>Where the strongest opportunities are.</h2></div><span class="pill">Browser-calculated</span></div><p class="current-summary">A transparent signal built from title fit, target-market fit, and posting freshness. It is a sorting aid, not a hiring prediction.</p><div class="insight-grid"><div class="insight-stat"><span>Top target market</span><strong id="insight-top-market">—</strong><small id="insight-top-market-note">Waiting for the latest snapshot</small></div><div class="insight-stat"><span>Top employer</span><strong id="insight-top-employer">—</strong><small id="insight-top-employer-note">Waiting for the latest snapshot</small></div><div class="insight-stat"><span>Freshest matches</span><strong id="insight-fresh-count">—</strong><small>approved roles posted in the last 24 hours</small></div></div><div id="insight-market-list" class="insight-market-list"></div></section>
 
+      <section class="panel market-explorer">
+        <div class="section-heading"><div><p class="eyebrow">LOCATION INTELLIGENCE</p><h2>Find the healthiest market.</h2></div><span class="pill">City-level view</span></div>
+        <p class="current-summary">Click a pin to inspect open postings in that market. Health is based on posted-date freshness: Fresh is within 24 hours, Active is 2–7 days, and Aging is older than 7 days.</p>
+        <div class="map-toolbar"><div class="segmented" role="group" aria-label="Map posting scope"><button class="segment active" data-map-scope="focus" type="button">Focus roles</button><button class="segment" data-map-scope="all" type="button">All target-market jobs</button></div><label class="map-health-select">Job health<select id="map-health-filter"><option value="all">All open jobs</option><option value="fresh">Fresh · 24 hours</option><option value="active">Active · 2–7 days</option><option value="aging">Aging · 8+ days</option></select></label></div>
+        <div id="map-market-pills" class="map-market-pills" aria-label="Target market selection"></div>
+        <div class="market-explorer-grid">
+          <div class="job-map-card">
+            <svg id="job-map" class="job-map" viewBox="0 0 800 420" role="img" aria-label="Interactive target market job map">
+              <path class="us-map-shape" d="M86 121 132 91 189 88 236 68 296 75 353 65 414 78 465 75 510 97 566 99 623 119 676 153 715 193 703 229 718 264 690 296 655 306 622 338 567 333 526 350 474 339 427 354 378 335 331 341 291 322 248 323 211 304 173 298 142 272 119 241 105 204 83 173Z"></path>
+              <path class="us-map-detail" d="M132 92 173 131 211 153 250 181 287 201 326 220 367 246 405 265 449 282 494 298 545 306 596 292 649 271"></path>
+              <g id="map-pins"></g>
+            </svg>
+            <div class="map-legend"><span><i class="legend-dot fresh"></i>Fresh</span><span><i class="legend-dot active"></i>Active</span><span><i class="legend-dot aging"></i>Aging</span><span class="map-legend-note">Pin size = open roles</span></div>
+          </div>
+          <aside class="map-detail-panel">
+            <div class="map-detail-heading"><div><p class="eyebrow">SELECTED MARKET</p><h3 id="map-selection-title">All target markets</h3></div><span class="count-badge" id="map-selection-count">—</span></div>
+            <p id="map-selection-summary" class="map-selection-summary">Choose a pin to see its job health.</p>
+            <div id="map-health-stats" class="map-health-stats"></div>
+            <div id="map-job-list" class="map-job-list" aria-live="polite"></div>
+          </aside>
+        </div>
+      </section>
+
       <section class="change-grid">
         <article class="panel change-panel"><div class="section-heading"><div><p class="eyebrow">JUST IN</p><h2>New postings</h2></div><span class="count-badge" id="new-count">0</span></div><div id="new-list" class="job-list"></div></article>
         <article class="panel change-panel"><div class="section-heading"><div><p class="eyebrow">NO LONGER LISTED</p><h2>Removed postings</h2></div><span class="count-badge count-badge-muted" id="removed-count">0</span></div><div id="removed-list" class="job-list"></div></article>
