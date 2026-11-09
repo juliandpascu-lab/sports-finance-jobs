@@ -125,6 +125,7 @@ def test_title_rule_prioritizes_early_career_matches() -> None:
     assert is_in_role("Equity Research Associate") is True
     assert is_in_role("Investment Analyst") is True
     assert is_in_role("Investment Banking Analyst") is True
+    assert is_in_role("2028 IBD Summer Analyst") is True
     assert is_in_role("M&A Analyst") is True
     assert is_in_role("Transaction Advisory Analyst") is True
     assert is_in_role("Portfolio Analyst") is True
@@ -163,6 +164,7 @@ def test_title_rule_includes_entry_level_ib_and_ma_but_not_senior_roles() -> Non
     assert is_in_role("M&A Advisory Analyst") is True
     assert is_investment_banking_or_ma("Investment Banking Analyst") is True
     assert is_investment_banking_or_ma("M&A Advisory Analyst") is True
+    assert is_investment_banking_or_ma("IBD Summer Analyst") is True
     assert is_investment_banking_or_ma("Senior Investment Banking Associate") is False
     assert is_investment_banking_or_ma("Marketing Acquisition Associate") is False
 
@@ -174,3 +176,6 @@ def test_preferred_markets_and_new_york_narrowing() -> None:
     assert is_preferred_posting("FP&A Analyst", "Dallas, TX") is True
     assert is_preferred_posting("People Analyst", "New York, NY") is False
     assert is_preferred_posting("Investment Banking Analyst", "New York") is True
+    assert is_preferred_posting("IBD Summer Analyst", "New York") is True
+    assert matched_markets("Arlington, VA") == ()
+    assert "Dallas-Fort Worth" in matched_markets("Arlington, TX")

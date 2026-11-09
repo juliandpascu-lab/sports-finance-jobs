@@ -18,12 +18,19 @@ ROLE_PATTERNS = (
     r"\bassociate\s+(?:equity research)\b",
     r"\bm\s*&\s*a(?:\s+advisory)?\s+analyst\b",
     r"\banalyst\s+m\s*&\s*a(?:\s+advisory)?\b",
+    r"\banalyst\s+fp\s*&\s*a\b",
+    r"\btreasury(?:\s+[a-z0-9&]+){0,3}\s+analyst\b",
+    r"\banalyst(?:\s+[a-z0-9&]+){0,3}\s+treasury\b",
+    r"\bibd(?:\s+[a-z0-9&]+){0,2}\s+analyst\b",
+    r"\banalyst\s+investment\s+banking\b",
+    r"\banalyst\s+ibd\b",
 )
 
 INVESTMENT_BANKING_TERMS = (
     "investment banking analyst",
     "m&a analyst",
     "m&a advisory analyst",
+    "ibd",
 )
 
 TARGET_MARKETS = (
@@ -40,7 +47,9 @@ _MARKET_MARKERS = {
         "dallas-fort worth",
         "dfw",
         "fort worth",
-        "arlington",
+        "arlington, tx",
+        "arlington tx",
+        "arlington texas",
         "frisco",
         "irving",
         "mckinney",
@@ -111,7 +120,7 @@ def is_investment_banking_or_ma(title: str) -> bool:
     normalized = _normalize_title(title)
     if SENIORITY_PATTERN.search(normalized):
         return False
-    return any(term in normalized for term in INVESTMENT_BANKING_TERMS)
+    return any(term in normalized for term in INVESTMENT_BANKING_TERMS) and "analyst" in normalized
 
 
 def matched_markets(location: str) -> tuple[str, ...]:

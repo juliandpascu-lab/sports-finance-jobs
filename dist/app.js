@@ -21,7 +21,7 @@ const MARKET_SEARCH_LOCATIONS = {
   "New York": "New York, NY"
 };
 const MARKET_MARKERS = {
-  "Dallas-Fort Worth": ["dallas", "dallas-fort worth", "dfw", "fort worth", "arlington", "frisco", "irving", "mckinney", "plano", "richardson"],
+  "Dallas-Fort Worth": ["dallas", "dallas-fort worth", "dfw", "fort worth", "arlington, tx", "arlington tx", "arlington texas", "frisco", "irving", "mckinney", "plano", "richardson"],
   "Kansas City": ["kansas city", "lee's summit", "lenexa", "olathe", "overland park", "shawnee"],
   "Austin": ["austin", "cedar park", "georgetown", "pflugerville", "round rock"],
   "Fayetteville / Northwest Arkansas": ["fayetteville", "bentonville", "bella vista", "rogers", "springdale"],
@@ -135,8 +135,12 @@ function renderToday() {
   const good = (status.sources || []).filter((source) => source.ok).length;
   document.getElementById("source-health").textContent = `${good}/${(status.sources || []).length} healthy`;
   document.getElementById("source-list").innerHTML = (status.sources || []).map((source) => `<div class="source-row"><span class="source-state ${source.ok ? "ok" : "bad"}"></span><span>${escapeHTML(SOURCE_LABELS[source.name] || source.name)}</span><strong>${source.count}</strong></div>`).join("") || `<div class="empty-state"><p>No source data yet.</p></div>`;
-  const preferredOpen = history.filter((row) => row.status === "open" && isPreferredRow(row) && postedAge(row) <= 7);
-  document.getElementById("preference-summary").textContent = `${preferredOpen.length} approved-title jobs posted in the last 7 days across Dallas–Fort Worth, Kansas City, Austin, Fayetteville/NWA, and New York IB/M&A`;
+  const currentRows = history.filter((row) => row.status === "open" && isPreferredRow(row)).sort((a, b) => postingDate(b).localeCompare(postingDate(a)) || a.title.localeCompare(b.title));
+  const preferredOpen = currentRows.filter((row) => postedAge(row) <= 7);
+  document.getElementById("preference-summary").textContent = `${currentRows.length} current approved-title matches across Dallas–Fort Worth, Kansas City, Austin, Fayetteville/NWA, and New York IB/M&A · ${preferredOpen.length} posted in the last 7 days`;
+  document.getElementById("current-count").textContent = currentRows.length;
+  document.getElementById("current-summary").textContent = currentRows.length ? "These are the open postings currently matching your exact role and location focus. Posted dates come from the employer feed; watcher dates show when this tool first saw them." : "No open posting currently matches both the approved role list and target locations.";
+  renderJobList(document.getElementById("current-list"), currentRows, { open: true, empty: "No current approved-title matches." });
   const newRows = history.filter((row) => row.first_seen === runDate && !asBool(row.first_run) && isPreferredRow(row));
   const removedRows = history.filter((row) => row.removed_date === runDate && isPreferredRow(row));
   document.getElementById("new-count").textContent = newRows.length;

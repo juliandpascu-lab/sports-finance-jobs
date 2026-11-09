@@ -60,6 +60,7 @@ h3 { margin-bottom: 7px; font-size: 16px; line-height: 1.2; }
 .count-badge { color: var(--orange-dark); background: #fff0e9; }.count-badge-muted { color: var(--muted); background: #edf1f5; }
 .text-link { display: inline-block; margin-top: 14px; color: #f5a07c; font-size: 13px; font-weight: 800; text-decoration: none; }
 .job-list { display: grid; gap: 9px; }
+.current-match-panel { margin-top: 18px; }.current-summary { max-width: 760px; margin-bottom: 14px; color: var(--muted); font-size: 13px; line-height: 1.55; }
 .job-card { display: flex; align-items: center; justify-content: space-between; gap: 16px; padding: 17px 0; border-bottom: 1px solid #edf1f5; }
 .job-card:last-child { border-bottom: 0; }.job-card-main { min-width: 0; }.job-employer, .job-meta { margin-bottom: 6px; color: var(--muted); font-size: 11px; }.job-employer { color: var(--orange-dark); font-weight: 800; letter-spacing: .02em; }.job-employer span { color: #b7c1cc; }
 .job-card h3 { overflow-wrap: anywhere; }.job-card h3 a { text-decoration: none; }.job-card h3 a:hover { color: var(--orange-dark); }.job-meta { margin-bottom: 0; line-height: 1.5; }
