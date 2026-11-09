@@ -237,7 +237,7 @@ function renderTopbar(status) {
   if (!element) return;
   const sources = status.sources || [];
   const healthy = sources.filter((source) => source.ok).length;
-  element.textContent = `${healthy}/${sources.length} ATS feeds healthy · refreshed daily`;
+  element.textContent = `${healthy}/${sources.length} feeds checked · last sync ${formatDateTime(status.run_time)}`;
 }
 
 function renderSourceHealth(status) {

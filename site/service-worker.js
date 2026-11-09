@@ -1,4 +1,4 @@
-const CACHE = "finance-sports-jobs-v7";
+const CACHE = "finance-sports-jobs-v8";
 const SHELL = ["./", "./index.html", "./browse.html", "./market.html", "./styles.css", "./app.js", "./market.js", "./manifest.webmanifest", "./icon.svg", "./us-states.json"];
 
 self.addEventListener("install", (event) => {
