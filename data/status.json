@@ -1,8 +1,8 @@
 {
-  "run_time": "2026-11-09T00:34:29.434762Z",
+  "run_time": "2026-11-09T00:43:09.869566Z",
   "first_run_date": "2026-11-08",
   "days_with_success": 2,
-  "open": 469,
+  "open": 649,
   "new_today": 0,
   "removed_today": 0,
   "sources": [
@@ -115,6 +115,26 @@
       "name": "offdeal",
       "ok": true,
       "count": 5
+    },
+    {
+      "name": "fourhands",
+      "ok": true,
+      "count": 29
+    },
+    {
+      "name": "capitalfarmcredit",
+      "ok": true,
+      "count": 21
+    },
+    {
+      "name": "successacademycharterschool",
+      "ok": true,
+      "count": 96
+    },
+    {
+      "name": "taketwo",
+      "ok": true,
+      "count": 34
     }
   ]
 }

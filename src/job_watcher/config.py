@@ -175,6 +175,34 @@ SOURCES: tuple[SourceConfig, ...] = (
         "https://api.ashbyhq.com/posting-api/job-board/offdeal",
         "https://jobs.ashbyhq.com/offdeal",
     ),
+    SourceConfig(
+        "fourhands",
+        "Four Hands",
+        "Greenhouse",
+        "https://boards-api.greenhouse.io/v1/boards/fourhands/jobs?content=true",
+        "https://job-boards.greenhouse.io/fourhands",
+    ),
+    SourceConfig(
+        "capitalfarmcredit",
+        "Capital Farm Credit",
+        "Greenhouse",
+        "https://boards-api.greenhouse.io/v1/boards/capitalfarmcredit/jobs?content=true",
+        "https://job-boards.greenhouse.io/capitalfarmcredit",
+    ),
+    SourceConfig(
+        "successacademycharterschool",
+        "Success Academy Charter Schools",
+        "Greenhouse",
+        "https://boards-api.greenhouse.io/v1/boards/successacademycharterschool/jobs?content=true",
+        "https://job-boards.greenhouse.io/successacademycharterschool",
+    ),
+    SourceConfig(
+        "taketwo",
+        "Take-Two Interactive Software",
+        "Greenhouse",
+        "https://boards-api.greenhouse.io/v1/boards/taketwo/jobs?content=true",
+        "https://job-boards.greenhouse.io/taketwo",
+    ),
 )
 
 SOURCE_BY_NAME = {source.name: source for source in SOURCES}

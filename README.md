@@ -106,6 +106,10 @@ search term is required.
 | Solomon Partners | Greenhouse | `solomonpartnersprofessionals` |
 | SAX Advisory Group | Greenhouse | `saxllp` |
 | OffDeal | Ashby | `offdeal` |
+| Four Hands | Greenhouse | `fourhands` |
+| Capital Farm Credit | Greenhouse | `capitalfarmcredit` |
+| Success Academy Charter Schools | Greenhouse | `successacademycharterschool` |
+| Take-Two Interactive Software | Greenhouse | `taketwo` |
 
 The default role rule is: **include titles containing analyst, analytics,
 finance, FP&A, financial, strategy, planning, revenue, pricing, operations,
@@ -121,6 +125,18 @@ Fayetteville/Northwest Arkansas, and New York. New York is restricted to
 entry-level investment-banking or M&A titles; the other markets use the broader
 finance, FP&A, business, and analytics rule. The history still retains every
 posting returned by every source, as required by the project brief.
+
+Browse defaults to postings whose employer-provided `posted_date` is within the
+last seven days and can be changed to 24 hours, 3 days, 14 days, 30 days, or
+any date. A new source does not make an old posting look new: the interface
+uses `posted_date` for freshness and `first_seen` only for watcher history.
+
+The Browse page also provides live, one-click Indeed and LinkedIn searches for
+each target market and finance query. The pipeline does not scrape or log into
+those sites: Indeed's documented APIs are partner/job-sync integrations, and
+LinkedIn requires approved partner access and prohibits unauthorized automated
+scraping. The live shortcuts therefore open the current search pages directly,
+while the daily data pipeline uses public employer ATS feeds.
 
 ## Commands
 
