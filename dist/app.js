@@ -26,10 +26,10 @@ const MARKET_SEARCH_LOCATIONS = {
   "New York": "New York, NY"
 };
 const MARKET_MARKERS = {
-  "Dallas-Fort Worth": ["dallas", "dallas-fort worth", "dfw", "fort worth", "arlington, tx", "arlington tx", "arlington texas", "frisco", "irving", "mckinney", "plano", "richardson"],
+  "Dallas-Fort Worth": ["dallas-fort worth", "dfw", "dallas, tx", "dallas tx", "dallas texas", "dallas, texas", "fort worth, tx", "fort worth tx", "fort worth texas", "fort worth, texas", "arlington, tx", "arlington tx", "arlington texas", "frisco, tx", "frisco tx", "frisco texas", "frisco, texas", "irving, tx", "irving tx", "irving texas", "irving, texas", "mckinney, tx", "mckinney tx", "mckinney texas", "mckinney, texas", "plano, tx", "plano tx", "plano texas", "plano, texas", "richardson, tx", "richardson tx", "richardson texas", "richardson, texas"],
   "Kansas City": ["kansas city", "lee's summit", "lenexa", "olathe", "overland park", "shawnee"],
-  "Austin": ["austin", "cedar park", "georgetown", "pflugerville", "round rock"],
-  "Fayetteville / Northwest Arkansas": ["fayetteville", "bentonville", "bella vista", "rogers", "springdale", "lowell", "johnson", "tontitown", "siloam springs"],
+  "Austin": ["austin, tx", "austin tx", "austin texas", "austin, texas", "cedar park, tx", "cedar park tx", "cedar park texas", "cedar park, texas", "georgetown, tx", "georgetown tx", "georgetown texas", "georgetown, texas", "pflugerville, tx", "pflugerville tx", "pflugerville texas", "pflugerville, texas", "round rock, tx", "round rock tx", "round rock texas", "round rock, texas"],
+  "Fayetteville / Northwest Arkansas": ["northwest arkansas", "nwa", "fayetteville, ar", "fayetteville ar", "fayetteville, arkansas", "fayetteville arkansas", "bentonville, ar", "bentonville ar", "bentonville, arkansas", "bentonville arkansas", "bella vista, ar", "bella vista ar", "bella vista, arkansas", "bella vista arkansas", "rogers, ar", "rogers ar", "rogers, arkansas", "rogers arkansas", "springdale, ar", "springdale ar", "springdale, arkansas", "springdale arkansas", "lowell, ar", "lowell ar", "lowell, arkansas", "lowell arkansas", "johnson, ar", "johnson ar", "johnson, arkansas", "johnson arkansas", "tontitown, ar", "tontitown ar", "tontitown, arkansas", "tontitown arkansas", "siloam springs, ar", "siloam springs ar", "siloam springs, arkansas", "siloam springs arkansas"],
   "New York": ["new york", "new york city", "nyc", "brooklyn", "bronx", "jersey city", "manhattan", "nassau county", "queens", "staten island", "suffolk county", "white plains"]
 };
 const INVESTMENT_BANKING_TERMS = ["investment banking", "investment banker", "ibd", "m&a", "merger", "corporate development", "transaction", "deals"];

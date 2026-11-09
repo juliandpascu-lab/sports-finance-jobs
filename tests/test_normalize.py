@@ -174,6 +174,9 @@ def test_preferred_markets_and_new_york_narrowing() -> None:
     assert "Kansas City" in matched_markets("Kansas City, KS; Kansas City, MO")
     assert "Fayetteville / Northwest Arkansas" in matched_markets("Bentonville, AR")
     assert "Fayetteville / Northwest Arkansas" in matched_markets("Lowell, AR")
+    assert "Austin" in matched_markets("Round Rock, Texas")
+    assert matched_markets("Dallas, GA") == ()
+    assert matched_markets("Austin, MN") == ()
     assert is_preferred_posting("FP&A Analyst", "Dallas, TX") is True
     assert is_preferred_posting("People Analyst", "New York, NY") is False
     assert is_preferred_posting("Investment Banking Analyst", "New York") is True
