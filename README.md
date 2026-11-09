@@ -86,19 +86,23 @@ The history-build command rebuilds `data/history.csv` from `data/raw/` alone.
 
 ## Sources and title rule
 
-The watchlist is deliberately broad enough for a new graduate or someone with
-one to two years of FP&A experience: professional teams, sports technology,
-sports media, ticketing, sports commerce, sports betting/prediction markets,
-investment banking, credit, fintech, startups, higher education, and general
-finance. Every configured source is an anonymous JSON request to the employer's
-ATS; the collector never reads a job-board HTML page.
+The watchlist now has 47 employer sources and is deliberately broad enough for
+a new graduate or someone with one to two years of FP&A experience: professional
+teams, sports technology, sports media, ticketing, sports commerce, sports
+betting/prediction markets, investment banking, credit, fintech, startups,
+higher education, and general finance. Every configured source is an anonymous
+JSON request to the employer's ATS; the collector never reads a job-board HTML
+page.
 
-The current boards return fewer than 5,000 postings per source. The paginated
-adapters still enforce the brief's large-board rule: if a Workday,
+The configured requests return fewer than 5,000 postings per source. The
+paginated adapters still enforce the brief's large-board rule: if a Workday,
 SmartRecruiters, or Oracle response reports more than 5,000 postings and no
 source-specific term is configured, the collector repeats the request with the
-search term `finance`. That term is the documented fallback for any future
-large board.
+search term `finance`. JPMorgan Chase's unfiltered Oracle board currently
+reports more than 5,000 postings, so its configured request explicitly uses
+`finance`; Capital One and JLL use the same term to keep their broad boards
+focused on this finance watchlist. These source-specific terms are documented
+in the table below.
 
 | Employer | ATS | Source key |
 | --- | --- | --- |
@@ -131,10 +135,24 @@ large board.
 | University of Texas at Austin | Workday | `utaustin` |
 | Nutrabolt | Workday | `nutrabolt` |
 | Fidelity Investments | Workday | `fidelity` |
+| Southwest Airlines | Workday | `southwest` |
+| Tyson Foods | Workday | `tysonfoods` |
+| J.B. Hunt Transport Services | Workday | `jbhunt` |
+| University of Arkansas System | Workday | `uasys` |
+| Q2 Holdings | Workday | `q2` |
+| UMB Financial | Workday | `umb` |
+| Capital One | Workday (`finance` search term) | `capitalone` |
+| BlackRock | Workday | `blackrock` |
+| Barclays | Workday | `barclays` |
+| Guggenheim Securities | Workday | `guggenheim` |
+| Morningstar | Workday | `morningstar` |
+| KeyBank | Workday | `keybank` |
+| JLL | Workday (`finance` search term) | `jll` |
 | Intuitive | SmartRecruiters | `intuitive` |
 | RR Donnelley | SmartRecruiters | `rrdonnelley` |
 | Experian | SmartRecruiters | `experian` |
 | Oracle | Oracle Recruiting Cloud | `oraclecareers` |
+| JPMorgan Chase | Oracle Recruiting Cloud (`finance` search term) | `jpmorgan` |
 
 The default role rule now includes only these requested job families:
 **Financial Analyst I/II, FP&A Analyst, Corporate Finance Analyst, Revenue
@@ -159,12 +177,14 @@ last seven days and can be changed to 24 hours, 3 days, 14 days, 30 days, or
 any date. A new source does not make an old posting look new: the interface
 uses `posted_date` for freshness and `first_seen` only for watcher history.
 
-The Browse page also provides live, one-click Indeed and LinkedIn searches for
-each target market and finance query. The pipeline does not scrape or log into
-those sites: Indeed's documented APIs are partner/job-sync integrations, and
-LinkedIn requires approved partner access and prohibits unauthorized automated
-scraping. The live shortcuts therefore open the current search pages directly,
-while the daily data pipeline uses public employer ATS feeds.
+The Browse page also provides live, one-click searches for each target market
+and finance query on Indeed, LinkedIn, Google Jobs, Jooble, ZipRecruiter,
+Monster, CareerBuilder, SimplyHired, and Adzuna. Where supported, the link
+requests approximately the last 24 hours. The pipeline does not scrape or log
+into those sites: Indeed's documented APIs are partner/job-sync integrations,
+and LinkedIn prohibits unauthorized automated scraping. The live shortcuts
+therefore open current search pages directly, while the daily data pipeline
+uses public employer ATS feeds.
 
 ## Commands
 

@@ -9,6 +9,11 @@ const SOURCE_LABELS = {
   fourhands: "Four Hands", capitalfarmcredit: "Capital Farm Credit",
   successacademycharterschool: "Success Academy", taketwo: "Take-Two Interactive",
   utaustin: "University of Texas at Austin", nutrabolt: "Nutrabolt", fidelity: "Fidelity Investments",
+  southwest: "Southwest Airlines", tysonfoods: "Tyson Foods", jbhunt: "J.B. Hunt Transport Services",
+  uasys: "University of Arkansas System", q2: "Q2 Holdings", umb: "UMB Financial",
+  capitalone: "Capital One", blackrock: "BlackRock", barclays: "Barclays",
+  guggenheim: "Guggenheim Securities", morningstar: "Morningstar", keybank: "KeyBank", jll: "JLL",
+  jpmorgan: "JPMorgan Chase",
   intuitive: "Intuitive", rrdonnelley: "RR Donnelley", experian: "Experian", oraclecareers: "Oracle"
 };
 
@@ -24,7 +29,7 @@ const MARKET_MARKERS = {
   "Dallas-Fort Worth": ["dallas", "dallas-fort worth", "dfw", "fort worth", "arlington, tx", "arlington tx", "arlington texas", "frisco", "irving", "mckinney", "plano", "richardson"],
   "Kansas City": ["kansas city", "lee's summit", "lenexa", "olathe", "overland park", "shawnee"],
   "Austin": ["austin", "cedar park", "georgetown", "pflugerville", "round rock"],
-  "Fayetteville / Northwest Arkansas": ["fayetteville", "bentonville", "bella vista", "rogers", "springdale"],
+  "Fayetteville / Northwest Arkansas": ["fayetteville", "bentonville", "bella vista", "rogers", "springdale", "lowell", "johnson", "tontitown", "siloam springs"],
   "New York": ["new york", "new york city", "nyc", "brooklyn", "bronx", "jersey city", "manhattan", "nassau county", "queens", "staten island", "suffolk county", "white plains"]
 };
 const INVESTMENT_BANKING_TERMS = ["investment banking", "investment banker", "ibd", "m&a", "merger", "corporate development", "transaction", "deals"];
@@ -94,22 +99,32 @@ function isPreferredRow(row) {
 }
 function marketLabel(row) { return matchedMarkets(row).join(" · "); }
 function externalJobSearchURL(site, query, location) {
-  if (site === "Indeed") return `https://www.indeed.com/jobs?q=${encodeURIComponent(query)}&l=${encodeURIComponent(location)}&fromage=7`;
-  return `https://www.linkedin.com/jobs/search/?keywords=${encodeURIComponent(query)}&location=${encodeURIComponent(location)}&f_TPR=r604800`;
+  if (site === "Indeed") return `https://www.indeed.com/jobs?q=${encodeURIComponent(query)}&l=${encodeURIComponent(location)}&fromage=1`;
+  if (site === "LinkedIn") return `https://www.linkedin.com/jobs/search/?keywords=${encodeURIComponent(query)}&location=${encodeURIComponent(location)}&f_TPR=r86400`;
+  if (site === "Google Jobs") return `https://www.google.com/search?q=${encodeURIComponent(`${query} jobs in ${location}`)}`;
+  if (site === "Jooble") return `https://jooble.org/SearchResult?ukw=${encodeURIComponent(query)}&loc=${encodeURIComponent(location)}`;
+  if (site === "ZipRecruiter") return `https://www.ziprecruiter.com/jobs-search?search=${encodeURIComponent(query)}&location=${encodeURIComponent(location)}&days=1`;
+  if (site === "Monster") return `https://www.monster.com/jobs/search/?q=${encodeURIComponent(query)}&where=${encodeURIComponent(location)}&tm=1`;
+  if (site === "CareerBuilder") return `https://www.careerbuilder.com/jobs?keywords=${encodeURIComponent(query)}&location=${encodeURIComponent(location)}&posted=1`;
+  if (site === "SimplyHired") return `https://www.simplyhired.com/search?q=${encodeURIComponent(query)}&l=${encodeURIComponent(location)}&fdb=1`;
+  if (site === "Adzuna") return `https://www.adzuna.com/search?q=${encodeURIComponent(query)}&loc=${encodeURIComponent(location)}`;
+  return `https://www.google.com/search?q=${encodeURIComponent(`${query} jobs in ${location}`)}`;
 }
 function renderExternalSearches() {
   const element = document.getElementById("external-searches");
   if (!element) return;
   const queries = ["Financial Analyst I / II", "FP&A Analyst", "Corporate Finance Analyst", "Credit Analyst"];
   const bankingQueries = ["Investment Banking Analyst", "M&A Analyst", "Transaction Advisory Analyst", "Valuation Analyst"];
+  const liveSites = ["Indeed", "LinkedIn", "Google Jobs", "Jooble", "ZipRecruiter", "Monster", "CareerBuilder", "SimplyHired", "Adzuna"];
   element.innerHTML = TARGET_MARKETS.map((market) => {
     const searchQueries = market === "New York" ? bankingQueries : queries;
     const approvedSearches = market === "New York" ? NEW_YORK_ROLE_SEARCHES : APPROVED_ROLE_SEARCHES;
     const approvedQuery = approvedSearches.map((query) => `"${query}"`).join(" OR ");
     const location = MARKET_SEARCH_LOCATIONS[market];
     const roleLabel = market === "New York" ? "Eligible IB/M&A role families" : "All 20 approved role families";
-    const allRolesLink = `<span class="external-search-item"><span>${roleLabel}</span><a href="${externalJobSearchURL("Indeed", approvedQuery, location)}" target="_blank" rel="noopener">Indeed ↗</a><a href="${externalJobSearchURL("LinkedIn", approvedQuery, location)}" target="_blank" rel="noopener">LinkedIn ↗</a></span>`;
-    const links = searchQueries.map((query) => `<span class="external-search-item"><span>${escapeHTML(query)}</span><a href="${externalJobSearchURL("Indeed", query, location)}" target="_blank" rel="noopener">Indeed ↗</a><a href="${externalJobSearchURL("LinkedIn", query, location)}" target="_blank" rel="noopener">LinkedIn ↗</a></span>`).join("");
+    const linkSet = (query) => `<div class="external-search-links">${liveSites.map((site) => `<a href="${externalJobSearchURL(site, query, location)}" target="_blank" rel="noopener">${site === "Google Jobs" ? "Google" : escapeHTML(site)} ↗</a>`).join("")}</div>`;
+    const allRolesLink = `<div class="external-search-item"><span>${roleLabel}</span>${linkSet(approvedQuery)}</div>`;
+    const links = searchQueries.map((query) => `<div class="external-search-item"><span>${escapeHTML(query)}</span>${linkSet(query)}</div>`).join("");
     return `<div class="external-market"><strong>${escapeHTML(market)}</strong>${allRolesLink}${links}</div>`;
   }).join("");
 }

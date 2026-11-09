@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import gzip
 import json
+from concurrent.futures import ThreadPoolExecutor
 from dataclasses import dataclass
 from pathlib import Path
 from typing import Any
@@ -224,6 +225,22 @@ def read_raw_payload(path: Path) -> Any:
         return json.loads(handle.read().decode("utf-8-sig"))
 
 
+def _collect_one_source(source: SourceConfig, run_date: str, raw_root: Path) -> SourceResult:
+    target = _raw_file(raw_root, run_date, source.name)
+    if target.exists():
+        target.unlink()
+    try:
+        payload = fetch_source_payload(source)
+        count = len(normalize_source_payload(source, payload, as_of_date=run_date))
+        with gzip.open(target, "wb") as handle:
+            handle.write(_payload_bytes(payload))
+        return SourceResult(source.name, True, count)
+    except Exception as exc:  # one unavailable board cannot stop the collection
+        if target.exists():
+            target.unlink()
+        return SourceResult(source.name, False, 0, f"{type(exc).__name__}: {exc}")
+
+
 def collect_sources(
     run_date: str,
     *,
@@ -234,22 +251,14 @@ def collect_sources(
 
     day_root = raw_root / run_date
     day_root.mkdir(parents=True, exist_ok=True)
-    results: list[SourceResult] = []
-    for source in sources:
-        target = _raw_file(raw_root, run_date, source.name)
-        if target.exists():
-            target.unlink()
-        try:
-            payload = fetch_source_payload(source)
-            count = len(normalize_source_payload(source, payload, as_of_date=run_date))
-            with gzip.open(target, "wb") as handle:
-                handle.write(_payload_bytes(payload))
-            results.append(SourceResult(source.name, True, count))
-        except Exception as exc:  # one unavailable board cannot stop the run
-            if target.exists():
-                target.unlink()
-            results.append(SourceResult(source.name, False, 0, f"{type(exc).__name__}: {exc}"))
-    return results
+    worker_count = min(6, len(sources)) or 1
+    with ThreadPoolExecutor(max_workers=worker_count) as executor:
+        # executor.map preserves the configured source order for status output.
+        return list(
+            executor.map(
+                lambda source: _collect_one_source(source, run_date, raw_root), sources
+            )
+        )
 
 
 def source_results_from_raw(

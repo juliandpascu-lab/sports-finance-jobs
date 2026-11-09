@@ -1,10 +1,10 @@
 {
-  "run_time": "2026-11-09T02:30:35.289850Z",
+  "run_time": "2026-11-09T05:07:11.798844Z",
   "first_run_date": "2026-11-08",
   "days_with_success": 2,
-  "open": 6841,
+  "open": 15649,
   "new_today": 0,
-  "removed_today": 0,
+  "removed_today": 1,
   "sources": [
     {
       "name": "baltimoreorioles",
@@ -29,7 +29,7 @@
     {
       "name": "hudl",
       "ok": true,
-      "count": 48
+      "count": 47
     },
     {
       "name": "geniussports",
@@ -149,7 +149,72 @@
     {
       "name": "fidelity",
       "ok": true,
-      "count": 853
+      "count": 849
+    },
+    {
+      "name": "southwest",
+      "ok": true,
+      "count": 23
+    },
+    {
+      "name": "tysonfoods",
+      "ok": true,
+      "count": 691
+    },
+    {
+      "name": "jbhunt",
+      "ok": true,
+      "count": 447
+    },
+    {
+      "name": "uasys",
+      "ok": true,
+      "count": 778
+    },
+    {
+      "name": "q2",
+      "ok": true,
+      "count": 60
+    },
+    {
+      "name": "umb",
+      "ok": true,
+      "count": 166
+    },
+    {
+      "name": "capitalone",
+      "ok": true,
+      "count": 331
+    },
+    {
+      "name": "blackrock",
+      "ok": true,
+      "count": 272
+    },
+    {
+      "name": "barclays",
+      "ok": true,
+      "count": 606
+    },
+    {
+      "name": "guggenheim",
+      "ok": true,
+      "count": 6
+    },
+    {
+      "name": "morningstar",
+      "ok": true,
+      "count": 180
+    },
+    {
+      "name": "keybank",
+      "ok": true,
+      "count": 569
+    },
+    {
+      "name": "jll",
+      "ok": true,
+      "count": 579
     },
     {
       "name": "intuitive",
@@ -170,6 +235,11 @@
       "name": "oraclecareers",
       "ok": true,
       "count": 2821
+    },
+    {
+      "name": "jpmorgan",
+      "ok": true,
+      "count": 4105
     }
   ]
 }

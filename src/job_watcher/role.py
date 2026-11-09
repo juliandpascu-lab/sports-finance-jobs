@@ -77,6 +77,10 @@ _MARKET_MARKERS = {
         "bella vista",
         "rogers",
         "springdale",
+        "lowell",
+        "johnson",
+        "tontitown",
+        "siloam springs",
     ),
     "New York": (
         "new york",
