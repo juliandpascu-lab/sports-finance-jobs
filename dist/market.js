@@ -22,7 +22,7 @@ function renderMarket(data) {
   const newEntries = Object.entries(newAll).sort((a, b) => a[0].localeCompare(b[0])).slice(-14);
   chart(document.getElementById("new-chart"), newEntries);
   document.getElementById("new-heading").textContent = `${Object.values(newAll).reduce((a, b) => a + b, 0)} new postings tracked`;
-  document.getElementById("new-explanation").textContent = `The chart shows non-first-run postings first seen on each day. ${Object.values(newRole).reduce((a, b) => a + b, 0)} of the tracked postings match the entry-level finance, FP&A, analytics, or IB/M&A title rule.`;
+  document.getElementById("new-explanation").textContent = `The chart shows non-first-run postings first seen on each day. ${Object.values(newRole).reduce((a, b) => a + b, 0)} of the tracked postings match one of the twenty approved job-title families.`;
 
   const removed = groupCount(rows.filter((row) => row.removed_date), "removed_date");
   chart(document.getElementById("removed-chart"), Object.entries(removed).sort((a, b) => a[0].localeCompare(b[0])).slice(-14));

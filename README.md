@@ -37,7 +37,7 @@ GitHub Issue, pushes the generated data commit, and deploys the refreshed site.
 | `src/job_watcher/history.py` | Rebuilds history exclusively from raw files. |
 | `src/job_watcher/issues.py` | Creates or updates the dated GitHub Issue and closes the previous one. |
 | `src/job_watcher/normalize.py` | Converts Greenhouse, Lever, Ashby, Workday, SmartRecruiters, and Oracle responses to common columns. |
-| `src/job_watcher/role.py` | Title-only entry-level finance/FP&A/analytics/IB/M&A rule plus preferred-market matching. |
+| `src/job_watcher/role.py` | Title-only rule for the twenty approved analyst job families plus preferred-market matching. |
 | `src/job_watcher/schema.py` | Shared history/status schemas and path constants. |
 | `src/job_watcher/status.py` | Writes the latest-run status summary. |
 | `src/job_watcher/cli.py` | `run` and `build-history` commands. |
@@ -128,19 +128,22 @@ large board.
 | Experian | SmartRecruiters | `experian` |
 | Oracle | Oracle Recruiting Cloud | `oraclecareers` |
 
-The default role rule is: **include titles containing analyst, analytics,
-finance, FP&A, financial, strategy, planning, revenue, pricing, operations,
-accounting, treasury, business intelligence, investment banking, investment
-banker, IBD, M&A, merger, acquisition, corporate development, transaction, or
-deals; exclude obvious seniority titles such as senior, lead, manager, director,
-VP, head, principal, staff, chief, and executive.** This is intentionally
-title-based so it catches analyst, internship, fellow, and 1–2-year FP&A paths
-without inventing experience requirements that an ATS feed does not provide.
+The default role rule now includes only these requested job families:
+**Financial Analyst I/II, FP&A Analyst, Corporate Finance Analyst, Revenue
+Finance Analyst, Strategic Finance Analyst, Treasury Analyst, Credit Analyst,
+Commercial Banking Analyst, Corporate Banking Analyst, Valuation Analyst,
+Equity Research Associate, Investment Analyst, Investment Banking Analyst, M&A
+Analyst, Transaction Advisory Analyst, Portfolio Analyst, Financial Risk
+Analyst, Asset Management Analyst, Private Credit Analyst, and Corporate
+Development Analyst.** It excludes obvious seniority titles such as senior,
+lead, manager, director, VP, head, principal, staff, chief, and executive.
+Matching is title-only and also accepts common title punctuation/order variants
+such as `Analyst, Corporate Development`.
 
 The default website view limits jobs to Dallas–Fort Worth, Kansas City, Austin,
 Fayetteville/Northwest Arkansas, and New York. New York is restricted to
-entry-level investment-banking or M&A titles; the other markets use the broader
-finance, FP&A, business, and analytics rule. The history still retains every
+entry-level investment-banking or M&A titles; the other markets use only the
+twenty approved job families. The history still retains every
 posting returned by every source, as required by the project brief.
 
 Browse defaults to postings whose employer-provided `posted_date` is within the

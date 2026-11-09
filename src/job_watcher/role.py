@@ -4,41 +4,26 @@ from __future__ import annotations
 
 import re
 
-ROLE_TERMS = (
-    "analyst",
-    "analytics",
-    "finance",
-    "financial",
-    "fp&a",
-    "strategy",
-    "strategic",
-    "planning",
-    "revenue",
-    "pricing",
-    "operations",
-    "accounting",
-    "treasury",
-    "business intelligence",
-    "investment banking",
-    "investment banker",
-    "ibd",
-    "m&a",
-    "merger",
-    "acquisition",
-    "corporate development",
-    "transaction",
-    "deals",
+ROLE_PATTERNS = (
+    r"\b(?:financial|finance)\s+analyst\b",
+    r"\bfp\s*&\s*a\s+analyst\b",
+    r"\b(?:corporate finance|revenue finance|strategic finance|treasury|credit|"
+    r"commercial banking|corporate banking|valuation|investment|portfolio|risk|"
+    r"asset management|private credit|corporate development|transaction advisory)\s+analyst\b",
+    r"\binvestment banking\s+analyst\b",
+    r"\banalyst\s+(?:corporate finance|revenue finance|strategic finance|treasury|credit|"
+    r"commercial banking|corporate banking|valuation|investment|portfolio|risk|"
+    r"asset management|private credit|corporate development|transaction advisory)\b",
+    r"\b(?:equity research)\s+associate\b",
+    r"\bassociate\s+(?:equity research)\b",
+    r"\bm\s*&\s*a(?:\s+advisory)?\s+analyst\b",
+    r"\banalyst\s+m\s*&\s*a(?:\s+advisory)?\b",
 )
 
 INVESTMENT_BANKING_TERMS = (
-    "investment banking",
-    "investment banker",
-    "ibd",
-    "m&a",
-    "merger",
-    "corporate development",
-    "transaction",
-    "deals",
+    "investment banking analyst",
+    "m&a analyst",
+    "m&a advisory analyst",
 )
 
 TARGET_MARKETS = (
@@ -107,27 +92,26 @@ SENIORITY_PATTERN = re.compile(
 )
 
 
-def is_in_role(title: str) -> bool:
-    """Return whether a posting title fits the early-career watchlist."""
+def _normalize_title(title: str) -> str:
+    return re.sub(r"[^a-z0-9&]+", " ", title.casefold()).strip()
 
-    normalized = " ".join(title.casefold().split())
+
+def is_in_role(title: str) -> bool:
+    """Return whether a title matches one of the twenty approved job families."""
+
+    normalized = _normalize_title(title)
     if SENIORITY_PATTERN.search(normalized):
         return False
-    return any(term in normalized for term in ROLE_TERMS)
+    return any(re.search(pattern, normalized) for pattern in ROLE_PATTERNS)
 
 
 def is_investment_banking_or_ma(title: str) -> bool:
     """Return whether a title is specifically investment banking or M&A."""
 
-    normalized = " ".join(title.casefold().split())
+    normalized = _normalize_title(title)
     if SENIORITY_PATTERN.search(normalized):
         return False
-    if any(term in normalized for term in INVESTMENT_BANKING_TERMS):
-        return True
-    return "acquisition" in normalized and any(
-        term in normalized
-        for term in ("investment", "corporate", "merger", "m&a", "transaction", "deal")
-    )
+    return any(term in normalized for term in INVESTMENT_BANKING_TERMS)
 
 
 def matched_markets(location: str) -> tuple[str, ...]:

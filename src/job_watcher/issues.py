@@ -10,6 +10,7 @@ from urllib.error import HTTPError
 from urllib.request import Request, urlopen
 
 from .config import SOURCE_BY_NAME
+from .role import is_preferred_posting
 
 
 def _posting_lines(rows: list[dict[str, Any]], field: str, run_date: str) -> list[str]:
@@ -18,6 +19,7 @@ def _posting_lines(rows: list[dict[str, Any]], field: str, run_date: str) -> lis
         for row in rows
         if row.get(field) == run_date
         and not (field == "first_seen" and str(row.get("first_run", "")).lower() == "true")
+        and is_preferred_posting(row.get("title", ""), row.get("location", ""))
     ]
     selected.sort(key=lambda row: (row.get("employer", ""), row.get("title", "")))
     lines: list[str] = []

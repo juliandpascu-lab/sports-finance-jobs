@@ -271,12 +271,15 @@ SOURCES: tuple[SourceConfig, ...] = (
 
 SOURCE_BY_NAME = {source.name: source for source in SOURCES}
 
-ROLE_NAME = "Entry-level finance, FP&A, analytics, credit, and New York IB/M&A"
+ROLE_NAME = "Entry-level finance, banking, valuation, investment, risk, and M&A analyst roles"
 ROLE_RULE_SUMMARY = (
-    "Include titles containing analyst, analytics, finance, FP&A, financial, "
-    "strategy, planning, revenue, pricing, operations, accounting, treasury, "
-    "business intelligence, investment banking, investment banker, M&A, "
-    "merger, acquisition, corporate development, transaction, or deals; "
+    "Include only Financial Analyst I/II, FP&A Analyst, Corporate Finance Analyst, "
+    "Revenue Finance Analyst, Strategic Finance Analyst, Treasury Analyst, "
+    "Credit Analyst, Commercial Banking Analyst, Corporate Banking Analyst, "
+    "Valuation Analyst, Equity Research Associate, Investment Analyst, "
+    "Investment Banking Analyst, M&A Analyst, Transaction Advisory Analyst, "
+    "Portfolio Analyst, Financial Risk Analyst, Asset Management Analyst, "
+    "Private Credit Analyst, and Corporate Development Analyst; "
     "exclude obvious seniority titles such as "
     "senior, lead, manager, director, VP, head, principal, staff, chief, "
     "and executive."

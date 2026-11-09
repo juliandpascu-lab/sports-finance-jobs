@@ -11,10 +11,24 @@ def test_issue_lists_each_posting_with_details_and_application_link() -> None:
             "posted_date": "2026-11-09",
             "source": "example",
             "url": "https://example.test/apply/123",
+            "in_role": "true",
             "first_seen": "2026-11-09",
             "first_run": False,
             "removed_date": "",
-        }
+        },
+        {
+            "title": "Software Engineer",
+            "employer": "Example Bank",
+            "location": "Austin, TX",
+            "department": "Engineering",
+            "posted_date": "2026-11-09",
+            "source": "example",
+            "url": "https://example.test/apply/456",
+            "in_role": "false",
+            "first_seen": "2026-11-09",
+            "first_run": False,
+            "removed_date": "",
+        },
     ]
 
     body = issue_body(rows, "2026-11-09", {"open": 1, "new_today": 1, "removed_today": 0})
@@ -26,3 +40,4 @@ def test_issue_lists_each_posting_with_details_and_application_link() -> None:
     assert "Posted: 2026-11-09" in body
     assert "Source: example" in body
     assert "[Open application](https://example.test/apply/123)" in body
+    assert "Software Engineer" not in body

@@ -89,8 +89,8 @@ function externalJobSearchURL(site, query, location) {
 function renderExternalSearches() {
   const element = document.getElementById("external-searches");
   if (!element) return;
-  const queries = ["Financial Analyst", "FP&A Analyst", "Credit Analyst", "Business Analyst"];
-  const bankingQueries = ["Investment Banking Analyst", "M&A Analyst", "FP&A Analyst", "Credit Analyst"];
+  const queries = ["Financial Analyst I / II", "FP&A Analyst", "Corporate Finance Analyst", "Credit Analyst"];
+  const bankingQueries = ["Investment Banking Analyst", "M&A Analyst", "Transaction Advisory Analyst", "Valuation Analyst"];
   element.innerHTML = TARGET_MARKETS.map((market) => {
     const searchQueries = market === "New York" ? bankingQueries : queries;
     const location = MARKET_SEARCH_LOCATIONS[market];
@@ -136,9 +136,9 @@ function renderToday() {
   document.getElementById("source-health").textContent = `${good}/${(status.sources || []).length} healthy`;
   document.getElementById("source-list").innerHTML = (status.sources || []).map((source) => `<div class="source-row"><span class="source-state ${source.ok ? "ok" : "bad"}"></span><span>${escapeHTML(SOURCE_LABELS[source.name] || source.name)}</span><strong>${source.count}</strong></div>`).join("") || `<div class="empty-state"><p>No source data yet.</p></div>`;
   const preferredOpen = history.filter((row) => row.status === "open" && isPreferredRow(row) && postedAge(row) <= 7);
-  document.getElementById("preference-summary").textContent = `${preferredOpen.length} preferred jobs posted in the last 7 days across Dallas–Fort Worth, Kansas City, Austin, Fayetteville/NWA, and New York IB/M&A`;
-  const newRows = history.filter((row) => row.first_seen === runDate && !asBool(row.first_run));
-  const removedRows = history.filter((row) => row.removed_date === runDate);
+  document.getElementById("preference-summary").textContent = `${preferredOpen.length} approved-title jobs posted in the last 7 days across Dallas–Fort Worth, Kansas City, Austin, Fayetteville/NWA, and New York IB/M&A`;
+  const newRows = history.filter((row) => row.first_seen === runDate && !asBool(row.first_run) && isPreferredRow(row));
+  const removedRows = history.filter((row) => row.removed_date === runDate && isPreferredRow(row));
   document.getElementById("new-count").textContent = newRows.length;
   document.getElementById("removed-count").textContent = removedRows.length;
   renderJobList(document.getElementById("new-list"), newRows, { compact: true, empty: "No new non-first-run postings today." });
@@ -164,8 +164,8 @@ function renderBrowse() {
   if (controls.sort.value === "first_seen") rows.sort((a, b) => (b.first_seen || "").localeCompare(a.first_seen || "") || a.title.localeCompare(b.title));
   else if (controls.sort.value === "title") rows.sort((a, b) => a.title.localeCompare(b.title));
   else rows.sort((a, b) => postingDate(b).localeCompare(postingDate(a)) || (b.first_seen || "").localeCompare(a.first_seen || "") || a.title.localeCompare(b.title));
-  document.getElementById("browse-count").textContent = `${rows.length} open ${roleOnly ? "entry-level matches" : marketOnly ? "target-market jobs" : "tracked postings"}`;
-  document.getElementById("browse-as-of").textContent = `As of ${formatDate(latestDate(state.data))} · posted-date freshness is on by default · New York limited to IB/M&A in the default view`;
+  document.getElementById("browse-count").textContent = `${rows.length} open ${roleOnly ? "approved-title matches" : marketOnly ? "target-market jobs" : "tracked postings"}`;
+  document.getElementById("browse-as-of").textContent = `As of ${formatDate(latestDate(state.data))} · posted-date freshness is on by default · default titles are limited to the approved twenty · New York limited to IB/M&A`;
   renderJobList(document.getElementById("browse-list"), rows, { open: true, empty: "No postings match these filters." });
   bindStars();
 }
