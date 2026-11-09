@@ -1,8 +1,8 @@
 {
-  "run_time": "2026-11-08T22:54:18.659352Z",
+  "run_time": "2026-11-09T00:32:25.213311Z",
   "first_run_date": "2026-11-08",
-  "days_with_success": 1,
-  "open": 418,
+  "days_with_success": 2,
+  "open": 469,
   "new_today": 0,
   "removed_today": 0,
   "sources": [
@@ -80,6 +80,41 @@
       "name": "brodie_rec_league",
       "ok": true,
       "count": 48
+    },
+    {
+      "name": "campusapps",
+      "ok": true,
+      "count": 7
+    },
+    {
+      "name": "ducerapartnerscampus",
+      "ok": true,
+      "count": 4
+    },
+    {
+      "name": "financialtechnologypartners",
+      "ok": true,
+      "count": 22
+    },
+    {
+      "name": "glcadvisors",
+      "ok": true,
+      "count": 5
+    },
+    {
+      "name": "solomonpartnersprofessionals",
+      "ok": true,
+      "count": 3
+    },
+    {
+      "name": "saxllp",
+      "ok": true,
+      "count": 5
+    },
+    {
+      "name": "offdeal",
+      "ok": true,
+      "count": 5
     }
   ]
 }

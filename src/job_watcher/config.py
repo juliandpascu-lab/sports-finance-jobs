@@ -17,8 +17,9 @@ class SourceConfig:
 
 
 # These boards cover professional teams, sports technology, sports media,
-# ticketing, sports commerce, and sports betting/prediction markets. The
-# endpoints are public ATS JSON feeds; the pipeline never reads board HTML.
+# ticketing, sports commerce, sports betting/prediction markets, and public
+# investment-banking / M&A recruiting. The endpoints are public ATS JSON feeds;
+# the pipeline never reads board HTML.
 SOURCES: tuple[SourceConfig, ...] = (
     SourceConfig(
         "baltimoreorioles",
@@ -125,15 +126,66 @@ SOURCES: tuple[SourceConfig, ...] = (
         "https://api.ashbyhq.com/posting-api/job-board/Brodie%20Rec%20League",
         "https://jobs.ashbyhq.com/Brodie%20Rec%20League",
     ),
+    SourceConfig(
+        "campusapps",
+        "Campus Apps / Financial Technology Partners",
+        "Greenhouse",
+        "https://boards-api.greenhouse.io/v1/boards/campusapps/jobs?content=true",
+        "https://job-boards.greenhouse.io/campusapps",
+    ),
+    SourceConfig(
+        "ducerapartnerscampus",
+        "Ducera Partners",
+        "Greenhouse",
+        "https://boards-api.greenhouse.io/v1/boards/ducerapartnerscampus/jobs?content=true",
+        "https://job-boards.greenhouse.io/ducerapartnerscampus",
+    ),
+    SourceConfig(
+        "financialtechnologypartners",
+        "Financial Technology Partners",
+        "Greenhouse",
+        "https://boards-api.greenhouse.io/v1/boards/financialtechnologypartners/jobs?content=true",
+        "https://job-boards.greenhouse.io/financialtechnologypartners",
+    ),
+    SourceConfig(
+        "glcadvisors",
+        "GLC Advisors",
+        "Greenhouse",
+        "https://boards-api.greenhouse.io/v1/boards/glcadvisors/jobs?content=true",
+        "https://job-boards.greenhouse.io/glcadvisors",
+    ),
+    SourceConfig(
+        "solomonpartnersprofessionals",
+        "Solomon Partners",
+        "Greenhouse",
+        "https://boards-api.greenhouse.io/v1/boards/solomonpartnersprofessionals/jobs?content=true",
+        "https://job-boards.greenhouse.io/solomonpartnersprofessionals",
+    ),
+    SourceConfig(
+        "saxllp",
+        "SAX Advisory Group",
+        "Greenhouse",
+        "https://boards-api.greenhouse.io/v1/boards/saxllp/jobs?content=true",
+        "https://job-boards.greenhouse.io/saxllp",
+    ),
+    SourceConfig(
+        "offdeal",
+        "OffDeal",
+        "Ashby",
+        "https://api.ashbyhq.com/posting-api/job-board/offdeal",
+        "https://jobs.ashbyhq.com/offdeal",
+    ),
 )
 
 SOURCE_BY_NAME = {source.name: source for source in SOURCES}
 
-ROLE_NAME = "Early-career sports finance, business, and analytics"
+ROLE_NAME = "Entry-level sports finance, FP&A, analytics, and New York IB/M&A"
 ROLE_RULE_SUMMARY = (
     "Include titles containing analyst, analytics, finance, FP&A, financial, "
     "strategy, planning, revenue, pricing, operations, accounting, treasury, "
-    "or business intelligence; exclude obvious seniority titles such as "
+    "business intelligence, investment banking, investment banker, M&A, "
+    "merger, acquisition, corporate development, transaction, or deals; "
+    "exclude obvious seniority titles such as "
     "senior, lead, manager, director, VP, head, principal, staff, chief, "
     "and executive."
 )

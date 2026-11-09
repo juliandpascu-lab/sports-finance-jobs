@@ -2,9 +2,21 @@ const SOURCE_LABELS = {
   baltimoreorioles: "Baltimore Orioles", nflcareers: "NFL", lions: "Detroit Lions", fccincinnati: "FC Cincinnati",
   hudl: "Hudl", geniussports: "Genius Sports", seatgeek: "SeatGeek", sbnation: "SB Nation",
   fanaticsfbg: "Fanatics Betting & Gaming", theathletic: "The Athletic", legend: "Legend", flosports: "FloSports",
-  novig: "Novig", onyx: "Onyx Games", brodie_rec_league: "Brodie Rec League"
+  novig: "Novig", onyx: "Onyx Games", brodie_rec_league: "Brodie Rec League",
+  campusapps: "Campus Apps / FT Partners", ducerapartnerscampus: "Ducera Partners",
+  financialtechnologypartners: "Financial Technology Partners", glcadvisors: "GLC Advisors",
+  solomonpartnersprofessionals: "Solomon Partners", saxllp: "SAX Advisory Group", offdeal: "OffDeal"
 };
 
+const TARGET_MARKETS = ["Dallas-Fort Worth", "Kansas City", "Austin", "Fayetteville / Northwest Arkansas", "New York"];
+const MARKET_MARKERS = {
+  "Dallas-Fort Worth": ["dallas", "dallas-fort worth", "dfw", "fort worth", "arlington", "frisco", "irving", "mckinney", "plano", "richardson"],
+  "Kansas City": ["kansas city", "lee's summit", "lenexa", "olathe", "overland park", "shawnee"],
+  "Austin": ["austin", "cedar park", "georgetown", "pflugerville", "round rock"],
+  "Fayetteville / Northwest Arkansas": ["fayetteville", "bentonville", "bella vista", "rogers", "springdale"],
+  "New York": ["new york", "new york city", "nyc", "brooklyn", "bronx", "jersey city", "manhattan", "nassau county", "queens", "staten island", "suffolk county", "white plains"]
+};
+const INVESTMENT_BANKING_TERMS = ["investment banking", "investment banker", "ibd", "m&a", "merger", "corporate development", "transaction", "deals"];
 const state = { data: null, shortlist: new Set(JSON.parse(localStorage.getItem("sportsFinanceShortlist") || "[]")) };
 
 function escapeHTML(value) {
@@ -42,6 +54,21 @@ function latestDate(data) { return data.status.run_time?.slice(0, 10) || data.hi
 function formatDate(value) { return value ? new Date(`${value}T00:00:00Z`).toLocaleDateString(undefined, {month:"short", day:"numeric", year:"numeric", timeZone:"UTC"}) : "—"; }
 function formatDateTime(value) { return value ? new Date(value).toLocaleString(undefined, {month:"short", day:"numeric", hour:"numeric", minute:"2-digit", timeZoneName:"short"}) : "No completed run yet"; }
 function saveShortlist() { localStorage.setItem("sportsFinanceShortlist", JSON.stringify([...state.shortlist])); }
+function normalizedText(value) { return String(value || "").toLowerCase().replace(/\s+/g, " ").trim(); }
+function matchedMarkets(row) {
+  const location = normalizedText(row.location);
+  return TARGET_MARKETS.filter((market) => MARKET_MARKERS[market].some((marker) => location.includes(marker)));
+}
+function isInvestmentBankingOrMA(row) {
+  const title = normalizedText(row.title);
+  return INVESTMENT_BANKING_TERMS.some((term) => title.includes(term)) || (title.includes("acquisition") && ["investment", "corporate", "merger", "m&a", "transaction", "deal"].some((term) => title.includes(term)));
+}
+function isTargetMarketRow(row) { return matchedMarkets(row).length > 0; }
+function isPreferredRow(row) {
+  const markets = matchedMarkets(row);
+  return asBool(row.in_role) && markets.length > 0 && (markets.some((market) => market !== "New York") || isInvestmentBankingOrMA(row));
+}
+function marketLabel(row) { return matchedMarkets(row).join(" · "); }
 
 function jobCard(row, options = {}) {
   const days = dateDiff(row.first_seen, latestDate(state.data));
@@ -49,7 +76,7 @@ function jobCard(row, options = {}) {
   return `<article class="job-card ${options.compact ? "job-card-compact" : ""}">
     <div class="job-card-main"><p class="job-employer">${escapeHTML(row.employer)} <span>·</span> ${escapeHTML(row.department || "Sports business")}</p>
     <h3><a href="${escapeHTML(row.url)}" target="_blank" rel="noopener">${escapeHTML(row.title)}</a></h3>
-    <p class="job-meta">${escapeHTML(row.location || "Location not provided")} · Posted ${escapeHTML(formatDate(row.posted_date || row.first_seen))}${options.open ? ` · ${days} days observed` : ""}</p></div>
+    <p class="job-meta">${escapeHTML(row.location || "Location not provided")} · ${escapeHTML(marketLabel(row) || "Outside target markets")} · Posted ${escapeHTML(formatDate(row.posted_date || row.first_seen))}${options.open ? ` · ${days} days observed` : ""}</p></div>
     <div class="job-card-actions"><button class="star-button ${star ? "saved" : ""}" data-star="${escapeHTML(row.posting_id)}" aria-label="${star ? "Remove from" : "Save to"} shortlist">${star ? "★" : "☆"}</button><a class="apply-button" href="${escapeHTML(row.url)}" target="_blank" rel="noopener">Apply ↗</a></div>
   </article>`;
 }
@@ -77,8 +104,10 @@ function renderToday() {
   const good = (status.sources || []).filter((source) => source.ok).length;
   document.getElementById("source-health").textContent = `${good}/${(status.sources || []).length} healthy`;
   document.getElementById("source-list").innerHTML = (status.sources || []).map((source) => `<div class="source-row"><span class="source-state ${source.ok ? "ok" : "bad"}"></span><span>${escapeHTML(SOURCE_LABELS[source.name] || source.name)}</span><strong>${source.count}</strong></div>`).join("") || `<div class="empty-state"><p>No source data yet.</p></div>`;
-  const newRows = history.filter((row) => row.first_seen === runDate && !asBool(row.first_run));
-  const removedRows = history.filter((row) => row.removed_date === runDate);
+  const preferredOpen = history.filter((row) => row.status === "open" && isPreferredRow(row));
+  document.getElementById("preference-summary").textContent = `${preferredOpen.length} open matches across Dallas–Fort Worth, Kansas City, Austin, Fayetteville/NWA, and New York IB/M&A`;
+  const newRows = history.filter((row) => row.first_seen === runDate && !asBool(row.first_run) && isPreferredRow(row));
+  const removedRows = history.filter((row) => row.removed_date === runDate && isPreferredRow(row));
   document.getElementById("new-count").textContent = newRows.length;
   document.getElementById("removed-count").textContent = removedRows.length;
   renderJobList(document.getElementById("new-list"), newRows, { compact: true, empty: "No new non-first-run postings today." });
@@ -87,31 +116,31 @@ function renderToday() {
 }
 
 function renderBrowse() {
-  const controls = { role: document.getElementById("role-toggle"), all: document.getElementById("all-toggle"), search: document.getElementById("title-search"), employer: document.getElementById("employer-filter"), location: document.getElementById("location-filter"), days: document.getElementById("days-filter") };
+  const controls = { role: document.getElementById("role-toggle"), market: document.getElementById("market-toggle"), all: document.getElementById("all-toggle"), search: document.getElementById("title-search"), employer: document.getElementById("employer-filter"), location: document.getElementById("market-filter"), days: document.getElementById("days-filter") };
   const roleOnly = controls.role.classList.contains("active");
+  const marketOnly = controls.market.classList.contains("active");
   let rows = state.data.history.filter((row) => row.status === "open");
-  if (roleOnly) rows = rows.filter((row) => asBool(row.in_role));
+  if (roleOnly) rows = rows.filter(isPreferredRow);
+  else if (marketOnly) rows = rows.filter(isTargetMarketRow);
   const search = controls.search.value.trim().toLowerCase();
   if (search) rows = rows.filter((row) => row.title.toLowerCase().includes(search));
   if (controls.employer.value) rows = rows.filter((row) => row.employer === controls.employer.value);
-  if (controls.location.value) rows = rows.filter((row) => row.location.includes(controls.location.value));
+  if (controls.location.value) rows = rows.filter((row) => matchedMarkets(row).includes(controls.location.value));
   const minimumDays = Number(controls.days.value || 0);
   if (minimumDays) rows = rows.filter((row) => dateDiff(row.first_seen, latestDate(state.data)) >= minimumDays);
   rows.sort((a, b) => (b.first_seen || "").localeCompare(a.first_seen || "") || a.title.localeCompare(b.title));
-  document.getElementById("browse-count").textContent = `${rows.length} open ${roleOnly ? "role matches" : "postings"}`;
-  document.getElementById("browse-as-of").textContent = `As of ${formatDate(latestDate(state.data))} · sorted by first-seen date`;
+  document.getElementById("browse-count").textContent = `${rows.length} open ${roleOnly ? "entry-level matches" : marketOnly ? "target-market jobs" : "tracked postings"}`;
+  document.getElementById("browse-as-of").textContent = `As of ${formatDate(latestDate(state.data))} · sorted by first-seen date · New York limited to IB/M&A in the default view`;
   renderJobList(document.getElementById("browse-list"), rows, { open: true, empty: "No postings match these filters." });
   bindStars();
 }
 
 function setupBrowse() {
   const employers = [...new Set(state.data.history.filter((row) => row.status === "open").map((row) => row.employer))].sort();
-  const locations = [...new Set(state.data.history.filter((row) => row.status === "open").flatMap((row) => row.location.split(";").map((value) => value.trim())).filter(Boolean))].sort();
   document.getElementById("employer-filter").insertAdjacentHTML("beforeend", employers.map((value) => `<option>${escapeHTML(value)}</option>`).join(""));
-  document.getElementById("location-filter").insertAdjacentHTML("beforeend", locations.map((value) => `<option>${escapeHTML(value)}</option>`).join(""));
-  ["title-search", "employer-filter", "location-filter", "days-filter"].forEach((id) => document.getElementById(id).addEventListener("input", renderBrowse));
-  document.getElementById("role-toggle").addEventListener("click", () => { document.getElementById("role-toggle").classList.add("active"); document.getElementById("all-toggle").classList.remove("active"); renderBrowse(); });
-  document.getElementById("all-toggle").addEventListener("click", () => { document.getElementById("all-toggle").classList.add("active"); document.getElementById("role-toggle").classList.remove("active"); renderBrowse(); });
+  document.getElementById("market-filter").insertAdjacentHTML("beforeend", TARGET_MARKETS.map((value) => `<option>${escapeHTML(value)}</option>`).join(""));
+  ["title-search", "employer-filter", "market-filter", "days-filter"].forEach((id) => document.getElementById(id).addEventListener("input", renderBrowse));
+  [["role-toggle", ["market-toggle", "all-toggle"]], ["market-toggle", ["role-toggle", "all-toggle"]], ["all-toggle", ["role-toggle", "market-toggle"]]].forEach(([activeId, inactiveIds]) => document.getElementById(activeId).addEventListener("click", () => { document.getElementById(activeId).classList.add("active"); inactiveIds.forEach((id) => document.getElementById(id).classList.remove("active")); renderBrowse(); }));
   renderBrowse();
 }
 

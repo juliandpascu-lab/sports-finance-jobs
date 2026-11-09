@@ -2,7 +2,12 @@ import pytest
 
 from job_watcher.config import SOURCES
 from job_watcher.normalize import normalize_source_payload
-from job_watcher.role import is_in_role
+from job_watcher.role import (
+    is_investment_banking_or_ma,
+    is_in_role,
+    is_preferred_posting,
+    matched_markets,
+)
 
 
 @pytest.mark.parametrize("source", SOURCES, ids=lambda source: source.name)
@@ -71,3 +76,20 @@ def test_title_rule_prioritizes_early_career_matches() -> None:
     assert is_in_role("Senior Financial Analyst") is False
     assert is_in_role("Director of Strategy") is False
     assert is_in_role("Software Engineer") is False
+
+
+def test_title_rule_includes_entry_level_ib_and_ma_but_not_senior_roles() -> None:
+    assert is_in_role("Investment Banker I") is True
+    assert is_in_role("M&A Advisory Analyst") is True
+    assert is_investment_banking_or_ma("Investment Banking Analyst") is True
+    assert is_investment_banking_or_ma("Senior Investment Banking Associate") is False
+    assert is_investment_banking_or_ma("Marketing Acquisition Associate") is False
+
+
+def test_preferred_markets_and_new_york_narrowing() -> None:
+    assert "Austin" in matched_markets("Austin, TX")
+    assert "Kansas City" in matched_markets("Kansas City, KS; Kansas City, MO")
+    assert "Fayetteville / Northwest Arkansas" in matched_markets("Bentonville, AR")
+    assert is_preferred_posting("FP&A Analyst", "Dallas, TX") is True
+    assert is_preferred_posting("People Analyst", "New York, NY") is False
+    assert is_preferred_posting("Investment Banker I", "New York") is True
