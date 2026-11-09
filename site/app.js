@@ -106,7 +106,8 @@ function jobCard(row, options = {}) {
   return `<article class="job-card ${options.compact ? "job-card-compact" : ""}">
     <div class="job-card-main"><p class="job-employer">${escapeHTML(row.employer)} <span>·</span> ${escapeHTML(row.department || "Business function")}</p>
     <h3><a href="${escapeHTML(row.url)}" target="_blank" rel="noopener">${escapeHTML(row.title)}</a></h3>
-    <p class="job-meta">${escapeHTML(row.location || "Location not provided")} · ${escapeHTML(marketLabel(row) || "Outside target markets")} · Posted ${escapeHTML(formatDate(postingDate(row)))}${options.open ? ` · ${postedDays} days since posted · ${days} days observed` : ""}</p></div>
+    <p class="job-meta"><strong>Location:</strong> ${escapeHTML(row.location || "Location not provided")} · ${escapeHTML(marketLabel(row) || "Outside target markets")}</p>
+    <p class="job-meta"><strong>Posted:</strong> ${escapeHTML(formatDate(postingDate(row)))} · <strong>Source:</strong> ${escapeHTML(SOURCE_LABELS[row.source] || row.source || "Employer board")}${options.open ? ` · ${postedDays} days since posted · ${days} days observed` : ""}</p></div>
     <div class="job-card-actions"><button class="star-button ${star ? "saved" : ""}" data-star="${escapeHTML(row.posting_id)}" aria-label="${star ? "Remove from" : "Save to"} shortlist">${star ? "★" : "☆"}</button><a class="apply-button" href="${escapeHTML(row.url)}" target="_blank" rel="noopener">Apply ↗</a></div>
   </article>`;
 }
@@ -136,8 +137,8 @@ function renderToday() {
   document.getElementById("source-list").innerHTML = (status.sources || []).map((source) => `<div class="source-row"><span class="source-state ${source.ok ? "ok" : "bad"}"></span><span>${escapeHTML(SOURCE_LABELS[source.name] || source.name)}</span><strong>${source.count}</strong></div>`).join("") || `<div class="empty-state"><p>No source data yet.</p></div>`;
   const preferredOpen = history.filter((row) => row.status === "open" && isPreferredRow(row) && postedAge(row) <= 7);
   document.getElementById("preference-summary").textContent = `${preferredOpen.length} preferred jobs posted in the last 7 days across Dallas–Fort Worth, Kansas City, Austin, Fayetteville/NWA, and New York IB/M&A`;
-  const newRows = history.filter((row) => row.first_seen === runDate && !asBool(row.first_run) && isPreferredRow(row));
-  const removedRows = history.filter((row) => row.removed_date === runDate && isPreferredRow(row));
+  const newRows = history.filter((row) => row.first_seen === runDate && !asBool(row.first_run));
+  const removedRows = history.filter((row) => row.removed_date === runDate);
   document.getElementById("new-count").textContent = newRows.length;
   document.getElementById("removed-count").textContent = removedRows.length;
   renderJobList(document.getElementById("new-list"), newRows, { compact: true, empty: "No new non-first-run postings today." });

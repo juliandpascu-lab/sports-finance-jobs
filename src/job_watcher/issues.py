@@ -20,11 +20,20 @@ def _posting_lines(rows: list[dict[str, Any]], field: str, run_date: str) -> lis
         and not (field == "first_seen" and str(row.get("first_run", "")).lower() == "true")
     ]
     selected.sort(key=lambda row: (row.get("employer", ""), row.get("title", "")))
-    return [
-        f"- [{row.get('title', 'Untitled')} — {row.get('employer', '')}]({row.get('url', '')})"
-        f" — {row.get('location') or 'Location not provided'}"
-        for row in selected
-    ]
+    lines: list[str] = []
+    for row in selected:
+        lines.extend(
+            [
+                f"- **{row.get('title', 'Untitled')}**",
+                f"  - Employer: {row.get('employer', '')}",
+                f"  - Location: {row.get('location') or 'Location not provided'}",
+                f"  - Department: {row.get('department') or 'Not provided'}",
+                f"  - Posted: {row.get('posted_date') or 'Not provided'}",
+                f"  - Source: {row.get('source', '')}",
+                f"  - Apply: [Open application]({row.get('url', '')})",
+            ]
+        )
+    return lines
 
 
 def issue_body(
