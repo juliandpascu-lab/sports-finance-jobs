@@ -342,3 +342,68 @@ body[data-page="today"] .count-badge {
   border: 1px solid rgba(127,164,124,.3);
   box-shadow: inset 0 1px 0 rgba(255,255,255,.05), 0 0 12px rgba(69,220,145,.05);
 }
+
+/* Metric tiles: make the six headline numbers read like a live desk instrument panel. */
+body[data-page="today"] .metric-card {
+  display: flex;
+  min-height: 172px;
+  flex-direction: column;
+  padding: 23px 20px 17px;
+  border-left-width: 3px;
+}
+body[data-page="today"] .metric-card:nth-child(1) { border-left-color: #45dc91; background: radial-gradient(circle at 88% 88%, rgba(69,220,145,.16), transparent 32%), linear-gradient(145deg, #14291b, #0c160f 70%); }
+body[data-page="today"] .metric-card:nth-child(2) { border-left-color: #d3a546; background: radial-gradient(circle at 88% 88%, rgba(211,165,70,.2), transparent 32%), linear-gradient(145deg, #1d2917, #17170e 70%); }
+body[data-page="today"] .metric-card:nth-child(3) { border-left-color: #75c9e0; background: radial-gradient(circle at 88% 88%, rgba(117,201,224,.15), transparent 32%), linear-gradient(145deg, #13262a, #0c1714 70%); }
+body[data-page="today"] .metric-card:nth-child(4) { border-left-color: #d66d60; background: radial-gradient(circle at 88% 88%, rgba(214,109,96,.15), transparent 32%), linear-gradient(145deg, #291916, #161211 70%); }
+body[data-page="today"] .metric-card:nth-child(5) { border-left-color: #45dc91; background: radial-gradient(circle at 88% 88%, rgba(69,220,145,.21), transparent 32%), linear-gradient(145deg, #10291c, #0b1711 70%); }
+body[data-page="today"] .metric-card:nth-child(6) { border-left-color: #8ee0ac; background: radial-gradient(circle at 88% 88%, rgba(142,224,172,.18), transparent 32%), linear-gradient(145deg, #12281c, #0c1710 70%); }
+body[data-page="today"] .metric-card .metric-label::after {
+  margin-left: auto;
+  color: #5e7562;
+  content: "01";
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  font-size: 9px;
+  font-weight: 850;
+  letter-spacing: .08em;
+}
+body[data-page="today"] .metric-card:nth-child(2) .metric-label::after { content: "02"; color: #ab8d4d; }
+body[data-page="today"] .metric-card:nth-child(3) .metric-label::after { content: "03"; color: #5f9cac; }
+body[data-page="today"] .metric-card:nth-child(4) .metric-label::after { content: "04"; color: #a96259; }
+body[data-page="today"] .metric-card:nth-child(5) .metric-label::after { content: "05"; color: #52b983; }
+body[data-page="today"] .metric-card:nth-child(6) .metric-label::after { content: "06"; color: #71b88d; }
+body[data-page="today"] .metric-card strong {
+  position: relative;
+  z-index: 1;
+  margin-top: 26px;
+  font-size: clamp(38px, 3.5vw, 49px);
+  line-height: .88;
+  text-shadow: 0 4px 18px rgba(0,0,0,.3);
+}
+body[data-page="today"] .metric-card .metric-note {
+  display: flex;
+  align-items: center;
+  gap: 11px;
+  margin-top: auto;
+  padding-top: 17px;
+}
+body[data-page="today"] .metric-card .metric-note::after {
+  width: 32px;
+  height: 3px;
+  flex: 0 0 auto;
+  border-radius: 99px;
+  background: linear-gradient(90deg, #45dc91, rgba(69,220,145,0));
+  box-shadow: 0 0 10px rgba(69,220,145,.22);
+  content: "";
+}
+body[data-page="today"] .metric-card:nth-child(2) .metric-note::after { width: 84px; background: linear-gradient(90deg, #d3a546, rgba(211,165,70,0)); box-shadow: 0 0 10px rgba(211,165,70,.2); }
+body[data-page="today"] .metric-card:nth-child(3) .metric-note::after { width: 57px; background: linear-gradient(90deg, #75c9e0, rgba(117,201,224,0)); box-shadow: 0 0 10px rgba(117,201,224,.2); }
+body[data-page="today"] .metric-card:nth-child(4) .metric-note::after { width: 47px; background: linear-gradient(90deg, #d66d60, rgba(214,109,96,0)); box-shadow: 0 0 10px rgba(214,109,96,.2); }
+body[data-page="today"] .metric-card:nth-child(5) .metric-note::after { width: 72px; }
+body[data-page="today"] .metric-card:nth-child(6) .metric-note::after { width: 24px; background: linear-gradient(90deg, #8ee0ac, rgba(142,224,172,0)); }
+body[data-page="today"] .metric-card:hover { transform: translateY(-5px) scale(1.01); }
+
+@media (max-width: 560px) {
+  body[data-page="today"] .metric-card { min-height: 146px; padding: 20px 17px 15px; }
+  body[data-page="today"] .metric-card strong { margin-top: 23px; font-size: 37px; }
+  body[data-page="today"] .metric-card .metric-note { padding-top: 14px; }
+}
