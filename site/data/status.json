@@ -1,10 +1,10 @@
 {
-  "run_time": "2026-11-10T19:26:32.581928Z",
+  "run_time": "2026-11-10T19:41:49.430889Z",
   "first_run_date": "2026-11-08",
   "days_with_success": 3,
-  "open": 16073,
-  "new_today": 518,
-  "removed_today": 480,
+  "open": 16079,
+  "new_today": 533,
+  "removed_today": 490,
   "sources": [
     {
       "name": "baltimoreorioles",
@@ -49,7 +49,7 @@
     {
       "name": "fanaticsfbg",
       "ok": true,
-      "count": 92
+      "count": 91
     },
     {
       "name": "theathletic",
@@ -139,7 +139,7 @@
     {
       "name": "utaustin",
       "ok": true,
-      "count": 638
+      "count": 636
     },
     {
       "name": "nutrabolt",
@@ -149,7 +149,7 @@
     {
       "name": "fidelity",
       "ok": true,
-      "count": 858
+      "count": 857
     },
     {
       "name": "southwest",
@@ -159,12 +159,12 @@
     {
       "name": "tysonfoods",
       "ok": true,
-      "count": 717
+      "count": 722
     },
     {
       "name": "jbhunt",
       "ok": true,
-      "count": 447
+      "count": 448
     },
     {
       "name": "uasys",
@@ -179,17 +179,17 @@
     {
       "name": "umb",
       "ok": true,
-      "count": 164
+      "count": 163
     },
     {
       "name": "capitalone",
       "ok": true,
-      "count": 339
+      "count": 340
     },
     {
       "name": "blackrock",
       "ok": true,
-      "count": 277
+      "count": 280
     },
     {
       "name": "barclays",
@@ -204,12 +204,12 @@
     {
       "name": "morningstar",
       "ok": true,
-      "count": 183
+      "count": 184
     },
     {
       "name": "keybank",
       "ok": true,
-      "count": 571
+      "count": 572
     },
     {
       "name": "jll",
@@ -219,7 +219,7 @@
     {
       "name": "intuitive",
       "ok": true,
-      "count": 850
+      "count": 849
     },
     {
       "name": "rrdonnelley",
@@ -234,7 +234,7 @@
     {
       "name": "oraclecareers",
       "ok": true,
-      "count": 2837
+      "count": 2836
     },
     {
       "name": "jpmorgan",
@@ -249,7 +249,7 @@
     {
       "name": "federalreserve",
       "ok": true,
-      "count": 170
+      "count": 171
     }
   ]
 }
