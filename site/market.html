@@ -7,33 +7,33 @@
     <link rel="manifest" href="manifest.webmanifest" />
     <link rel="icon" href="icon.svg" type="image/svg+xml" />
     <link rel="stylesheet" href="styles.css" />
-    <title>The Street Finance Watch — Market</title>
+    <title>Wolf Desk Finance Watch — Market</title>
   </head>
   <body data-page="market">
     <header class="topbar">
-      <a class="brand" href="index.html"><span class="brand-mark">↗</span><span>THE STREET / FINANCE WATCH</span></a>
+      <a class="brand" href="index.html"><span class="brand-mark">↗</span><span>WOLF DESK / FINANCE WATCH</span></a>
       <div class="topbar-meta"><span class="topbar-status-dot"></span><span data-topbar-text>Daily ATS watch · loading source health</span></div>
       <nav aria-label="Main navigation"><a class="nav-link" data-nav="today" href="index.html">Today</a><a class="nav-link" data-nav="browse" href="browse.html">Browse</a><a class="nav-link" data-nav="market" href="market.html">Market</a><a class="nav-link" data-nav="resume" href="resume.html">Resume Vault</a></nav>
     </header>
-    <div class="ticker-strip" aria-label="Watcher positioning"><span class="ticker-lead">THE STREET BOARD</span><span>PUBLIC ATS FEEDS</span><span>EARLY-CAREER FINANCE</span><span>DFW · KC · AUSTIN · NWA · NYC</span><span class="ticker-live">LIVE / DAILY</span></div>
+    <div class="ticker-strip" aria-label="Watcher positioning"><span class="ticker-lead">WOLF DESK / OPENING BELL</span><span>PUBLIC ATS FEEDS</span><span>DEALS · FP&amp;A · FINANCE</span><span>DFW · KC · AUSTIN · NWA · NYC</span><span class="ticker-live">STAY SHARP / DAILY</span></div>
     <main class="page-shell">
       <section class="hero hero-compact">
-        <p class="eyebrow">THE MARKET · YOUR WATCHER’S MEMORY</p>
-        <h1>See what is moving, not just what is open.</h1>
-        <p class="hero-copy">These views turn the daily snapshots into useful context: how quickly roles appear and disappear, which employers carry the most inventory, and where the open market is concentrated.</p>
-        <div class="hero-details"><span><strong>Source</strong> Full history file</span><span><strong>Method</strong> Calculated in browser</span><span><strong>Refresh</strong> Grows each day</span></div>
+        <p class="eyebrow">READ THE TAPE · YOUR WATCHER’S MEMORY</p>
+        <h1>Read the tape. Move first.</h1>
+        <p class="hero-copy">The market never sits still. These views show how quickly positions hit the board and disappear, which employers carry the inventory, and where the strongest action is gathering.</p>
+        <div class="hero-details"><span><strong>Source</strong> Full history file</span><span><strong>Method</strong> Calculated in browser</span><span><strong>Refresh</strong> New tape daily</span></div>
       </section>
       <div id="market-as-of" class="market-as-of">Calculating from history…</div>
       <section class="market-grid">
-        <article class="panel market-card"><p class="eyebrow">01 · MOMENTUM</p><h2 id="new-heading">New postings per day</h2><p id="new-explanation">—</p><div class="chart-pair"><div><h3>All postings</h3><div id="new-all-chart" class="chart" role="img" aria-label="All new postings per day chart"></div></div><div><h3>Approved roles</h3><div id="new-role-chart" class="chart" role="img" aria-label="Approved-role new postings per day chart"></div></div></div></article>
-        <article class="panel market-card"><p class="eyebrow">02 · CHURN</p><h2 id="removed-heading">Removed postings per day</h2><p id="removed-explanation">—</p><div id="removed-chart" class="chart" role="img" aria-label="Removed postings per day chart"></div></article>
-        <article class="panel market-card"><p class="eyebrow">03 · EMPLOYERS</p><h2 id="employer-heading">Open postings per employer</h2><p id="employer-explanation">—</p><div id="employer-chart" class="chart chart-tall" role="img" aria-label="Open postings per employer chart"></div></article>
-        <article class="panel market-card highlight-card"><p class="eyebrow">04 · TENURE</p><h2 id="days-heading">Days open</h2><p id="days-explanation">—</p><div id="days-chart" class="stat-visual"><strong id="median-days">—</strong><span>median days for removed, non-first-run postings</span></div></article>
-        <article class="panel market-card"><p class="eyebrow">05 · SPEED</p><h2 id="seven-heading">Share removed within seven days</h2><p id="seven-explanation">—</p><div id="seven-chart" class="stat-visual"><strong id="seven-share">—</strong><span id="seven-denominator">—</span></div></article>
-        <article class="panel market-card"><p class="eyebrow">06 · GEOGRAPHY</p><h2 id="location-heading">Top locations among open postings</h2><p id="location-explanation">—</p><div id="location-chart" class="chart chart-tall" role="img" aria-label="Top locations chart"></div></article>
+        <article class="panel market-card"><p class="eyebrow">01 · OPENING BELL</p><h2 id="new-heading">New postings per day</h2><p id="new-explanation">—</p><div class="chart-pair"><div><h3>All postings</h3><div id="new-all-chart" class="chart" role="img" aria-label="All new postings per day chart"></div></div><div><h3>Approved roles</h3><div id="new-role-chart" class="chart" role="img" aria-label="Approved-role new postings per day chart"></div></div></div></article>
+        <article class="panel market-card"><p class="eyebrow">02 · THE TAPE MOVES</p><h2 id="removed-heading">Removed postings per day</h2><p id="removed-explanation">—</p><div id="removed-chart" class="chart" role="img" aria-label="Removed postings per day chart"></div></article>
+        <article class="panel market-card"><p class="eyebrow">03 · THE BOOK</p><h2 id="employer-heading">Open postings per employer</h2><p id="employer-explanation">—</p><div id="employer-chart" class="chart chart-tall" role="img" aria-label="Open postings per employer chart"></div></article>
+        <article class="panel market-card highlight-card"><p class="eyebrow">04 · TIME ON THE FLOOR</p><h2 id="days-heading">Days open</h2><p id="days-explanation">—</p><div id="days-chart" class="stat-visual"><strong id="median-days">—</strong><span>median days for removed, non-first-run postings</span></div></article>
+        <article class="panel market-card"><p class="eyebrow">05 · SPEED OF THE CLOSE</p><h2 id="seven-heading">Share removed within seven days</h2><p id="seven-explanation">—</p><div id="seven-chart" class="stat-visual"><strong id="seven-share">—</strong><span id="seven-denominator">—</span></div></article>
+        <article class="panel market-card"><p class="eyebrow">06 · WHERE THE ACTION IS</p><h2 id="location-heading">Top locations among open postings</h2><p id="location-explanation">—</p><div id="location-chart" class="chart chart-tall" role="img" aria-label="Top locations chart"></div></article>
       </section>
     </main>
-    <footer class="footer">Computed from the watcher’s repository history · <a href="browse.html">Browse open roles</a> · <a href="resume.html">Open Resume Vault</a></footer>
+    <footer class="footer">Computed from the watcher’s repository history · <a href="browse.html">Work the board</a> · <a href="resume.html">Open the pitch desk</a></footer>
     <script src="app.js"></script>
     <script src="market.js"></script>
   </body>

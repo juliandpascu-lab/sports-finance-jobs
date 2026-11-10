@@ -1,10 +1,10 @@
 {
-  "name": "The Street Finance Watch",
-  "short_name": "Street Jobs",
+  "name": "Wolf Desk Finance Watch",
+  "short_name": "Wolf Desk",
   "description": "Entry-level finance, FP&A, analytics, credit, sports-business, and New York investment-banking jobs.",
   "start_url": "./index.html",
   "display": "standalone",
-  "background_color": "#f1efe7",
-  "theme_color": "#111613",
+  "background_color": "#0c110e",
+  "theme_color": "#0c110e",
   "icons": [{"src":"icon.svg","sizes":"any","type":"image/svg+xml","purpose":"any maskable"}]
 }

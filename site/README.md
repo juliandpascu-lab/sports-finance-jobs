@@ -27,7 +27,7 @@ open-job history beside the preview and calculates title-and-skill tailoring
 notes in the browser. The file is not uploaded, written to the repository, or
 saved in browser storage.
 
-The visual system uses an original Wall Street trading-floor direction: dark
+The visual system uses an original Wolf Desk trading-floor direction: dark
 terminal navigation, brass accents, green market signals, ticker-strip context,
-and newspaper-style headings. It does not include movie logos, screenshots, or
-other copyrighted film assets.
+high-pressure brokerage copy, and newspaper-style headings. It does not include
+movie logos, screenshots, dialogue, or other copyrighted film assets.
