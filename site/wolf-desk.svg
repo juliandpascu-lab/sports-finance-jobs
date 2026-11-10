@@ -1,0 +1,62 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 360" role="img" aria-labelledby="title desc">
+  <title id="title">Original Wolf Desk trading-floor illustration</title>
+  <desc id="desc">A dark brokerage terminal grid with a geometric wolf crest, market bars, and a rising gold price line.</desc>
+  <defs>
+    <linearGradient id="floor" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#070b08"/>
+      <stop offset=".62" stop-color="#13261a"/>
+      <stop offset="1" stop-color="#241d0d"/>
+    </linearGradient>
+    <linearGradient id="gold" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0" stop-color="#8d6b2e"/>
+      <stop offset=".5" stop-color="#f2ca6b"/>
+      <stop offset="1" stop-color="#b98d3b"/>
+    </linearGradient>
+    <pattern id="grid" width="42" height="42" patternUnits="userSpaceOnUse">
+      <path d="M42 0H0V42" fill="none" stroke="#d8e9d7" stroke-opacity=".08" stroke-width="1"/>
+    </pattern>
+    <filter id="glow" x="-30%" y="-30%" width="160%" height="160%">
+      <feGaussianBlur stdDeviation="5" result="blur"/>
+      <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>
+  </defs>
+  <rect width="1200" height="360" rx="22" fill="url(#floor)"/>
+  <rect x="20" y="20" width="1160" height="320" rx="16" fill="url(#grid)"/>
+  <path d="M0 292H1200" stroke="#d3a546" stroke-opacity=".26"/>
+  <path d="M0 303H1200" stroke="#45dc91" stroke-opacity=".12"/>
+
+  <g fill="#d3a546" opacity=".88" font-family="Arial, sans-serif" font-weight="700" letter-spacing="3">
+    <text x="58" y="68" font-size="14">WOLF DESK</text>
+    <text x="58" y="95" font-size="10" fill="#9fb4a0">OPENING BELL / DAILY TAPE</text>
+  </g>
+  <g fill="#a6b9a7" font-family="Arial, sans-serif" font-size="10" letter-spacing="2">
+    <text x="58" y="326">DFW</text><text x="114" y="326">KC</text><text x="160" y="326">AUS</text><text x="216" y="326">NWA</text><text x="278" y="326">NYC</text>
+  </g>
+
+  <g transform="translate(58 142)" opacity=".9">
+    <rect x="0" y="92" width="15" height="44" rx="2" fill="#2f6a49"/>
+    <rect x="28" y="72" width="15" height="64" rx="2" fill="#3d9c69"/>
+    <rect x="56" y="98" width="15" height="38" rx="2" fill="#80652f"/>
+    <rect x="84" y="46" width="15" height="90" rx="2" fill="#53d88f"/>
+    <rect x="112" y="62" width="15" height="74" rx="2" fill="#bd9140"/>
+    <rect x="140" y="22" width="15" height="114" rx="2" fill="#f0c866"/>
+    <path d="M7 88 35 70 63 96 91 44 119 61 147 19 174 38" fill="none" stroke="#f2ca6b" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" filter="url(#glow)"/>
+    <circle cx="174" cy="38" r="5" fill="#45dc91"/>
+  </g>
+
+  <g transform="translate(785 45)">
+    <circle cx="170" cy="132" r="111" fill="#0a100c" stroke="#d3a546" stroke-opacity=".56" stroke-width="2"/>
+    <path d="M92 210 112 75l58 45 58-45 20 135-78-39z" fill="url(#gold)"/>
+    <path d="m112 75 58 45 58-45-20 84-38-35-38 35z" fill="#45dc91"/>
+    <path d="m170 140-18 32h36z" fill="#101711"/>
+    <path d="M170 174v38" stroke="#f4d27c" stroke-width="4" stroke-linecap="round"/>
+    <circle cx="170" cy="132" r="122" fill="none" stroke="#45dc91" stroke-opacity=".22" stroke-dasharray="2 12" stroke-width="3"/>
+  </g>
+  <g fill="#d7e6d6" font-family="Arial, sans-serif" text-anchor="middle">
+    <text x="955" y="300" font-size="12" letter-spacing="5">MAKE THE CALL</text>
+    <text x="955" y="321" fill="#9fb4a0" font-size="9" letter-spacing="2">FRESH ROLES / CLEAN SIGNAL</text>
+  </g>
+  <g fill="#45dc91" font-family="monospace" font-size="10" letter-spacing="1">
+    <text x="443" y="78">LIVE  047</text><text x="443" y="98" fill="#d3a546">TAPE  12:17Z</text><text x="443" y="118">EDGE  +18.4%</text>
+  </g>
+</svg>
