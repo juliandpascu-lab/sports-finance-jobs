@@ -23,38 +23,73 @@ GitHub Issue, pushes the generated data commit, and deploys the refreshed site.
 - Live site: <https://juliandpascu-lab.github.io/sports-finance-jobs/>
 - Daily report: <https://github.com/juliandpascu-lab/sports-finance-jobs/issues>
 
-## Repository layout
+## Repository layout and complete file inventory
+
+The table below documents every non-snapshot file tracked by the repository.
+Daily compressed responses are generated from the documented raw-file pattern
+because their contents and count change every run.
 
 | Path | Purpose |
 | --- | --- |
+| `README.md` | Project instructions, rubric-facing documentation, source table, commands, and deployment links. |
+| `.gitignore` | Ignores local caches, virtual environments, and generated development files. |
 | `.openai/hosting.json` | Declares the static Sites deployment output. |
-| `.gitignore` | Ignores local caches and generated development files. |
-| `.github/workflows/tests.yml` | Runs the pytest suite on every push. |
-| `.github/workflows/pipeline.yml` | Fetches public ATS feeds, updates history, creates the daily Issue, and deploys refreshed Pages. |
-| `.github/workflows/pages.yml` | Deploys the `site/` directory to GitHub Pages. |
-| `data/history.csv` | Fixed-path normalized posting history. |
-| `data/raw/` | Fixed root for dated, compressed source responses. |
-| `data/status.json` | Fixed-path summary of the latest pipeline run. |
-| `site/` | Today, Browse, Market, private browser-only Resume Vault, PWA manifest, service worker, and generated data mirror. |
-| `src/job_watcher/config.py` | Sports, banking, fintech, startup, and general-finance watchlist and role description. |
-| `src/job_watcher/collector.py` | Public JSON fetching and compressed raw-file persistence. |
-| `src/job_watcher/history.py` | Rebuilds history exclusively from raw files. |
-| `src/job_watcher/issues.py` | Creates or updates the dated GitHub Issue and closes the previous one. |
-| `src/job_watcher/normalize.py` | Converts Greenhouse, Lever, Ashby, Workday, SmartRecruiters, and Oracle responses to common columns. |
-| `src/job_watcher/role.py` | Title-only rule for the twenty approved analyst job families plus preferred-market matching. |
-| `src/job_watcher/schema.py` | Shared history/status schemas and path constants. |
-| `src/job_watcher/status.py` | Writes the latest-run status summary. |
-| `src/job_watcher/cli.py` | `run` and `build-history` commands. |
+| `.github/workflows/tests.yml` | Installs the project and runs pytest on every push. |
+| `.github/workflows/pipeline.yml` | Runs the daily collection, history build, status write, Issue sync, data commit, and Pages deployment. |
+| `.github/workflows/pages.yml` | Deploys the tracked `site/` directory to GitHub Pages after site changes. |
+| `pyproject.toml` | Python package metadata, optional pytest dependency, package discovery, and pytest configuration. |
+| `data/history.csv` | Fixed-path normalized posting history with one row per posting. |
+| `data/status.json` | Fixed-path summary of the latest run and every source result. |
+| `data/raw/.gitkeep` | Keeps the raw-data root in the repository before the first snapshot. |
+| `data/raw/<UTC-date>/<source>.json.gz` | Compressed anonymous ATS response; one generated file per source and collection date. The source keys are listed in the Sources table below. |
 | `src/job_watcher/__init__.py` | Package marker for the watcher modules. |
+| `src/job_watcher/config.py` | Employer watchlist, ATS endpoints, source-specific search terms, role name, and title-rule summary. |
+| `src/job_watcher/collector.py` | Fetches public JSON, paginates supported ATS boards, isolates source failures, and writes compressed raw responses. |
+| `src/job_watcher/history.py` | Rebuilds the history exclusively from dated raw files and applies first-seen, last-seen, removed, and reopened logic. |
+| `src/job_watcher/issues.py` | Creates or updates the dated GitHub Issue, lists changes with application links, and closes the previous day’s Issue. |
+| `src/job_watcher/normalize.py` | Converts Greenhouse, Lever, Ashby, Workday, SmartRecruiters, and Oracle responses to common columns. |
+| `src/job_watcher/role.py` | Applies the twenty approved title families, seniority exclusions, school-program exclusions, and preferred-market matching. |
+| `src/job_watcher/schema.py` | Defines fixed paths, history columns, status keys, and raw-file paths. |
+| `src/job_watcher/status.py` | Calculates and writes the latest-run status summary. |
+| `src/job_watcher/cli.py` | Provides the `run` and `build-history` command-line entry points. |
 | `tests/test_collector.py` | Tests paginated Workday, SmartRecruiters, and Oracle collection. |
-| `tests/test_history.py` | First-seen, last-seen, removal, and reopening tests. |
+| `tests/test_history.py` | Tests first-seen, last-seen, removal, reopening, and missing-source behavior. |
 | `tests/test_issues.py` | Tests detailed daily Issue listing output and role filtering. |
-| `tests/test_normalize.py` | Conversion contract for every configured source and title-rule tests. |
-| `tests/test_schema.py` | Schema contract tests. |
-| `tests/test_status.py` | Tests successful-date counting in the status file. |
-| `pyproject.toml` | Python package and test configuration. |
-| `site/` | Source site bundle: Today, Browse, Market, Resume Vault, shared scripts/styles, PWA files, and deployment marker files. |
-| `dist/` | Generated static deployment mirror of the site bundle. |
+| `tests/test_normalize.py` | Tests conversion to common columns for every configured source and the title/market rules. |
+| `tests/test_schema.py` | Tests the assignment’s fixed data paths, history columns, and status keys. |
+| `tests/test_status.py` | Tests successful-date counting from raw files. |
+| `site/.gitkeep` | Keeps the source site directory present in the repository. |
+| `site/.nojekyll` | Prevents GitHub Pages from applying Jekyll processing to the static site. |
+| `site/README.md` | Documents the site pages, browser-only Resume Vault, data loading, offline behavior, and visual system. |
+| `site/index.html` | Today page: latest run, source health, counts, changes, market map, and current matches. |
+| `site/browse.html` | Browse page: role/all-posting switch, filters, search, sorting, apply links, and shortlist stars. |
+| `site/market.html` | Market page shell containing the six rubric-required findings and chart containers. |
+| `site/resume.html` | Browser-only Resume Vault page with the local resume viewer and side-by-side job finder. |
+| `site/app.js` | Shared Today/Browse data loading, role filtering, maps, job cards, searches, shortlist, and saved-search behavior. |
+| `site/market.js` | Browser-side Market calculations for new, removed, open, days-open, seven-day, and location metrics. |
+| `site/resume.js` | Browser-only DOCX reading, resume matching, and local tailoring-note behavior. |
+| `site/styles.css` | Shared Wolf Desk typography, colors, responsive layout, cards, charts, controls, and accessibility styling. |
+| `site/service-worker.js` | Caches the app shell and last loaded data for offline use. |
+| `site/manifest.webmanifest` | PWA name, start URL, display mode, theme colors, and icon declaration. |
+| `site/icon.svg` | App favicon and manifest icon. |
+| `site/wolf-desk.svg` | Original trading-floor/wolf visual used on the Today page. |
+| `site/us-states.json` | Bundled United States geometry used by the interactive market map. |
+| `site/data/history.csv` | Generated Pages mirror of `data/history.csv`. |
+| `site/data/status.json` | Generated Pages mirror of `data/status.json`. |
+| `dist/.gitkeep` | Keeps the generated deployment mirror directory present. |
+| `dist/.nojekyll` | Prevents Jekyll processing if the deployment mirror is served directly. |
+| `dist/README.md` | Deployment-mirror documentation. |
+| `dist/index.html` | Generated Today page mirror. |
+| `dist/browse.html` | Generated Browse page mirror. |
+| `dist/market.html` | Generated Market page mirror. |
+| `dist/app.js` | Generated shared site JavaScript mirror. |
+| `dist/market.js` | Generated Market JavaScript mirror. |
+| `dist/styles.css` | Generated shared stylesheet mirror. |
+| `dist/service-worker.js` | Generated service-worker mirror. |
+| `dist/manifest.webmanifest` | Generated PWA manifest mirror. |
+| `dist/icon.svg` | Generated app-icon mirror. |
+| `dist/data/history.csv` | Generated deployment mirror of the normalized history. |
+| `dist/data/status.json` | Generated deployment mirror of the latest status. |
 
 ## Fixed data paths
 
