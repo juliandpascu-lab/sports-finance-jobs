@@ -1,10 +1,10 @@
 {
-  "name": "Finance + Sports Jobs",
-  "short_name": "Finance Jobs",
+  "name": "The Street Finance Watch",
+  "short_name": "Street Jobs",
   "description": "Entry-level finance, FP&A, analytics, credit, sports-business, and New York investment-banking jobs.",
   "start_url": "./index.html",
   "display": "standalone",
-  "background_color": "#f5f7f9",
-  "theme_color": "#0d1b2a",
+  "background_color": "#f1efe7",
+  "theme_color": "#111613",
   "icons": [{"src":"icon.svg","sizes":"any","type":"image/svg+xml","purpose":"any maskable"}]
 }
