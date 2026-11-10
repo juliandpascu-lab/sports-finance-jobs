@@ -36,6 +36,28 @@
         <img src="wolf-desk.svg" alt="Original Wolf Desk trading-floor illustration with a wolf crest and rising market line" />
       </section>
 
+      <section class="position-market panel" aria-label="Job position market">
+        <div class="position-market-heading"><div><p class="eyebrow">POSITION MARKET · JOB FLOW</p><h2>Read the flow. Take the right seat.</h2></div><span class="position-market-status"><i></i> Desk live</span></div>
+        <div class="position-market-grid">
+          <div class="position-ladder">
+            <div class="position-ladder-row position-open"><span class="position-index">01</span><span class="position-label">OPEN BOOK</span><strong id="position-open-count">—</strong><small>approved roles on the board</small></div>
+            <div class="position-ladder-row position-fresh"><span class="position-index">02</span><span class="position-label">FRESH FLOW</span><strong id="position-fresh-count">—</strong><small>posted in the last 24 hours</small></div>
+            <div class="position-ladder-row position-new"><span class="position-index">03</span><span class="position-label">NEW TAPE</span><strong id="position-new-count">—</strong><small>new to the watcher today</small></div>
+            <div class="position-ladder-row position-removed"><span class="position-index">04</span><span class="position-label">OFF TAPE</span><strong id="position-removed-count">—</strong><small>pulled since the last run</small></div>
+          </div>
+          <div class="position-flow-chart">
+            <div class="position-flow-header"><span>STAGGERED POSITION FLOW</span><small>freshness · daily movement</small></div>
+            <svg viewBox="0 0 520 190" role="img" aria-label="Staggered job position flow line">
+              <path class="flow-grid-line" d="M18 32H500M18 78H500M18 124H500M18 168H500"/>
+              <path class="flow-line" d="M18 150H70V132H120V143H173V96H226V111H278V68H335V84H390V48H447V26H500"/>
+              <circle class="flow-node" cx="70" cy="132" r="5"/><circle class="flow-node" cx="173" cy="96" r="5"/><circle class="flow-node" cx="278" cy="68" r="5"/><circle class="flow-node" cx="390" cy="48" r="5"/><circle class="flow-node flow-node-final" cx="500" cy="26" r="7"/>
+              <text x="18" y="184">OPEN</text><text x="222" y="184">WATCH</text><text x="438" y="184">MOVE</text>
+            </svg>
+            <p class="position-note">A visual metaphor for job flow, not a trading feed. The numbers above come from the latest watcher run.</p>
+          </div>
+        </div>
+      </section>
+
       <section class="metric-grid" aria-label="Latest snapshot totals">
         <article class="metric-card"><span class="metric-label">Days watched</span><strong id="metric-days">—</strong><span class="metric-note">successful collection dates</span></article>
         <article class="metric-card metric-card-accent"><span class="metric-label">Open roles</span><strong id="metric-open">—</strong><span class="metric-note">across every watched board</span></article>

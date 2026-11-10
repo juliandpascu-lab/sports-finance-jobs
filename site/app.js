@@ -483,6 +483,8 @@ function renderToday() {
   const preferredOpen = currentRows.filter((row) => postedAge(row) <= 7);
   document.getElementById("metric-target").textContent = currentRows.length;
   document.getElementById("metric-fresh").textContent = currentRows.filter((row) => postedAge(row) <= 1).length;
+  document.getElementById("position-open-count")?.replaceChildren(String(currentRows.length));
+  document.getElementById("position-fresh-count")?.replaceChildren(String(currentRows.filter((row) => postedAge(row) <= 1).length));
   renderSourceHealth(status);
   document.getElementById("preference-summary").textContent = `${currentRows.length} current approved-title matches across Dallas–Fort Worth, Kansas City, Austin, Fayetteville/NWA, and New York IB/M&A · ${preferredOpen.length} posted in the last 7 days`;
   document.getElementById("current-count").textContent = currentRows.length;
@@ -492,6 +494,8 @@ function renderToday() {
   const removedRows = history.filter((row) => row.removed_date === runDate && isPreferredRow(row));
   document.getElementById("new-count").textContent = newRows.length;
   document.getElementById("removed-count").textContent = removedRows.length;
+  document.getElementById("position-new-count")?.replaceChildren(String(newRows.length));
+  document.getElementById("position-removed-count")?.replaceChildren(String(removedRows.length));
   renderJobList(document.getElementById("new-list"), newRows, { compact: true, empty: "No new non-first-run postings today." });
   renderJobList(document.getElementById("removed-list"), removedRows, { compact: true, empty: "No postings were removed today." });
   renderMatchInsights(currentRows);
