@@ -72,6 +72,29 @@
         <div class="opening-bell-stats"><div><span>Fresh focus roles</span><strong id="bell-fresh">—</strong><small>posted in the last 24 hours</small></div><div><span>New focus tape</span><strong id="bell-new">—</strong><small>new since the prior run</small></div><div><span>Market pulse</span><strong id="bell-pulse">—</strong><small>strongest target market today</small></div></div>
       </section>
 
+      <section class="panel market-explorer primary-market-map">
+        <div class="section-heading"><div><p class="eyebrow">WHERE THE ACTION IS</p><h2>See which markets are making noise.</h2></div><span class="pill">City-level view</span></div>
+        <p class="current-summary">Click a pin to inspect open postings in that market. Health is based on posted-date freshness: Fresh is within 24 hours, Active is 2–7 days, and Aging is older than 7 days.</p>
+        <div class="map-toolbar"><div class="segmented" role="group" aria-label="Map posting scope"><button class="segment active" data-map-scope="focus" type="button">Focus roles</button><button class="segment" data-map-scope="all" type="button">All target-market jobs</button></div><label class="map-health-select">Job health<select id="map-health-filter"><option value="all">All open jobs</option><option value="fresh">Fresh · 24 hours</option><option value="active">Active · 2–7 days</option><option value="aging">Aging · 8+ days</option></select></label></div>
+        <div id="map-market-pills" class="map-market-pills" aria-label="Target market selection"></div>
+        <div class="market-explorer-grid">
+          <div class="job-map-card">
+            <svg id="job-map" class="job-map" viewBox="0 0 800 420" role="img" aria-label="Interactive United States target market job map">
+              <rect class="map-water" x="0" y="0" width="800" height="420" rx="14"></rect>
+              <g id="map-state-layer"></g>
+              <g id="map-pins"></g>
+            </svg>
+            <div class="map-legend"><span><i class="legend-dot fresh"></i>Fresh</span><span><i class="legend-dot active"></i>Active</span><span><i class="legend-dot aging"></i>Aging</span><span class="map-legend-note">Pin size = open roles</span></div>
+          </div>
+          <aside class="map-detail-panel">
+            <div class="map-detail-heading"><div><p class="eyebrow">DESK LOCATION</p><h3 id="map-selection-title">All target markets</h3></div><span class="count-badge" id="map-selection-count">—</span></div>
+            <p id="map-selection-summary" class="map-selection-summary">Choose a pin to see its job health.</p>
+            <div id="map-health-stats" class="map-health-stats"></div>
+            <div id="map-job-list" class="map-job-list" aria-live="polite"></div>
+          </aside>
+        </div>
+      </section>
+
       <section class="dashboard-grid">
         <article class="panel">
           <div class="section-heading"><div><p class="eyebrow">THE FLOOR CHECK</p><h2>Who answered the bell?</h2></div><span class="pill" id="source-health">—</span></div>
@@ -95,29 +118,6 @@
       <section class="market-intelligence-grid">
         <article class="panel daily-recap-panel"><div class="section-heading"><div><p class="eyebrow">THE MORNING NOTE</p><h2 id="recap-headline">Daily desk recap</h2></div><span class="pill">Calculated here</span></div><p id="recap-copy" class="current-summary">Reading today’s movement across your focus roles.</p><div id="recap-list" class="recap-list"></div></article>
         <article class="panel role-heatmap-panel"><div class="section-heading"><div><p class="eyebrow">ROLE HEATMAP</p><h2>Where the seats are opening.</h2></div><span class="pill">Open focus roles</span></div><p class="current-summary">A live count by target market and role family. Darker cells mean more open seats.</p><div id="role-heatmap" class="role-heatmap" aria-live="polite"></div></article>
-      </section>
-
-      <section class="panel market-explorer">
-        <div class="section-heading"><div><p class="eyebrow">WHERE THE ACTION IS</p><h2>See which markets are making noise.</h2></div><span class="pill">City-level view</span></div>
-        <p class="current-summary">Click a pin to inspect open postings in that market. Health is based on posted-date freshness: Fresh is within 24 hours, Active is 2–7 days, and Aging is older than 7 days.</p>
-        <div class="map-toolbar"><div class="segmented" role="group" aria-label="Map posting scope"><button class="segment active" data-map-scope="focus" type="button">Focus roles</button><button class="segment" data-map-scope="all" type="button">All target-market jobs</button></div><label class="map-health-select">Job health<select id="map-health-filter"><option value="all">All open jobs</option><option value="fresh">Fresh · 24 hours</option><option value="active">Active · 2–7 days</option><option value="aging">Aging · 8+ days</option></select></label></div>
-        <div id="map-market-pills" class="map-market-pills" aria-label="Target market selection"></div>
-        <div class="market-explorer-grid">
-          <div class="job-map-card">
-            <svg id="job-map" class="job-map" viewBox="0 0 800 420" role="img" aria-label="Interactive United States target market job map">
-              <rect class="map-water" x="0" y="0" width="800" height="420" rx="14"></rect>
-              <g id="map-state-layer"></g>
-              <g id="map-pins"></g>
-            </svg>
-            <div class="map-legend"><span><i class="legend-dot fresh"></i>Fresh</span><span><i class="legend-dot active"></i>Active</span><span><i class="legend-dot aging"></i>Aging</span><span class="map-legend-note">Pin size = open roles</span></div>
-          </div>
-          <aside class="map-detail-panel">
-            <div class="map-detail-heading"><div><p class="eyebrow">DESK LOCATION</p><h3 id="map-selection-title">All target markets</h3></div><span class="count-badge" id="map-selection-count">—</span></div>
-            <p id="map-selection-summary" class="map-selection-summary">Choose a pin to see its job health.</p>
-            <div id="map-health-stats" class="map-health-stats"></div>
-            <div id="map-job-list" class="map-job-list" aria-live="polite"></div>
-          </aside>
-        </div>
       </section>
 
       <section class="change-grid">
