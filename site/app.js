@@ -53,6 +53,22 @@ const NEW_YORK_ROLE_SEARCHES = [
   "Transaction Advisory Analyst", "Investment Banking Analyst", "M&A Analyst"
 ];
 const CORE_FINANCE_CREDIT_TERMS = ["financial analyst", "fp&a", "corporate finance", "revenue finance", "strategic finance", "treasury analyst", "credit analyst", "commercial banking", "corporate banking", "financial risk"];
+const APPLICATION_STAGES = [
+  { key: "watch", label: "Watch" },
+  { key: "applied", label: "Applied" },
+  { key: "interview", label: "Interview" },
+  { key: "offer", label: "Offer" },
+  { key: "closed", label: "Closed" }
+];
+const HEATMAP_FAMILIES = [
+  { key: "finance", label: "Finance" },
+  { key: "fpa", label: "FP&A" },
+  { key: "credit", label: "Credit" },
+  { key: "banking", label: "Banking" },
+  { key: "treasury", label: "Treasury" },
+  { key: "risk", label: "Risk" },
+  { key: "markets", label: "Markets" }
+];
 
 function readStoredJSON(key, fallback) {
   try {
@@ -69,10 +85,12 @@ const state = {
   mapGeometry: null,
   shortlist: new Set(Array.isArray(storedShortlist) ? storedShortlist : []),
   savedSearches: readStoredJSON("sportsFinanceSavedSearches", []),
+  applications: readStoredJSON("sportsFinanceApplications", {}),
   mapMarket: "all",
   mapScope: "focus"
 };
 if (!Array.isArray(state.savedSearches)) state.savedSearches = [];
+if (!state.applications || Array.isArray(state.applications) || typeof state.applications !== "object") state.applications = {};
 
 function escapeHTML(value) {
   return String(value ?? "").replace(/[&<>'"]/g, (char) => ({"&":"&amp;","<":"&lt;",">":"&gt;","'":"&#39;","\"":"&quot;"}[char]));
@@ -112,6 +130,7 @@ function formatDate(value) { return value ? new Date(`${value}T00:00:00Z`).toLoc
 function formatDateTime(value) { return value ? new Date(value).toLocaleString(undefined, {month:"short", day:"numeric", hour:"numeric", minute:"2-digit", timeZoneName:"short"}) : "No completed run yet"; }
 function saveShortlist() { localStorage.setItem("sportsFinanceShortlist", JSON.stringify([...state.shortlist])); }
 function saveSavedSearches() { localStorage.setItem("sportsFinanceSavedSearches", JSON.stringify(state.savedSearches)); }
+function saveApplications() { localStorage.setItem("sportsFinanceApplications", JSON.stringify(state.applications)); }
 function normalizedText(value) { return String(value || "").toLowerCase().replace(/\s+/g, " ").trim(); }
 function matchedMarkets(row) {
   const location = normalizedText(row.location);
@@ -140,23 +159,36 @@ function roleFamily(row) {
   if (title.includes("risk")) return "Financial Risk Analyst";
   return "Other approved role";
 }
+function heatmapFamily(row) {
+  const title = normalizedText(row.title);
+  if (title.includes("fp&a")) return "fpa";
+  if (title.includes("credit")) return "credit";
+  if (title.includes("commercial banking") || title.includes("corporate banking")) return "banking";
+  if (title.includes("treasury")) return "treasury";
+  if (title.includes("risk")) return "risk";
+  if (title.includes("investment") || title.includes("equity research") || title.includes("valuation") || title.includes("portfolio") || title.includes("asset management") || title.includes("private credit") || title.includes("m&a") || title.includes("transaction") || title.includes("corporate development")) return "markets";
+  return "finance";
+}
 function coreFinanceCreditPriority(row) {
   const title = normalizedText(row.title);
   return CORE_FINANCE_CREDIT_TERMS.some((term) => title.includes(term)) ? 1 : 0;
 }
-function relevanceScore(row) {
+function opportunityScore(row) {
   const title = normalizedText(row.title);
-  let score = 40;
-  if (coreFinanceCreditPriority(row)) score += 12;
-  if (APPROVED_ROLE_SEARCHES.some((role) => title.includes(normalizedText(role)))) score += 25;
-  else if (title.includes("analyst") || title.includes("associate")) score += 15;
-  if (asBool(row.in_role)) score += 15;
-  if (isTargetMarketRow(row)) score += 10;
+  let score = 46;
+  if (coreFinanceCreditPriority(row)) score += 16;
+  if (APPROVED_ROLE_SEARCHES.some((role) => title.includes(normalizedText(role)))) score += 12;
+  else if (title.includes("analyst") || title.includes("associate")) score += 7;
+  if (asBool(row.in_role)) score += 14;
+  if (isTargetMarketRow(row)) score += 9;
   const age = postedAge(row);
   if (age === 0) score += 10;
   else if (age <= 1) score += 7;
   else if (age <= 7) score += 3;
   return Math.min(99, score);
+}
+function relevanceScore(row) {
+  return opportunityScore(row);
 }
 function duplicateKey(row) { return [row.employer, row.title, row.location].map(normalizedText).join("|"); }
 function groupedRows(rows) {
@@ -176,6 +208,11 @@ function groupedRows(rows) {
   });
   return [...byKey.values()].flat().map((group) => ({ ...group.primary, _duplicates: group.rows }));
 }
+function applicationStage(row) { return state.applications[row.posting_id]?.stage || ""; }
+function applicationStageOptions(selected) {
+  return [`<option value="">Track…</option>`, ...APPLICATION_STAGES.map((stage) => `<option value="${stage.key}" ${selected === stage.key ? "selected" : ""}>${stage.label}</option>`)].join("");
+}
+function applicationStageLabel(key) { return APPLICATION_STAGES.find((stage) => stage.key === key)?.label || "Untracked"; }
 function externalJobSearchURL(site, query, location) {
   if (site === "Indeed") return `https://www.indeed.com/jobs?q=${encodeURIComponent(query)}&l=${encodeURIComponent(location)}&fromage=1`;
   if (site === "LinkedIn") return `https://www.linkedin.com/jobs/search/?keywords=${encodeURIComponent(query)}&location=${encodeURIComponent(location)}&f_TPR=r86400`;
@@ -211,9 +248,10 @@ function jobCard(row, options = {}) {
   const days = dateDiff(row.first_seen, latestDate(state.data));
   const postedDays = postedAge(row);
   const star = state.shortlist.has(row.posting_id);
+  const stage = applicationStage(row);
   const duplicates = row._duplicates || [row];
   const sources = [...new Set(duplicates.map((item) => SOURCE_LABELS[item.source] || item.source || "Employer board"))];
-  const score = isPreferredRow(row) ? `<span class="match-score">${relevanceScore(row)}% match</span>` : "";
+  const score = isPreferredRow(row) ? `<span class="match-score">Desk score ${opportunityScore(row)}%</span>` : "";
   const duplicateNote = duplicates.length > 1 ? `<div class="job-duplicate"><strong>${duplicates.length} board listings</strong><span>${escapeHTML(sources.join(" · "))}</span><div class="job-duplicate-links">${duplicates.map((item) => `<a href="${escapeHTML(item.url)}" target="_blank" rel="noopener">${escapeHTML(SOURCE_LABELS[item.source] || item.source || "Source")} ↗</a>`).join("")}</div></div>` : "";
   return `<article class="job-card ${options.compact ? "job-card-compact" : ""}">
     <div class="job-card-main"><p class="job-employer">${escapeHTML(row.employer)} <span>·</span> ${escapeHTML(row.department || "Business function")}</p>
@@ -221,7 +259,7 @@ function jobCard(row, options = {}) {
     <div class="job-signals">${score}${duplicates.length > 1 ? `<span class="duplicate-badge">${duplicates.length} sources</span>` : ""}</div>
     <p class="job-meta"><strong>Location:</strong> ${escapeHTML(row.location || "Location not provided")} · ${escapeHTML(marketLabel(row) || "Outside target markets")}</p>
     <p class="job-meta"><strong>Posted:</strong> ${escapeHTML(formatDate(postingDate(row)))} · <strong>Source:</strong> ${escapeHTML(SOURCE_LABELS[row.source] || row.source || "Employer board")}${options.open ? ` · ${postedDays} days since posted · ${days} days observed` : ""}</p>${duplicateNote}</div>
-    <div class="job-card-actions"><button class="star-button ${star ? "saved" : ""}" data-star="${escapeHTML(row.posting_id)}" aria-label="${star ? "Remove from" : "Save to"} shortlist">${star ? "★" : "☆"}</button><a class="apply-button" href="${escapeHTML(row.url)}" target="_blank" rel="noopener">Apply ↗</a></div>
+    <div class="job-card-actions"><button class="star-button ${star ? "saved" : ""}" data-star="${escapeHTML(row.posting_id)}" aria-label="${star ? "Remove from" : "Save to"} shortlist">${star ? "★" : "☆"}</button><div class="job-action-stack"><select class="stage-select" data-stage-id="${escapeHTML(row.posting_id)}" aria-label="Track ${escapeHTML(row.title)}">${applicationStageOptions(stage)}</select><a class="apply-button" href="${escapeHTML(row.url)}" target="_blank" rel="noopener">Apply ↗</a></div></div>
   </article>`;
 }
 
@@ -237,6 +275,39 @@ function bindStars() {
     saveShortlist();
     if (document.body.dataset.page === "browse") renderBrowse(); else button.classList.toggle("saved");
   }));
+}
+
+function bindApplicationControls(root = document) {
+  root.querySelectorAll("[data-stage-id]").forEach((select) => select.addEventListener("change", () => {
+    const id = select.dataset.stageId;
+    const stage = select.value;
+    if (!stage) delete state.applications[id];
+    else state.applications[id] = { ...(state.applications[id] || {}), stage, updatedAt: new Date().toISOString() };
+    saveApplications();
+    renderApplicationBoard();
+  }));
+  root.querySelectorAll("[data-note-id]").forEach((button) => button.addEventListener("click", () => {
+    const id = button.dataset.noteId;
+    const current = state.applications[id] || { stage: "watch" };
+    const note = window.prompt("Desk note for this application", current.note || "");
+    if (note === null) return;
+    state.applications[id] = { ...current, note: note.trim(), updatedAt: new Date().toISOString() };
+    saveApplications();
+    renderApplicationBoard();
+  }));
+}
+
+function renderApplicationBoard() {
+  const board = document.getElementById("application-board");
+  if (!board || !state.data) return;
+  const rowsById = new Map(state.data.history.map((row) => [row.posting_id, row]));
+  const tracked = Object.entries(state.applications).map(([id, record]) => ({ row: rowsById.get(id), id, record })).filter((item) => item.row && item.record?.stage);
+  board.innerHTML = APPLICATION_STAGES.map((stage) => {
+    const lane = tracked.filter((item) => item.record.stage === stage.key);
+    const cards = lane.length ? lane.map(({ row, id, record }) => `<article class="application-card"><div><span class="application-card-employer">${escapeHTML(row.employer)}</span><a href="${escapeHTML(row.url)}" target="_blank" rel="noopener"><strong>${escapeHTML(row.title)}</strong></a><small>${escapeHTML(row.location || "Location not provided")} · updated ${escapeHTML(formatDateTime(record.updatedAt))}</small>${record.note ? `<p>${escapeHTML(record.note)}</p>` : ""}</div><div class="application-card-actions"><select class="stage-select" data-stage-id="${escapeHTML(id)}" aria-label="Move ${escapeHTML(row.title)}">${applicationStageOptions(stage.key)}</select><button class="text-button" type="button" data-note-id="${escapeHTML(id)}">${record.note ? "Edit note" : "Add note"}</button></div></article>`).join("") : `<div class="application-empty-lane">No positions here yet.</div>`;
+    return `<section class="application-lane"><div class="application-lane-heading"><span>${stage.label}</span><strong>${lane.length}</strong></div><div class="application-lane-list">${cards}</div></section>`;
+  }).join("");
+  bindApplicationControls(board);
 }
 
 function renderTopbar(status) {
@@ -479,6 +550,73 @@ function setupSavedSearches() {
   checkSavedSearchAlerts();
 }
 
+function renderLiveTicker(status, focusRows = null) {
+  if (!state.data) return;
+  const rows = focusRows || state.data.history.filter((row) => row.status === "open" && isPreferredRow(row));
+  const healthy = (status.sources || []).filter((source) => source.ok).length;
+  const update = (id, value) => { const element = document.getElementById(id); if (element) element.textContent = value; };
+  update("ticker-new", `NEW TAPE · ${status.new_today ?? 0}`);
+  update("ticker-focus", `FOCUS SEATS · ${rows.length}`);
+  update("ticker-health", `BOARDS ONLINE · ${healthy}/${(status.sources || []).length}`);
+  update("ticker-clock", `SYNC ${formatDateTime(status.run_time)}`);
+}
+
+function renderOpeningBell(status, focusRows, newRows, removedRows) {
+  const health = status.sources?.length ? Math.round(status.sources.filter((source) => source.ok).length / status.sources.length * 100) : 0;
+  const fresh = focusRows.filter((row) => postedAge(row) <= 1).length;
+  const marketCounts = Object.fromEntries(TARGET_MARKETS.map((market) => [market, 0]));
+  focusRows.forEach((row) => matchedMarkets(row).forEach((market) => { marketCounts[market] += 1; }));
+  const pulse = Object.entries(marketCounts).sort((a, b) => b[1] - a[1])[0];
+  const stateLabel = health === 100 ? "DESK OPEN" : health >= 80 ? "DESK WATCH" : "FEED CHECK";
+  const headline = fresh ? `${fresh} fresh seat${fresh === 1 ? "" : "s"} just hit the tape.` : focusRows.length ? "The board is active. Pick your next move." : "The tape is quiet. The desk is still watching.";
+  const copy = newRows.length ? `${newRows.length} approved focus role${newRows.length === 1 ? "" : "s"} appeared in the latest run. The strongest current lane is ${pulse?.[0] || "the open market"}.` : "No new approved focus roles landed in the latest run; use the heatmap to find the strongest open lane.";
+  const set = (id, value) => { const element = document.getElementById(id); if (element) element.textContent = value; };
+  set("bell-state", stateLabel);
+  set("bell-health", `${health}% feeds online`);
+  set("bell-headline", headline);
+  set("bell-copy", copy);
+  set("bell-runline", `Last sync ${formatDateTime(status.run_time)} · ${status.days_with_success || 0} successful collection dates · ${removedRows.length} focus role${removedRows.length === 1 ? "" : "s"} off tape`);
+  set("bell-fresh", fresh);
+  set("bell-new", newRows.length);
+  set("bell-pulse", pulse?.[1] ? `${pulse[0]} · ${pulse[1]}` : "Waiting");
+}
+
+function renderDailyRecap(newRows, removedRows, focusRows) {
+  const headline = document.getElementById("recap-headline");
+  const copy = document.getElementById("recap-copy");
+  const list = document.getElementById("recap-list");
+  if (!headline || !copy || !list) return;
+  const markets = {}, families = {}, employers = {};
+  newRows.forEach((row) => {
+    matchedMarkets(row).forEach((market) => { markets[market] = (markets[market] || 0) + 1; });
+    const family = heatmapFamily(row);
+    families[family] = (families[family] || 0) + 1;
+    employers[row.employer] = (employers[row.employer] || 0) + 1;
+  });
+  const topMarket = Object.entries(markets).sort((a, b) => b[1] - a[1])[0];
+  const topFamily = Object.entries(families).sort((a, b) => b[1] - a[1])[0];
+  const topEmployer = Object.entries(employers).sort((a, b) => b[1] - a[1])[0];
+  headline.textContent = newRows.length ? `${newRows.length} new focus role${newRows.length === 1 ? "" : "s"} on the tape.` : "No new focus roles on the tape.";
+  copy.textContent = newRows.length ? `${topFamily?.[0] || "Finance"} is the loudest lane${topMarket ? `, with ${topMarket[1]} new role${topMarket[1] === 1 ? "" : "s"} in ${topMarket[0]}` : ""}. The desk is tracking ${focusRows.length} open focus position${focusRows.length === 1 ? "" : "s"} overall.` : `The latest run pulled ${removedRows.length} focus role${removedRows.length === 1 ? "" : "s"} from the board. Watch the next bell for fresh inventory.`;
+  const rows = [
+    ["Strongest lane", topFamily ? `${topFamily[0]} · ${topFamily[1]} new` : "Waiting for a new role"],
+    ["Market move", topMarket ? `${topMarket[0]} · ${topMarket[1]} new` : "No target-market additions"],
+    ["Source pulse", topEmployer ? `${topEmployer[0]} · ${topEmployer[1]} new` : "No new employer signal"]
+  ];
+  list.innerHTML = rows.map(([label, value], index) => `<div class="recap-row"><span class="recap-index">0${index + 1}</span><span>${escapeHTML(label)}</span><strong>${escapeHTML(value)}</strong></div>`).join("");
+}
+
+function renderRoleHeatmap(focusRows) {
+  const element = document.getElementById("role-heatmap");
+  if (!element) return;
+  const counts = Object.fromEntries(TARGET_MARKETS.map((market) => [market, Object.fromEntries(HEATMAP_FAMILIES.map((family) => [family.key, 0]))]));
+  focusRows.forEach((row) => matchedMarkets(row).forEach((market) => { counts[market][heatmapFamily(row)] += 1; }));
+  const maximum = Math.max(...Object.values(counts).flatMap((market) => Object.values(market)), 1);
+  const header = HEATMAP_FAMILIES.map((family) => `<th scope="col">${escapeHTML(family.label)}</th>`).join("");
+  const body = TARGET_MARKETS.map((market) => `<tr><th scope="row">${escapeHTML(market)}</th>${HEATMAP_FAMILIES.map((family) => { const value = counts[market][family.key]; const level = value ? Math.max(1, Math.ceil(value / maximum * 5)) : 0; return `<td class="heat-cell heat-level-${level}" title="${escapeHTML(`${value} ${family.label} roles in ${market}`)}">${value || "·"}</td>`; }).join("")}</tr>`).join("");
+  element.innerHTML = `<div class="heatmap-scroll"><table><thead><tr><th scope="col">Market</th>${header}</tr></thead><tbody>${body}</tbody></table></div><div class="heatmap-key"><span><i class="heat-key heat-level-1"></i>Light</span><span><i class="heat-key heat-level-5"></i>Heavy</span><span>${focusRows.length} open focus roles counted</span></div>`;
+}
+
 function renderToday() {
   const { status, history } = state.data, runDate = latestDate(state.data);
   document.getElementById("run-status").textContent = `Last refresh ${formatDateTime(status.run_time)} · data through ${formatDate(runDate)}`;
@@ -505,9 +643,14 @@ function renderToday() {
   document.getElementById("position-removed-count")?.replaceChildren(String(removedRows.length));
   renderJobList(document.getElementById("new-list"), newRows, { compact: true, empty: "No new non-first-run postings today." });
   renderJobList(document.getElementById("removed-list"), removedRows, { compact: true, empty: "No postings were removed today." });
+  renderLiveTicker(status, currentRows);
+  renderOpeningBell(status, currentRows, newRows, removedRows);
+  renderDailyRecap(newRows, removedRows, currentRows);
+  renderRoleHeatmap(currentRows);
   renderMatchInsights(currentRows);
   setupMap();
   bindStars();
+  bindApplicationControls();
 }
 
 function renderBrowse() {
@@ -532,7 +675,9 @@ function renderBrowse() {
   document.getElementById("browse-count").textContent = `${rows.length} open ${roleOnly ? "approved-title matches" : marketOnly ? "target-market jobs" : "tracked postings"} · ${groupedRows(rows).length} cards`;
   document.getElementById("browse-as-of").textContent = `As of ${formatDate(latestDate(state.data))} · posted-date freshness is on by default · financial and credit roles are prioritized · school-specific IB programs are excluded`;
   renderJobList(document.getElementById("browse-list"), rows, { open: true, empty: "No postings match these filters." });
+  renderApplicationBoard();
   bindStars();
+  bindApplicationControls(document.getElementById("browse-list"));
 }
 
 function setupBrowse() {
@@ -556,4 +701,4 @@ async function loadData() {
 
 function registerServiceWorker() { if ("serviceWorker" in navigator) navigator.serviceWorker.register("service-worker.js").catch(() => {}); }
 
-window.jobWatcher = { state, ready: loadData().then(() => { registerServiceWorker(); renderTopbar(state.data.status); if (document.body.dataset.page === "today") renderToday(); if (document.body.dataset.page === "browse") setupBrowse(); return state.data; }) };
+window.jobWatcher = { state, ready: loadData().then(() => { registerServiceWorker(); renderTopbar(state.data.status); renderLiveTicker(state.data.status); if (document.body.dataset.page === "today") renderToday(); if (document.body.dataset.page === "browse") setupBrowse(); return state.data; }) };

@@ -3,22 +3,25 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <meta name="theme-color" content="#0d1b2a" />
+    <meta name="theme-color" content="#111613" />
     <link rel="manifest" href="manifest.webmanifest" />
     <link rel="icon" href="icon.svg" type="image/svg+xml" />
     <link rel="stylesheet" href="styles.css" />
-    <title>Finance + Sports Jobs — Browse</title>
+    <title>Wolf Desk Finance Watch — Browse</title>
   </head>
   <body data-page="browse">
     <header class="topbar">
-      <a class="brand" href="index.html"><span class="brand-mark">▰</span><span>FINANCE / SPORTS JOBS</span></a>
-      <nav aria-label="Main navigation"><a class="nav-link" data-nav="today" href="index.html">Today</a><a class="nav-link" data-nav="browse" href="browse.html">Browse</a><a class="nav-link" data-nav="market" href="market.html">Market</a></nav>
+      <a class="brand" href="index.html"><span class="brand-mark">↗</span><span>WOLF DESK / FINANCE WATCH</span></a>
+      <div class="topbar-meta"><span class="topbar-status-dot"></span><span data-topbar-text>Daily ATS watch · loading source health</span></div>
+      <nav aria-label="Main navigation"><a class="nav-link" data-nav="today" href="index.html">Today</a><a class="nav-link" data-nav="browse" href="browse.html">Browse</a><a class="nav-link" data-nav="market" href="market.html">Market</a><a class="nav-link" data-nav="resume" href="resume.html">Resume Vault</a></nav>
     </header>
+    <div class="ticker-strip" aria-label="Live watcher tape"><span class="ticker-lead">WOLF DESK / LIVE TAPE</span><span id="ticker-new">NEW TAPE · —</span><span id="ticker-focus">FOCUS SEATS · —</span><span id="ticker-health">BOARDS ONLINE · —</span><span id="ticker-clock" class="ticker-live">SYNCING · DAILY</span></div>
     <main class="page-shell">
       <section class="hero hero-compact">
-        <p class="eyebrow">THE BOARD · YOUR TARGET MARKETS</p>
-        <h1>Find the role that gets you closer to the game.</h1>
-        <p class="hero-copy">Start with the twenty approved job titles posted in the last 7 days in Dallas–Fort Worth, Kansas City, Austin, Fayetteville/NWA, and New York IB/M&A. Every title and Apply button opens the employer’s application page; the history also retains every job returned by each watched board.</p>
+        <p class="eyebrow">THE SALES FLOOR · YOUR SEARCH</p>
+        <h1>Find the desk that wants your number.</h1>
+        <p class="hero-copy">Start with the titles in your five focus markets. Sort the tape by fit and freshness, read the employer source, and move quickly when the right seat opens.</p>
+        <div class="hero-details"><span><strong>Opening view</strong> Approved titles</span><span><strong>Territory</strong> 5 focus markets</span><span><strong>Next move</strong> Direct application</span></div>
       </section>
       <section class="filters panel">
           <div class="filter-topline"><div class="segmented" role="group" aria-label="Posting scope"><button id="role-toggle" class="segment active" type="button">Approved titles</button><button id="market-toggle" class="segment" type="button">All target-market jobs</button><button id="all-toggle" class="segment" type="button">Every watched job</button></div><span id="browse-count" class="result-count">Loading…</span></div>
@@ -28,18 +31,34 @@
           <label>Target market<select id="market-filter"><option value="">All target markets</option></select></label>
           <label>Posted within<select id="freshness-filter"><option value="7">Last 7 days</option><option value="1">Last 24 hours</option><option value="3">Last 3 days</option><option value="14">Last 14 days</option><option value="30">Last 30 days</option><option value="0">Any date</option></select></label>
           <label>Days open<select id="days-filter"><option value="0">Any age</option><option value="7">7+ days</option><option value="14">14+ days</option><option value="30">30+ days</option><option value="60">60+ days</option></select></label>
-          <label>Sort by<select id="sort-filter"><option value="posted">Latest posted</option><option value="first_seen">First seen</option><option value="title">Title</option></select></label>
+          <label>Sort by<select id="sort-filter"><option value="relevance">Best match</option><option value="posted">Latest posted</option><option value="first_seen">First seen</option><option value="title">Title</option></select></label>
         </div>
       </section>
       <section class="browse-toolbar"><span id="browse-as-of">—</span><span class="shortlist-note">★ Shortlist is saved in this browser.</span></section>
+      <section class="saved-search-panel panel">
+        <div class="section-heading"><div><p class="eyebrow">YOUR CALL SHEET</p><h2>Keep your best pitches in rotation.</h2></div><span class="pill">Browser only</span></div>
+        <p class="saved-search-copy">Save title keywords and a target market on this device. When you open the watcher after a daily refresh, it highlights fresh matches and can show a browser alert while the page is open.</p>
+        <form id="saved-search-form" class="saved-search-form">
+          <label>Name<input id="saved-search-name" type="text" placeholder="Austin FP&A" maxlength="48" /></label>
+          <label>Title keywords<input id="saved-search-query" type="text" placeholder="FP&A or financial analyst" maxlength="80" /></label>
+          <label>Target market<select id="saved-search-market"><option value="">Any target market</option><option>Dallas-Fort Worth</option><option>Kansas City</option><option>Austin</option><option>Fayetteville / Northwest Arkansas</option><option>New York</option></select></label>
+          <div class="saved-search-actions"><button class="apply-button" type="submit">Save search</button><button class="text-button" id="enable-alerts" type="button">Enable browser alerts</button></div>
+        </form>
+        <div id="saved-search-list" class="saved-search-list" aria-live="polite"></div>
+      </section>
+      <section class="application-command-center panel">
+        <div class="section-heading"><div><p class="eyebrow">APPLICATION COMMAND CENTER</p><h2>Keep every pitch moving.</h2></div><span class="pill">Saved in this browser</span></div>
+        <p class="application-command-copy">Use the stage selector on any listing to move it from watch to applied, interview, offer, or closed. Notes stay on this device and never leave the browser.</p>
+        <div id="application-board" class="application-board" aria-live="polite"></div>
+      </section>
       <section class="external-search-panel panel">
-        <div class="section-heading"><div><p class="eyebrow">LIVE SEARCH SHORTCUTS</p><h2>Check the wider job market too.</h2></div><span class="pill">Freshness: ~24 hours</span></div>
+        <div class="section-heading"><div><p class="eyebrow">THE WIDER TAPE</p><h2>The market is bigger than one board.</h2></div><span class="pill">Freshness: ~24 hours</span></div>
         <p class="external-search-copy">These buttons open live searches across Indeed, LinkedIn, Google Jobs, Jooble, ZipRecruiter, Monster, CareerBuilder, SimplyHired, and Adzuna. Where supported, the link requests the last 24 hours. These are live searches, not copied listings; the daily stored history comes only from the public employer ATS feeds listed in the README.</p>
         <div id="external-searches" class="external-searches"></div>
       </section>
       <section id="browse-list" class="browse-list" aria-live="polite"></section>
     </main>
-    <footer class="footer">Official employer feeds · refreshed daily · <a href="index.html">Back to today</a></footer>
+    <footer class="footer">Public ATS feeds · refreshed daily · <a href="index.html">Back to the desk</a> · <a href="resume.html">Open the pitch desk</a></footer>
     <script src="app.js"></script>
   </body>
 </html>

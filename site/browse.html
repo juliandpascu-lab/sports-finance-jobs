@@ -15,7 +15,7 @@
       <div class="topbar-meta"><span class="topbar-status-dot"></span><span data-topbar-text>Daily ATS watch · loading source health</span></div>
       <nav aria-label="Main navigation"><a class="nav-link" data-nav="today" href="index.html">Today</a><a class="nav-link" data-nav="browse" href="browse.html">Browse</a><a class="nav-link" data-nav="market" href="market.html">Market</a><a class="nav-link" data-nav="resume" href="resume.html">Resume Vault</a></nav>
     </header>
-    <div class="ticker-strip" aria-label="Watcher positioning"><span class="ticker-lead">WOLF DESK / OPENING BELL</span><span>PUBLIC ATS FEEDS</span><span>DEALS · FP&amp;A · FINANCE</span><span>DFW · KC · AUSTIN · NWA · NYC</span><span class="ticker-live">STAY SHARP / DAILY</span></div>
+    <div class="ticker-strip" aria-label="Live watcher tape"><span class="ticker-lead">WOLF DESK / LIVE TAPE</span><span id="ticker-new">NEW TAPE · —</span><span id="ticker-focus">FOCUS SEATS · —</span><span id="ticker-health">BOARDS ONLINE · —</span><span id="ticker-clock" class="ticker-live">SYNCING · DAILY</span></div>
     <main class="page-shell">
       <section class="hero hero-compact">
         <p class="eyebrow">THE SALES FLOOR · YOUR SEARCH</p>
@@ -45,6 +45,11 @@
           <div class="saved-search-actions"><button class="apply-button" type="submit">Save search</button><button class="text-button" id="enable-alerts" type="button">Enable browser alerts</button></div>
         </form>
         <div id="saved-search-list" class="saved-search-list" aria-live="polite"></div>
+      </section>
+      <section class="application-command-center panel">
+        <div class="section-heading"><div><p class="eyebrow">APPLICATION COMMAND CENTER</p><h2>Keep every pitch moving.</h2></div><span class="pill">Saved in this browser</span></div>
+        <p class="application-command-copy">Use the stage selector on any listing to move it from watch to applied, interview, offer, or closed. Notes stay on this device and never leave the browser.</p>
+        <div id="application-board" class="application-board" aria-live="polite"></div>
       </section>
       <section class="external-search-panel panel">
         <div class="section-heading"><div><p class="eyebrow">THE WIDER TAPE</p><h2>The market is bigger than one board.</h2></div><span class="pill">Freshness: ~24 hours</span></div>

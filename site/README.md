@@ -16,9 +16,13 @@ It also includes a dependency-free interactive market map with city-level pins,
 Fresh/Active/Aging health filters, focus-role versus all-target-market scopes,
 and direct links to the exact listings behind each market count. The state
 geometry is bundled in `us-states.json`, so the map remains available offline.
-Browse includes relevance sorting, saved searches, optional browser alerts while
-the page is open, and live external-search shortcuts. Shortlists and saved
-searches are stored locally in the visitor's browser.
+Today also includes the Opening Bell dashboard, daily desk recap, role-family
+heatmap, live market ticker, and original trading-floor motion. Browse includes
+relevance sorting, opportunity scores, saved searches, optional browser alerts
+while the page is open, live external-search shortcuts, and an Application
+Command Center with Watch, Applied, Interview, Offer, and Closed lanes. Stars,
+saved searches, application stages, and application notes are stored locally in
+the visitor's browser; no application data is sent to the pipeline.
 
 The Resume Vault never contains the resume file. It asks the visitor to select a
 DOCX from their own computer, checks its fingerprint, and extracts a temporary

@@ -21,10 +21,10 @@
         <a class="nav-link" data-nav="resume" href="resume.html">Resume Vault</a>
       </nav>
     </header>
-    <div class="ticker-strip" aria-label="Watcher positioning"><span class="ticker-lead">WOLF DESK / OPENING BELL</span><span>PUBLIC ATS FEEDS</span><span>DEALS · FP&amp;A · FINANCE</span><span>DFW · KC · AUSTIN · NWA · NYC</span><span class="ticker-live">STAY SHARP / DAILY</span></div>
+    <div class="ticker-strip" aria-label="Live watcher tape"><span class="ticker-lead">WOLF DESK / LIVE TAPE</span><span id="ticker-new">NEW TAPE · —</span><span id="ticker-focus">FOCUS SEATS · —</span><span id="ticker-health">BOARDS ONLINE · —</span><span id="ticker-clock" class="ticker-live">SYNCING · DAILY</span></div>
     <main class="page-shell">
       <section class="hero hero-compact">
-        <p class="eyebrow">DAILY OPENING BELL · 47 PUBLIC BOARDS</p>
+        <p class="eyebrow">DAILY OPENING BELL · 49 PUBLIC BOARDS</p>
         <h1>Stop hunting. Start closing.</h1>
         <p class="hero-copy">A high-signal desk for the next finance move. We watch Dallas–Fort Worth, Kansas City, Austin, Northwest Arkansas, and New York banking so you can find the number, make the call, and move before the market gets crowded.</p>
         <div class="run-line"><span class="live-dot"></span><span id="run-status">Loading latest snapshot…</span></div>
@@ -67,6 +67,11 @@
         <article class="metric-card metric-card-signal"><span class="metric-label">Fresh matches</span><strong id="metric-fresh">—</strong><span class="metric-note">posted in the last 24 hours</span></article>
       </section>
 
+      <section class="opening-bell-panel panel" aria-label="Opening bell dashboard">
+        <div class="opening-bell-main"><div class="bell-kicker"><span class="bell-lamp"></span><span id="bell-state">DESK CHECKING</span><span class="pill" id="bell-health">—</span></div><h2 id="bell-headline">The desk is warming up.</h2><p id="bell-copy">The opening bell dashboard will translate the latest run into a clean next move.</p><div class="bell-runline" id="bell-runline">Waiting for the latest snapshot.</div></div>
+        <div class="opening-bell-stats"><div><span>Fresh focus roles</span><strong id="bell-fresh">—</strong><small>posted in the last 24 hours</small></div><div><span>New focus tape</span><strong id="bell-new">—</strong><small>new since the prior run</small></div><div><span>Market pulse</span><strong id="bell-pulse">—</strong><small>strongest target market today</small></div></div>
+      </section>
+
       <section class="dashboard-grid">
         <article class="panel">
           <div class="section-heading"><div><p class="eyebrow">THE FLOOR CHECK</p><h2>Who answered the bell?</h2></div><span class="pill" id="source-health">—</span></div>
@@ -86,6 +91,11 @@
       <section class="panel current-match-panel"><div class="section-heading"><div><p class="eyebrow">CURRENT DESK PICKS</p><h2>Open positions worth your time</h2></div><span class="count-badge" id="current-count">0</span></div><p id="current-summary" class="current-summary">Loading current approved-title matches…</p><div id="current-list" class="job-list" aria-live="polite"></div></section>
 
       <section class="panel match-insights-panel"><div class="section-heading"><div><p class="eyebrow">THE EDGE THIS ROUND</p><h2>Where you have the clearest angle.</h2></div><span class="pill">Calculated here</span></div><p class="current-summary">This is a desk signal based on title fit, target-market fit, and freshness—not a promise about hiring outcomes.</p><div class="insight-grid"><div class="insight-stat"><span>Strongest market</span><strong id="insight-top-market">—</strong><small id="insight-top-market-note">Waiting for the latest snapshot</small></div><div class="insight-stat"><span>Most active employer</span><strong id="insight-top-employer">—</strong><small id="insight-top-employer-note">Waiting for the latest snapshot</small></div><div class="insight-stat"><span>Posted in 24 hours</span><strong id="insight-fresh-count">—</strong><small>approved roles with a fresh employer date</small></div></div><div id="insight-market-list" class="insight-market-list"></div></section>
+
+      <section class="market-intelligence-grid">
+        <article class="panel daily-recap-panel"><div class="section-heading"><div><p class="eyebrow">THE MORNING NOTE</p><h2 id="recap-headline">Daily desk recap</h2></div><span class="pill">Calculated here</span></div><p id="recap-copy" class="current-summary">Reading today’s movement across your focus roles.</p><div id="recap-list" class="recap-list"></div></article>
+        <article class="panel role-heatmap-panel"><div class="section-heading"><div><p class="eyebrow">ROLE HEATMAP</p><h2>Where the seats are opening.</h2></div><span class="pill">Open focus roles</span></div><p class="current-summary">A live count by target market and role family. Darker cells mean more open seats.</p><div id="role-heatmap" class="role-heatmap" aria-live="polite"></div></article>
+      </section>
 
       <section class="panel market-explorer">
         <div class="section-heading"><div><p class="eyebrow">WHERE THE ACTION IS</p><h2>See which markets are making noise.</h2></div><span class="pill">City-level view</span></div>
