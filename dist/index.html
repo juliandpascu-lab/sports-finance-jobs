@@ -105,7 +105,23 @@
         <div class="market-explorer-grid">
           <div class="job-map-card">
             <svg id="job-map" class="job-map" viewBox="0 0 800 420" role="img" aria-label="Interactive United States target market job map">
+              <defs>
+                <pattern id="aerial-grid" width="42" height="42" patternUnits="userSpaceOnUse">
+                  <path d="M42 0H0V42" fill="none" stroke="#b6d9ae" stroke-opacity=".1" stroke-width=".7"></path>
+                  <circle cx="9" cy="12" r="1" fill="#c9e1b5" fill-opacity=".12"></circle>
+                  <circle cx="31" cy="30" r=".7" fill="#d9c47d" fill-opacity=".1"></circle>
+                </pattern>
+                <filter id="aerial-terrain" x="-12%" y="-12%" width="124%" height="124%">
+                  <feTurbulence type="fractalNoise" baseFrequency=".026" numOctaves="2" seed="19" result="terrain-noise"></feTurbulence>
+                  <feColorMatrix in="terrain-noise" type="saturate" values="0" result="terrain-mono"></feColorMatrix>
+                  <feComponentTransfer in="terrain-mono" result="terrain-contrast">
+                    <feFuncA type="table" tableValues="0 .16 .34"></feFuncA>
+                  </feComponentTransfer>
+                  <feBlend in="SourceGraphic" in2="terrain-contrast" mode="soft-light"></feBlend>
+                </filter>
+              </defs>
               <rect class="map-water" x="0" y="0" width="800" height="420" rx="14"></rect>
+              <rect class="map-aerial-grid" x="0" y="0" width="800" height="420" rx="14"></rect>
               <g id="map-state-layer"></g>
               <g id="map-pins"></g>
             </svg>
