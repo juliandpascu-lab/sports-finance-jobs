@@ -314,3 +314,31 @@ body[data-page="today"] .source-row { border-bottom-color: rgba(78,112,82,.42); 
   body[data-page="today"] .metric-card strong { margin-top: 21px; font-size: 34px; }
   body[data-page="today"] .metric-card::after { top: 16px; right: 16px; }
 }
+
+/* Small market tokens add a tactile, collectible detail to each live metric. */
+body[data-page="today"] .metric-card::after {
+  display: inline-flex;
+  min-height: 23px;
+  align-items: center;
+  gap: 4px;
+  padding: 4px 7px;
+  border: 1px solid rgba(127,164,124,.34);
+  border-radius: 999px;
+  color: #c2d4bc;
+  background: rgba(5,14,8,.58);
+  box-shadow: inset 0 1px 0 rgba(255,255,255,.06), 0 0 13px rgba(69,220,145,.08);
+  letter-spacing: .1em;
+}
+body[data-page="today"] .metric-card:nth-child(1)::after { content: "◆ TAPE"; }
+body[data-page="today"] .metric-card:nth-child(2)::after { content: "◎ OPEN"; border-color: rgba(211,165,70,.48); color: #e3c879; background: rgba(75,54,15,.44); box-shadow: inset 0 1px 0 rgba(255,255,255,.06), 0 0 13px rgba(211,165,70,.1); }
+body[data-page="today"] .metric-card:nth-child(3)::after { content: "✦ NEW"; }
+body[data-page="today"] .metric-card:nth-child(4)::after { content: "× OFF"; border-color: rgba(215,122,107,.42); color: #e2a59a; background: rgba(78,27,25,.38); box-shadow: inset 0 1px 0 rgba(255,255,255,.06), 0 0 13px rgba(215,122,107,.08); }
+body[data-page="today"] .metric-card:nth-child(5)::after { content: "⌁ FOCUS"; border-color: rgba(69,220,145,.48); color: #8de0ad; background: rgba(12,66,39,.38); }
+body[data-page="today"] .metric-card:nth-child(6)::after { content: "◉ FRESH"; border-color: rgba(69,220,145,.48); color: #8de0ad; background: rgba(12,66,39,.38); }
+body[data-page="today"] .metric-card .metric-label { display: flex; align-items: center; gap: 8px; }
+body[data-page="today"] .metric-card .metric-label::before { width: 15px; height: 1px; flex: 0 0 auto; background: linear-gradient(90deg, var(--orange), transparent); content: ""; }
+body[data-page="today"] .pill,
+body[data-page="today"] .count-badge {
+  border: 1px solid rgba(127,164,124,.3);
+  box-shadow: inset 0 1px 0 rgba(255,255,255,.05), 0 0 12px rgba(69,220,145,.05);
+}
