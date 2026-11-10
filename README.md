@@ -88,7 +88,7 @@ The history-build command rebuilds `data/history.csv` from `data/raw/` alone.
 
 ## Sources and title rule
 
-The watchlist now has 47 employer sources and is deliberately broad enough for
+The watchlist now has 49 employer sources and is deliberately broad enough for
 a new graduate or someone with one to two years of FP&A experience: professional
 teams, sports technology, sports media, ticketing, sports commerce, sports
 betting/prediction markets, investment banking, credit, fintech, startups,
@@ -155,6 +155,8 @@ in the table below.
 | Experian | SmartRecruiters | `experian` |
 | Oracle | Oracle Recruiting Cloud | `oraclecareers` |
 | JPMorgan Chase | Oracle Recruiting Cloud (`finance` search term) | `jpmorgan` |
+| Commerce Bank | Workday | `commercebank` |
+| Federal Reserve System | Workday | `federalreserve` |
 
 The default role rule now includes only these requested job families:
 **Financial Analyst I/II, FP&A Analyst, Corporate Finance Analyst, Revenue
@@ -166,13 +168,18 @@ Analyst, Asset Management Analyst, Private Credit Analyst, and Corporate
 Development Analyst.** It excludes obvious seniority titles such as senior,
 lead, manager, director, VP, head, principal, staff, chief, and executive.
 Matching is title-only and also accepts common title punctuation/order variants
-such as `Analyst, Corporate Development`.
+such as `Analyst, Corporate Development`. Financial Analyst, FP&A, Corporate
+Finance, Treasury, Credit, Commercial Banking, Corporate Banking, and Financial
+Risk roles are prioritized in the site’s default ordering. Campus, summer,
+student, internship, and school-tagged IBD recruiting programs are excluded
+from `in_role`, while the raw postings remain in history as required by the
+brief.
 
 The default website view limits jobs to Dallas–Fort Worth, Kansas City, Austin,
-Fayetteville/Northwest Arkansas, and New York. New York is restricted to
-entry-level investment-banking or M&A titles; the other markets use only the
-twenty approved job families. The history still retains every
-posting returned by every source, as required by the project brief.
+Fayetteville/Northwest Arkansas, and New York. All five markets use the
+approved finance, credit, banking, risk, valuation, investment, and M&A title
+families; school-specific IBD programs are excluded. The history still retains
+every posting returned by every source, as required by the project brief.
 
 Browse defaults to postings whose employer-provided `posted_date` is within the
 last seven days and can be changed to 24 hours, 3 days, 14 days, 30 days, or

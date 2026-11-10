@@ -396,6 +396,24 @@ SOURCES: tuple[SourceConfig, ...] = (
         search_term="finance",
         site_number="CX_1002",
     ),
+    SourceConfig(
+        "commercebank",
+        "Commerce Bank",
+        "Workday",
+        "https://commercebank.wd1.myworkdayjobs.com/wday/cxs/commercebank/CommerceJobs/jobs",
+        "https://commercebank.wd1.myworkdayjobs.com/en-US/CommerceJobs",
+        method="POST",
+        page_size=20,
+    ),
+    SourceConfig(
+        "federalreserve",
+        "Federal Reserve System",
+        "Workday",
+        "https://rb.wd5.myworkdayjobs.com/wday/cxs/rb/FRS/jobs",
+        "https://rb.wd5.myworkdayjobs.com/en-US/FRS",
+        method="POST",
+        page_size=20,
+    ),
 )
 
 SOURCE_BY_NAME = {source.name: source for source in SOURCES}
@@ -409,6 +427,10 @@ ROLE_RULE_SUMMARY = (
     "Investment Banking Analyst, M&A Analyst, Transaction Advisory Analyst, "
     "Portfolio Analyst, Financial Risk Analyst, Asset Management Analyst, "
     "Private Credit Analyst, and Corporate Development Analyst; "
+    "prioritize Financial Analyst, FP&A, Corporate Finance, Treasury, Credit, "
+    "Commercial Banking, Corporate Banking, and Financial Risk roles over "
+    "school-specific investment-banking recruiting programs; exclude campus, "
+    "summer, student, internship, and school-tagged IBD programs; "
     "exclude obvious seniority titles such as "
     "senior, lead, manager, director, VP, head, principal, staff, chief, "
     "and executive."

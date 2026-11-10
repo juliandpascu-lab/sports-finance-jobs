@@ -27,6 +27,11 @@ open-job history beside the preview and calculates title-and-skill tailoring
 notes in the browser. The file is not uploaded, written to the repository, or
 saved in browser storage.
 
+The default role board prioritizes general finance and credit paths—Financial
+Analyst, FP&A, Corporate Finance, Treasury, Credit, Commercial Banking,
+Corporate Banking, and Financial Risk—and excludes school-specific IB campus
+programs from preferred matches.
+
 The visual system uses an original Wolf Desk trading-floor direction: dark
 terminal navigation, brass accents, green market signals, ticker-strip context,
 high-pressure brokerage copy, and newspaper-style headings. It does not include

@@ -13,7 +13,7 @@ const SOURCE_LABELS = {
   uasys: "University of Arkansas System", q2: "Q2 Holdings", umb: "UMB Financial",
   capitalone: "Capital One", blackrock: "BlackRock", barclays: "Barclays",
   guggenheim: "Guggenheim Securities", morningstar: "Morningstar", keybank: "KeyBank", jll: "JLL",
-  jpmorgan: "JPMorgan Chase",
+  jpmorgan: "JPMorgan Chase", commercebank: "Commerce Bank", federalreserve: "Federal Reserve System",
   intuitive: "Intuitive", rrdonnelley: "RR Donnelley", experian: "Experian", oraclecareers: "Oracle"
 };
 
@@ -48,9 +48,11 @@ const APPROVED_ROLE_SEARCHES = [
   "Financial Risk Analyst", "Asset Management Analyst", "Private Credit Analyst", "Corporate Development Analyst"
 ];
 const NEW_YORK_ROLE_SEARCHES = [
-  "Investment Banking Analyst", "M&A Analyst", "Transaction Advisory Analyst", "Valuation Analyst",
-  "Equity Research Associate", "Investment Analyst", "Corporate Development Analyst"
+  "Financial Analyst I / II", "FP&A Analyst", "Corporate Finance Analyst", "Credit Analyst",
+  "Treasury Analyst", "Commercial Banking Analyst", "Valuation Analyst", "Investment Analyst",
+  "Transaction Advisory Analyst", "Investment Banking Analyst", "M&A Analyst"
 ];
+const CORE_FINANCE_CREDIT_TERMS = ["financial analyst", "fp&a", "corporate finance", "revenue finance", "strategic finance", "treasury analyst", "credit analyst", "commercial banking", "corporate banking", "financial risk"];
 
 function readStoredJSON(key, fallback) {
   try {
@@ -122,7 +124,7 @@ function isInvestmentBankingOrMA(row) {
 function isTargetMarketRow(row) { return matchedMarkets(row).length > 0; }
 function isPreferredRow(row) {
   const markets = matchedMarkets(row);
-  return asBool(row.in_role) && markets.length > 0 && (markets.some((market) => market !== "New York") || isInvestmentBankingOrMA(row));
+  return asBool(row.in_role) && markets.length > 0;
 }
 function marketLabel(row) { return matchedMarkets(row).join(" · "); }
 function roleFamily(row) {
@@ -138,9 +140,14 @@ function roleFamily(row) {
   if (title.includes("risk")) return "Financial Risk Analyst";
   return "Other approved role";
 }
+function coreFinanceCreditPriority(row) {
+  const title = normalizedText(row.title);
+  return CORE_FINANCE_CREDIT_TERMS.some((term) => title.includes(term)) ? 1 : 0;
+}
 function relevanceScore(row) {
   const title = normalizedText(row.title);
   let score = 40;
+  if (coreFinanceCreditPriority(row)) score += 12;
   if (APPROVED_ROLE_SEARCHES.some((role) => title.includes(normalizedText(role)))) score += 25;
   else if (title.includes("analyst") || title.includes("associate")) score += 15;
   if (asBool(row.in_role)) score += 15;
@@ -184,15 +191,15 @@ function externalJobSearchURL(site, query, location) {
 function renderExternalSearches() {
   const element = document.getElementById("external-searches");
   if (!element) return;
-  const queries = ["Financial Analyst I / II", "FP&A Analyst", "Corporate Finance Analyst", "Credit Analyst"];
-  const bankingQueries = ["Investment Banking Analyst", "M&A Analyst", "Transaction Advisory Analyst", "Valuation Analyst"];
+  const queries = ["Financial Analyst I / II", "FP&A Analyst", "Corporate Finance Analyst", "Revenue Finance Analyst", "Treasury Analyst", "Credit Analyst", "Commercial Banking Analyst", "Financial Risk Analyst"];
+  const bankingQueries = ["Financial Analyst", "Credit Analyst", "Treasury Analyst", "Commercial Banking Analyst", "Investment Banking Analyst", "M&A Analyst"];
   const liveSites = ["Indeed", "LinkedIn", "Google Jobs", "Jooble", "ZipRecruiter", "Monster", "CareerBuilder", "SimplyHired", "Adzuna"];
   element.innerHTML = TARGET_MARKETS.map((market) => {
     const searchQueries = market === "New York" ? bankingQueries : queries;
     const approvedSearches = market === "New York" ? NEW_YORK_ROLE_SEARCHES : APPROVED_ROLE_SEARCHES;
     const approvedQuery = approvedSearches.map((query) => `"${query}"`).join(" OR ");
     const location = MARKET_SEARCH_LOCATIONS[market];
-    const roleLabel = market === "New York" ? "Eligible IB/M&A role families" : "All 20 approved role families";
+    const roleLabel = "All 20 approved finance + banking role families";
     const linkSet = (query) => `<div class="external-search-links">${liveSites.map((site) => `<a href="${externalJobSearchURL(site, query, location)}" target="_blank" rel="noopener">${site === "Google Jobs" ? "Google" : escapeHTML(site)} ↗</a>`).join("")}</div>`;
     const allRolesLink = `<div class="external-search-item"><span>${roleLabel}</span>${linkSet(approvedQuery)}</div>`;
     const links = searchQueries.map((query) => `<div class="external-search-item"><span>${escapeHTML(query)}</span>${linkSet(query)}</div>`).join("");
@@ -479,14 +486,14 @@ function renderToday() {
   document.getElementById("metric-open").textContent = status.open ?? 0;
   document.getElementById("metric-new").textContent = status.new_today ?? 0;
   document.getElementById("metric-removed").textContent = status.removed_today ?? 0;
-  const currentRows = history.filter((row) => row.status === "open" && isPreferredRow(row)).sort((a, b) => postingDate(b).localeCompare(postingDate(a)) || a.title.localeCompare(b.title));
+  const currentRows = history.filter((row) => row.status === "open" && isPreferredRow(row)).sort((a, b) => coreFinanceCreditPriority(b) - coreFinanceCreditPriority(a) || postingDate(b).localeCompare(postingDate(a)) || a.title.localeCompare(b.title));
   const preferredOpen = currentRows.filter((row) => postedAge(row) <= 7);
   document.getElementById("metric-target").textContent = currentRows.length;
   document.getElementById("metric-fresh").textContent = currentRows.filter((row) => postedAge(row) <= 1).length;
   document.getElementById("position-open-count")?.replaceChildren(String(currentRows.length));
   document.getElementById("position-fresh-count")?.replaceChildren(String(currentRows.filter((row) => postedAge(row) <= 1).length));
   renderSourceHealth(status);
-  document.getElementById("preference-summary").textContent = `${currentRows.length} current approved-title matches across Dallas–Fort Worth, Kansas City, Austin, Fayetteville/NWA, and New York IB/M&A · ${preferredOpen.length} posted in the last 7 days`;
+  document.getElementById("preference-summary").textContent = `${currentRows.length} current finance, credit, banking, and analyst matches across Dallas–Fort Worth, Kansas City, Austin, Fayetteville/NWA, and New York · ${preferredOpen.length} posted in the last 7 days`;
   document.getElementById("current-count").textContent = currentRows.length;
   document.getElementById("current-summary").textContent = currentRows.length ? `These are the ${currentRows.length} open postings currently matching your exact role and location focus. ${groupedRows(currentRows).length} grouped cards reduce duplicate board listings; every source link remains available inside the card.` : "No open posting currently matches both the approved role list and target locations.";
   renderJobList(document.getElementById("current-list"), currentRows, { open: true, empty: "No current approved-title matches." });
@@ -523,7 +530,7 @@ function renderBrowse() {
   else if (controls.sort.value === "title") rows.sort((a, b) => a.title.localeCompare(b.title));
   else rows.sort((a, b) => postingDate(b).localeCompare(postingDate(a)) || (b.first_seen || "").localeCompare(a.first_seen || "") || a.title.localeCompare(b.title));
   document.getElementById("browse-count").textContent = `${rows.length} open ${roleOnly ? "approved-title matches" : marketOnly ? "target-market jobs" : "tracked postings"} · ${groupedRows(rows).length} cards`;
-  document.getElementById("browse-as-of").textContent = `As of ${formatDate(latestDate(state.data))} · posted-date freshness is on by default · default titles are limited to the approved twenty · New York limited to IB/M&A`;
+  document.getElementById("browse-as-of").textContent = `As of ${formatDate(latestDate(state.data))} · posted-date freshness is on by default · financial and credit roles are prioritized · school-specific IB programs are excluded`;
   renderJobList(document.getElementById("browse-list"), rows, { open: true, empty: "No postings match these filters." });
   bindStars();
 }

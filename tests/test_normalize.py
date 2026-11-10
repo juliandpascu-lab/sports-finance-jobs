@@ -6,6 +6,7 @@ from job_watcher.role import (
     is_investment_banking_or_ma,
     is_in_role,
     is_preferred_posting,
+    is_school_restricted_program,
     matched_markets,
 )
 
@@ -125,11 +126,13 @@ def test_title_rule_prioritizes_early_career_matches() -> None:
     assert is_in_role("Equity Research Associate") is True
     assert is_in_role("Investment Analyst") is True
     assert is_in_role("Investment Banking Analyst") is True
-    assert is_in_role("2028 IBD Summer Analyst") is True
+    assert is_in_role("IBD Analyst") is True
+    assert is_in_role("2028 IBD Summer Analyst") is False
     assert is_in_role("M&A Analyst") is True
     assert is_in_role("Transaction Advisory Analyst") is True
     assert is_in_role("Portfolio Analyst") is True
     assert is_in_role("Financial Risk Analyst") is True
+    assert is_in_role("Cyber Security Risk Analyst") is False
     assert is_in_role("Asset Management Analyst") is True
     assert is_in_role("Private Credit Analyst") is True
     assert is_in_role("Analyst, Corporate Development") is True
@@ -159,17 +162,22 @@ def test_workday_relative_posted_date_uses_raw_snapshot_date() -> None:
     assert rows[0]["posted_date"] == "2026-10-22"
 
 
-def test_title_rule_includes_entry_level_ib_and_ma_but_not_senior_roles() -> None:
+def test_title_rule_includes_open_market_ib_and_ma_but_not_school_programs() -> None:
     assert is_in_role("Investment Banker I") is False
     assert is_in_role("M&A Advisory Analyst") is True
     assert is_investment_banking_or_ma("Investment Banking Analyst") is True
     assert is_investment_banking_or_ma("M&A Advisory Analyst") is True
-    assert is_investment_banking_or_ma("IBD Summer Analyst") is True
+    assert is_investment_banking_or_ma("IBD Analyst") is True
+    assert is_school_restricted_program("2028 IBD Summer Analyst (USC)") is True
+    assert is_school_restricted_program("2028 IBD Summer Analyst (UCLA)") is True
+    assert is_school_restricted_program("Investment Banking Analyst") is False
+    assert is_investment_banking_or_ma("IBD Summer Analyst") is False
+    assert is_investment_banking_or_ma("Investment Banking Analyst - NYU") is False
     assert is_investment_banking_or_ma("Senior Investment Banking Associate") is False
     assert is_investment_banking_or_ma("Marketing Acquisition Associate") is False
 
 
-def test_preferred_markets_and_new_york_narrowing() -> None:
+def test_preferred_markets_include_finance_and_credit_across_all_focus_markets() -> None:
     assert "Austin" in matched_markets("Austin, TX")
     assert "Kansas City" in matched_markets("Kansas City, KS; Kansas City, MO")
     assert "Fayetteville / Northwest Arkansas" in matched_markets("Bentonville, AR")
@@ -179,7 +187,9 @@ def test_preferred_markets_and_new_york_narrowing() -> None:
     assert matched_markets("Austin, MN") == ()
     assert is_preferred_posting("FP&A Analyst", "Dallas, TX") is True
     assert is_preferred_posting("People Analyst", "New York, NY") is False
+    assert is_preferred_posting("Credit Analyst", "New York, NY") is True
+    assert is_preferred_posting("Financial Analyst", "New York, NY") is True
     assert is_preferred_posting("Investment Banking Analyst", "New York") is True
-    assert is_preferred_posting("IBD Summer Analyst", "New York") is True
+    assert is_preferred_posting("IBD Summer Analyst", "New York") is False
     assert matched_markets("Arlington, VA") == ()
     assert "Dallas-Fort Worth" in matched_markets("Arlington, TX")

@@ -33,6 +33,37 @@ INVESTMENT_BANKING_TERMS = (
     "ibd",
 )
 
+SCHOOL_PROGRAM_MARKERS = (
+    "usc",
+    "ucla",
+    "uchicago",
+    "u chicago",
+    "uc berkeley",
+    "washu",
+    "nyu",
+    "indiana university",
+)
+
+SCHOOL_PROGRAM_PATTERN = re.compile(
+    r"\b(?:summer|winter|spring|fall)\s+(?:analyst|associate)\b|"
+    r"\b(?:campus|undergraduate|graduate|student|intern|internship)\b|"
+    r"\b20\d{2}\s+(?:(?:january|july|summer|winter|spring|fall)\s+)?"
+    r"(?:ibd|investment banking)\b.*\b(?:full time|analyst)\b|"
+    r"\bibd\s+full time\s+analyst\b",
+    re.IGNORECASE,
+)
+
+NON_FINANCIAL_RISK_MARKERS = (
+    "cyber",
+    "security",
+    "information technology",
+    "technology",
+    "physical",
+    "clinical",
+    "environmental",
+    "safety",
+)
+
 TARGET_MARKETS = (
     "Dallas-Fort Worth",
     "Kansas City",
@@ -174,11 +205,31 @@ def _normalize_title(title: str) -> str:
     return re.sub(r"[^a-z0-9&]+", " ", title.casefold()).strip()
 
 
+def is_school_restricted_program(title: str) -> bool:
+    """Return whether an IB/M&A title is tied to a campus recruiting lane."""
+
+    normalized = _normalize_title(title)
+    if not any(term in normalized for term in ("ibd", "investment banking", "m&a")):
+        return False
+    if SCHOOL_PROGRAM_PATTERN.search(normalized):
+        return True
+    return any(
+        re.search(rf"\b{re.escape(marker)}\b", normalized)
+        for marker in SCHOOL_PROGRAM_MARKERS
+    )
+
+
 def is_in_role(title: str) -> bool:
     """Return whether a title matches one of the twenty approved job families."""
 
     normalized = _normalize_title(title)
+    if is_school_restricted_program(title):
+        return False
     if SENIORITY_PATTERN.search(normalized):
+        return False
+    if re.search(r"\brisk\s+analyst\b", normalized) and any(
+        marker in normalized for marker in NON_FINANCIAL_RISK_MARKERS
+    ):
         return False
     return any(re.search(pattern, normalized) for pattern in ROLE_PATTERNS)
 
@@ -187,6 +238,8 @@ def is_investment_banking_or_ma(title: str) -> bool:
     """Return whether a title is specifically investment banking or M&A."""
 
     normalized = _normalize_title(title)
+    if is_school_restricted_program(title):
+        return False
     if SENIORITY_PATTERN.search(normalized):
         return False
     return any(term in normalized for term in INVESTMENT_BANKING_TERMS) and "analyst" in normalized
@@ -212,14 +265,12 @@ def is_target_market(location: str) -> bool:
 def is_preferred_posting(title: str, location: str) -> bool:
     """Apply the user's role and market preferences to a normalized posting.
 
-    New York is intentionally narrower: only entry-level investment-banking or
-    M&A titles are included there. The other requested markets use the broader
-    finance, FP&A, business, and analytics title rule.
+    All requested markets use the broader finance, FP&A, credit, banking, risk,
+    and analyst title rule. School-specific IB recruiting programs are excluded
+    even when their title contains ``IBD Analyst``.
     """
 
     markets = matched_markets(location)
     if not markets:
         return False
-    if any(market != "New York" for market in markets):
-        return is_in_role(title)
-    return is_investment_banking_or_ma(title)
+    return is_in_role(title)
