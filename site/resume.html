@@ -26,29 +26,54 @@
       </section>
 
       <section class="resume-workspace">
-        <article class="panel resume-control-panel">
-          <div class="section-heading"><div><p class="eyebrow">RESUME VAULT</p><h2>Choose your file</h2></div><span class="private-badge">Private</span></div>
-          <p class="resume-copy">This page does not have a copy of your resume. Choose the file directly from your computer whenever you want to review it.</p>
-          <label class="resume-file-drop" for="resume-file">
-            <span class="resume-file-icon">DOCX</span>
-            <span><strong>Select resume</strong><small>Accepts Microsoft Word .docx files</small></span>
-            <input id="resume-file" type="file" accept=".docx,application/vnd.openxmlformats-officedocument.wordprocessingml.document" />
-          </label>
-          <div id="resume-status" class="resume-status" aria-live="polite"><strong>No file selected</strong><span>Your resume will stay on this device.</span></div>
-          <div class="resume-metadata" aria-label="Selected file details">
-            <div><span>File</span><strong id="resume-name">—</strong></div>
-            <div><span>Size</span><strong id="resume-size">—</strong></div>
-            <div><span>Fingerprint</span><strong id="resume-fingerprint" class="resume-hash">—</strong></div>
-            <div><span>Integrity</span><strong id="resume-integrity">Not compared</strong></div>
-          </div>
-          <div class="resume-actions"><a id="resume-open-original" class="apply-button resume-action-button" href="#" hidden>Open original DOCX ↗</a><button id="resume-clear" class="text-button" type="button" disabled>Clear this tab</button></div>
-          <div class="resume-privacy-note"><span>⌁</span><p><strong>Private by design.</strong> The viewer does not use uploads, localStorage, or IndexedDB. Clearing the tab removes the selected file from this page.</p></div>
-        </article>
+        <div class="resume-document-column">
+          <article class="panel resume-control-panel">
+            <div class="section-heading"><div><p class="eyebrow">RESUME VAULT</p><h2>Choose your file</h2></div><span class="private-badge">Private</span></div>
+            <p class="resume-copy">This page does not have a copy of your resume. Choose the file directly from your computer whenever you want to review it.</p>
+            <label class="resume-file-drop" for="resume-file">
+              <span class="resume-file-icon">DOCX</span>
+              <span><strong>Select resume</strong><small>Accepts Microsoft Word .docx files</small></span>
+              <input id="resume-file" type="file" accept=".docx,application/vnd.openxmlformats-officedocument.wordprocessingml.document" />
+            </label>
+            <div id="resume-status" class="resume-status" aria-live="polite"><strong>No file selected</strong><span>Your resume will stay on this device.</span></div>
+            <div class="resume-metadata" aria-label="Selected file details">
+              <div><span>File</span><strong id="resume-name">—</strong></div>
+              <div><span>Size</span><strong id="resume-size">—</strong></div>
+              <div><span>Fingerprint</span><strong id="resume-fingerprint" class="resume-hash">—</strong></div>
+              <div><span>Integrity</span><strong id="resume-integrity">Not compared</strong></div>
+            </div>
+            <div class="resume-actions"><a id="resume-open-original" class="apply-button resume-action-button" href="#" hidden>Open original DOCX ↗</a><button id="resume-clear" class="text-button" type="button" disabled>Clear this tab</button></div>
+            <div class="resume-privacy-note"><span>⌁</span><p><strong>Private by design.</strong> The viewer does not use uploads, localStorage, or IndexedDB. Clearing the tab removes the selected file from this page.</p></div>
+          </article>
 
-        <article class="panel resume-preview-panel">
-          <div class="resume-preview-toolbar"><div><p class="eyebrow">LOCAL PREVIEW</p><h2 id="resume-preview-heading">Waiting for your file</h2></div><span id="resume-preview-state" class="pill">No file loaded</span></div>
-          <div id="resume-preview" class="resume-preview" aria-live="polite"><div class="resume-empty"><span>◫</span><strong>Your resume will appear here.</strong><p>The preview is extracted from the selected DOCX in your browser. Your original file stays unchanged.</p></div></div>
-        </article>
+          <article class="panel resume-preview-panel">
+            <div class="resume-preview-toolbar"><div><p class="eyebrow">LOCAL PREVIEW</p><h2 id="resume-preview-heading">Waiting for your file</h2></div><span id="resume-preview-state" class="pill">No file loaded</span></div>
+            <div id="resume-preview" class="resume-preview" aria-live="polite"><div class="resume-empty"><span>◫</span><strong>Your resume will appear here.</strong><p>The preview is extracted from the selected DOCX in your browser. Your original file stays unchanged.</p></div></div>
+          </article>
+        </div>
+
+        <aside class="resume-job-column">
+          <article class="panel resume-jobs-panel">
+            <div class="section-heading"><div><p class="eyebrow">ROLE FINDER</p><h2>Choose a role to tailor toward.</h2></div><span class="pill">Daily snapshot</span></div>
+            <p class="resume-copy">Open roles appear here beside your resume. Select one to see the skills your resume already signals and the areas worth sharpening before you apply.</p>
+            <div class="resume-job-filters">
+              <label>View<select id="resume-job-scope"><option value="preferred">Target roles</option><option value="market">Target-market roles</option><option value="all">All open roles</option></select></label>
+              <label>Market<select id="resume-job-market"><option value="">All target markets</option><option>Dallas-Fort Worth</option><option>Kansas City</option><option>Austin</option><option>Fayetteville / Northwest Arkansas</option><option>New York</option></select></label>
+            </div>
+            <label class="resume-job-search">Search titles or employers<input id="resume-job-search" type="search" placeholder="FP&A, analyst, banking…" /></label>
+            <div class="resume-job-toolbar"><span id="resume-job-count">Loading open roles…</span><select id="resume-job-sort" aria-label="Sort roles"><option value="match">Best fit</option><option value="latest">Latest posted</option><option value="first_seen">First seen</option></select></div>
+            <div id="resume-job-list" class="resume-job-list" aria-live="polite"><div class="resume-job-loading">Loading current open roles…</div></div>
+          </article>
+
+          <article class="panel resume-match-panel" id="resume-match-panel">
+            <div class="resume-match-heading"><div><p class="eyebrow">TAILORING NOTES</p><h2 id="resume-match-heading">Choose a role</h2></div><span id="resume-match-score" class="resume-score">—</span></div>
+            <p id="resume-match-summary" class="resume-match-summary">Select your resume and a role to get local, role-specific guidance.</p>
+            <div class="resume-match-section"><h3>What already matches</h3><div id="resume-strengths" class="resume-signal-list"><div class="resume-signal-empty">Your matching strengths will appear here.</div></div></div>
+            <div class="resume-match-section"><h3>What to tailor</h3><div id="resume-tailor" class="resume-signal-list"><div class="resume-signal-empty">Choose a role to see suggested edits.</div></div></div>
+            <a id="resume-apply-link" class="apply-button resume-apply-link" href="#" target="_blank" rel="noopener" hidden>Open application ↗</a>
+            <p class="resume-match-note">Guidance uses the selected job’s title, employer, department, location, and your local resume text. Open the application to confirm the full description, and only add claims that are true.</p>
+          </article>
+        </aside>
       </section>
     </main>
 

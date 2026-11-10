@@ -10,8 +10,8 @@ startups, credit employers, and general finance employers through public
 applicant-tracking-system JSON endpoints. It maintains a reproducible posting
 history, publishes daily changes through GitHub Issues, and serves an
 installable site through GitHub Pages. The public site also includes a
-browser-only Resume Vault; the resume file itself is never committed or
-uploaded.
+browser-only Resume Vault with a side-by-side role finder and local tailoring
+notes; the resume file itself is never committed or uploaded.
 
 ## Current status
 

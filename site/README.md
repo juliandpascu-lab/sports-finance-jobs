@@ -22,5 +22,7 @@ searches are stored locally in the visitor's browser.
 
 The Resume Vault never contains the resume file. It asks the visitor to select a
 DOCX from their own computer, checks its fingerprint, and extracts a temporary
-text preview in browser memory. The file is not uploaded, written to the
-repository, or saved in browser storage.
+text preview in browser memory. Its role finder loads the already-published
+open-job history beside the preview and calculates title-and-skill tailoring
+notes in the browser. The file is not uploaded, written to the repository, or
+saved in browser storage.
