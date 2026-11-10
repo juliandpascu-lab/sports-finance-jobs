@@ -221,3 +221,96 @@ h1, h2, h3, .job-card h3, .job-card h3 a { color: #f5f0e4; }.hero-copy, .current
   .hero-compact .hero-copy { font-size: 14px; }
   .hero-compact .hero-details { padding-top: 13px; }
 }
+
+/* Today page cards: a richer Wolf Desk trading-floor treatment. */
+body[data-page="today"] .metric-card,
+body[data-page="today"] .dashboard-grid > .panel:first-child,
+body[data-page="today"] .current-match-panel,
+body[data-page="today"] .match-insights-panel,
+body[data-page="today"] .daily-recap-panel,
+body[data-page="today"] .role-heatmap-panel,
+body[data-page="today"] .primary-market-map,
+body[data-page="today"] .change-grid > .panel {
+  position: relative;
+  overflow: hidden;
+  border: 1px solid rgba(92,132,96,.48);
+  background:
+    radial-gradient(circle at 100% 0%, rgba(211,165,70,.13), transparent 28%),
+    linear-gradient(135deg, rgba(20,37,25,.98), rgba(14,25,17,.98) 56%, rgba(28,37,24,.98));
+  box-shadow: 0 19px 48px rgba(0,0,0,.24), inset 0 1px 0 rgba(255,255,255,.035);
+}
+body[data-page="today"] .metric-card {
+  min-height: 154px;
+  padding: 21px 20px 18px;
+  border-radius: 12px;
+  background:
+    radial-gradient(circle at 88% 12%, rgba(211,165,70,.18), transparent 30%),
+    repeating-linear-gradient(0deg, transparent 0 23px, rgba(119,163,117,.045) 24px, transparent 25px),
+    repeating-linear-gradient(90deg, transparent 0 31px, rgba(119,163,117,.035) 32px, transparent 33px),
+    linear-gradient(145deg, #14271a, #0c160f 67%, #1b2417);
+  transition: transform .2s ease, border-color .2s ease, box-shadow .2s ease;
+}
+body[data-page="today"] .metric-card::before {
+  right: 18px;
+  left: 18px;
+  height: 2px;
+  background: linear-gradient(90deg, var(--teal), var(--orange));
+}
+body[data-page="today"] .metric-card::after {
+  position: absolute;
+  top: 18px;
+  right: 18px;
+  color: #708b73;
+  content: "LIVE";
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  font-size: 8px;
+  font-weight: 850;
+  letter-spacing: .16em;
+}
+body[data-page="today"] .metric-card:nth-child(1)::after { content: "TAPE"; }
+body[data-page="today"] .metric-card:nth-child(2)::after { content: "OPEN"; color: var(--orange); }
+body[data-page="today"] .metric-card:nth-child(3)::after { content: "NEW"; }
+body[data-page="today"] .metric-card:nth-child(4)::after { content: "OFF"; color: #d77a6b; }
+body[data-page="today"] .metric-card:nth-child(5)::after { content: "FOCUS"; color: var(--teal); }
+body[data-page="today"] .metric-card:nth-child(6)::after { content: "FRESH"; color: var(--teal); }
+body[data-page="today"] .metric-card-accent { border-color: rgba(211,165,70,.6); }
+body[data-page="today"] .metric-card-signal { border-color: rgba(69,220,145,.48); }
+body[data-page="today"] .metric-card .metric-label { color: #9eb3a0; font-size: 10px; font-weight: 850; letter-spacing: .11em; text-transform: uppercase; }
+body[data-page="today"] .metric-card strong { margin: 23px 0 5px; color: #f5f0e4; font-family: Georgia, "Times New Roman", serif; font-size: 41px; line-height: .92; }
+body[data-page="today"] .metric-card .metric-note { color: #738a77; font-size: 10px; line-height: 1.4; }
+body[data-page="today"] .metric-card:hover { border-color: rgba(211,165,70,.72); box-shadow: 0 25px 58px rgba(0,0,0,.32), 0 0 0 1px rgba(211,165,70,.07); transform: translateY(-4px); }
+body[data-page="today"] .dashboard-grid > .panel:first-child::before,
+body[data-page="today"] .current-match-panel::before,
+body[data-page="today"] .match-insights-panel::before,
+body[data-page="today"] .daily-recap-panel::before,
+body[data-page="today"] .role-heatmap-panel::before,
+body[data-page="today"] .primary-market-map::before,
+body[data-page="today"] .change-grid > .panel::before {
+  position: absolute;
+  top: 0;
+  right: 24px;
+  left: 24px;
+  height: 2px;
+  background: linear-gradient(90deg, rgba(69,220,145,.72), rgba(211,165,70,.62), transparent);
+  content: "";
+}
+body[data-page="today"] .current-match-panel,
+body[data-page="today"] .primary-market-map { background: radial-gradient(circle at 98% 0%, rgba(69,220,145,.13), transparent 25%), linear-gradient(135deg, #13271a, #0e1811 62%, #211b10); }
+body[data-page="today"] .match-insights-panel,
+body[data-page="today"] .role-heatmap-panel { background: radial-gradient(circle at 100% 0%, rgba(211,165,70,.1), transparent 26%), linear-gradient(135deg, #121e15, #0e1711 64%, #182519); }
+body[data-page="today"] .dashboard-grid > .panel:first-child,
+body[data-page="today"] .daily-recap-panel,
+body[data-page="today"] .change-grid > .panel { background: linear-gradient(135deg, #111d14, #0d1710 62%, #17231a); }
+body[data-page="today"] .section-heading h2 { text-shadow: 0 2px 16px rgba(69,220,145,.08); }
+body[data-page="today"] .current-match-panel .job-card,
+body[data-page="today"] .change-grid .job-card { border-color: rgba(78,112,82,.42); }
+body[data-page="today"] .current-match-panel .job-card:hover,
+body[data-page="today"] .change-grid .job-card:hover { background: rgba(69,220,145,.055); }
+body[data-page="today"] .insight-stat { border-color: rgba(81,123,88,.48); background: rgba(7,17,10,.5); }
+body[data-page="today"] .source-row { border-bottom-color: rgba(78,112,82,.42); }
+
+@media (max-width: 560px) {
+  body[data-page="today"] .metric-card { min-height: 128px; padding: 18px; }
+  body[data-page="today"] .metric-card strong { margin-top: 21px; font-size: 34px; }
+  body[data-page="today"] .metric-card::after { top: 16px; right: 16px; }
+}
