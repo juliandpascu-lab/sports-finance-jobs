@@ -1,10 +1,10 @@
 {
-  "run_time": "2026-11-10T19:41:49.430889Z",
+  "run_time": "2026-11-11T19:34:21.745609Z",
   "first_run_date": "2026-11-08",
-  "days_with_success": 3,
-  "open": 16079,
-  "new_today": 533,
-  "removed_today": 490,
+  "days_with_success": 4,
+  "open": 16207,
+  "new_today": 544,
+  "removed_today": 434,
   "sources": [
     {
       "name": "baltimoreorioles",
@@ -14,7 +14,7 @@
     {
       "name": "nflcareers",
       "ok": true,
-      "count": 45
+      "count": 46
     },
     {
       "name": "lions",
@@ -49,7 +49,7 @@
     {
       "name": "fanaticsfbg",
       "ok": true,
-      "count": 91
+      "count": 92
     },
     {
       "name": "theathletic",
@@ -59,7 +59,7 @@
     {
       "name": "legend",
       "ok": true,
-      "count": 27
+      "count": 25
     },
     {
       "name": "flosports",
@@ -69,7 +69,7 @@
     {
       "name": "novig",
       "ok": true,
-      "count": 11
+      "count": 13
     },
     {
       "name": "onyx",
@@ -94,7 +94,7 @@
     {
       "name": "financialtechnologypartners",
       "ok": true,
-      "count": 20
+      "count": 21
     },
     {
       "name": "glcadvisors",
@@ -129,7 +129,7 @@
     {
       "name": "successacademycharterschool",
       "ok": true,
-      "count": 93
+      "count": 94
     },
     {
       "name": "taketwo",
@@ -139,42 +139,42 @@
     {
       "name": "utaustin",
       "ok": true,
-      "count": 636
+      "count": 639
     },
     {
       "name": "nutrabolt",
       "ok": true,
-      "count": 18
+      "count": 20
     },
     {
       "name": "fidelity",
       "ok": true,
-      "count": 857
+      "count": 865
     },
     {
       "name": "southwest",
       "ok": true,
-      "count": 33
+      "count": 37
     },
     {
       "name": "tysonfoods",
       "ok": true,
-      "count": 722
+      "count": 744
     },
     {
       "name": "jbhunt",
       "ok": true,
-      "count": 448
+      "count": 437
     },
     {
       "name": "uasys",
       "ok": true,
-      "count": 792
+      "count": 804
     },
     {
       "name": "q2",
       "ok": true,
-      "count": 64
+      "count": 62
     },
     {
       "name": "umb",
@@ -184,17 +184,17 @@
     {
       "name": "capitalone",
       "ok": true,
-      "count": 340
+      "count": 338
     },
     {
       "name": "blackrock",
       "ok": true,
-      "count": 280
+      "count": 291
     },
     {
       "name": "barclays",
       "ok": true,
-      "count": 623
+      "count": 622
     },
     {
       "name": "guggenheim",
@@ -204,52 +204,52 @@
     {
       "name": "morningstar",
       "ok": true,
-      "count": 184
+      "count": 192
     },
     {
       "name": "keybank",
       "ok": true,
-      "count": 572
+      "count": 581
     },
     {
       "name": "jll",
       "ok": true,
-      "count": 593
+      "count": 589
     },
     {
       "name": "intuitive",
       "ok": true,
-      "count": 849
+      "count": 867
     },
     {
       "name": "rrdonnelley",
       "ok": true,
-      "count": 605
+      "count": 613
     },
     {
       "name": "experian",
       "ok": true,
-      "count": 395
+      "count": 398
     },
     {
       "name": "oraclecareers",
       "ok": true,
-      "count": 2836
+      "count": 2848
     },
     {
       "name": "jpmorgan",
       "ok": true,
-      "count": 4092
+      "count": 4116
     },
     {
       "name": "commercebank",
       "ok": true,
-      "count": 165
+      "count": 166
     },
     {
       "name": "federalreserve",
       "ok": true,
-      "count": 171
+      "count": 170
     }
   ]
 }
