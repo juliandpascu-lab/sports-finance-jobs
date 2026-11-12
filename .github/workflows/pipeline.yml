@@ -2,7 +2,8 @@ name: Daily Sports Finance Job Watcher
 
 on:
   schedule:
-    - cron: "17 12 * * *"
+    # 23:00 UTC = 5:00 PM Central while America/Chicago is on CST.
+    - cron: "0 23 * * *"
   workflow_dispatch:
 
 permissions:

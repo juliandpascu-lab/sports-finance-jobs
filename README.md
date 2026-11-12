@@ -15,7 +15,8 @@ notes; the resume file itself is never committed or uploaded.
 
 ## Current status
 
-The first live collection is complete. The daily workflow runs at 12:17 UTC,
+The first live collection is complete. The daily workflow runs at 23:00 UTC,
+which is 5:00 PM Central during the current CST season,
 updates the raw snapshots and normalized history, opens or updates that day's
 GitHub Issue, pushes the generated data commit, and deploys the refreshed site.
 
