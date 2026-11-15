@@ -1,15 +1,15 @@
 {
-  "run_time": "2026-11-14T02:48:44.618177Z",
+  "run_time": "2026-11-15T02:16:44.447763Z",
   "first_run_date": "2026-11-08",
-  "days_with_success": 7,
-  "open": 16263,
-  "new_today": 346,
-  "removed_today": 351,
+  "days_with_success": 8,
+  "open": 16141,
+  "new_today": 238,
+  "removed_today": 366,
   "sources": [
     {
       "name": "baltimoreorioles",
       "ok": true,
-      "count": 7
+      "count": 8
     },
     {
       "name": "nflcareers",
@@ -79,7 +79,7 @@
     {
       "name": "brodie_rec_league",
       "ok": true,
-      "count": 34
+      "count": 42
     },
     {
       "name": "campusapps",
@@ -129,7 +129,7 @@
     {
       "name": "successacademycharterschool",
       "ok": true,
-      "count": 89
+      "count": 88
     },
     {
       "name": "taketwo",
@@ -138,8 +138,8 @@
     },
     {
       "name": "utaustin",
-      "ok": false,
-      "count": 0
+      "ok": true,
+      "count": 645
     },
     {
       "name": "nutrabolt",
@@ -148,18 +148,18 @@
     },
     {
       "name": "fidelity",
-      "ok": false,
-      "count": 0
+      "ok": true,
+      "count": 895
     },
     {
       "name": "southwest",
-      "ok": false,
-      "count": 0
+      "ok": true,
+      "count": 29
     },
     {
       "name": "tysonfoods",
-      "ok": false,
-      "count": 0
+      "ok": true,
+      "count": 728
     },
     {
       "name": "jbhunt",
@@ -168,53 +168,53 @@
     },
     {
       "name": "uasys",
-      "ok": false,
-      "count": 0
+      "ok": true,
+      "count": 795
     },
     {
       "name": "q2",
-      "ok": false,
-      "count": 0
+      "ok": true,
+      "count": 66
     },
     {
       "name": "umb",
-      "ok": false,
-      "count": 0
+      "ok": true,
+      "count": 156
     },
     {
       "name": "capitalone",
       "ok": true,
-      "count": 335
+      "count": 336
     },
     {
       "name": "blackrock",
-      "ok": false,
-      "count": 0
+      "ok": true,
+      "count": 273
     },
     {
       "name": "barclays",
       "ok": true,
-      "count": 654
+      "count": 649
     },
     {
       "name": "guggenheim",
-      "ok": false,
-      "count": 0
+      "ok": true,
+      "count": 5
     },
     {
       "name": "morningstar",
-      "ok": false,
-      "count": 0
+      "ok": true,
+      "count": 190
     },
     {
       "name": "keybank",
-      "ok": false,
-      "count": 0
+      "ok": true,
+      "count": 566
     },
     {
       "name": "jll",
-      "ok": false,
-      "count": 0
+      "ok": true,
+      "count": 582
     },
     {
       "name": "intuitive",
@@ -229,27 +229,27 @@
     {
       "name": "experian",
       "ok": true,
-      "count": 390
+      "count": 389
     },
     {
       "name": "oraclecareers",
       "ok": true,
-      "count": 2863
+      "count": 2848
     },
     {
       "name": "jpmorgan",
       "ok": true,
-      "count": 4078
+      "count": 4058
     },
     {
       "name": "commercebank",
-      "ok": false,
-      "count": 0
+      "ok": true,
+      "count": 168
     },
     {
       "name": "federalreserve",
-      "ok": false,
-      "count": 0
+      "ok": true,
+      "count": 147
     }
   ]
 }
