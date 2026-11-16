@@ -1,10 +1,10 @@
 {
-  "run_time": "2026-11-15T02:16:44.447763Z",
+  "run_time": "2026-11-16T02:29:24.919636Z",
   "first_run_date": "2026-11-08",
-  "days_with_success": 8,
-  "open": 16141,
-  "new_today": 238,
-  "removed_today": 366,
+  "days_with_success": 9,
+  "open": 16059,
+  "new_today": 24,
+  "removed_today": 112,
   "sources": [
     {
       "name": "baltimoreorioles",
@@ -149,17 +149,17 @@
     {
       "name": "fidelity",
       "ok": true,
-      "count": 895
+      "count": 891
     },
     {
       "name": "southwest",
       "ok": true,
-      "count": 29
+      "count": 28
     },
     {
       "name": "tysonfoods",
       "ok": true,
-      "count": 728
+      "count": 717
     },
     {
       "name": "jbhunt",
@@ -169,7 +169,7 @@
     {
       "name": "uasys",
       "ok": true,
-      "count": 795
+      "count": 786
     },
     {
       "name": "q2",
@@ -189,12 +189,12 @@
     {
       "name": "blackrock",
       "ok": true,
-      "count": 273
+      "count": 267
     },
     {
       "name": "barclays",
       "ok": true,
-      "count": 649
+      "count": 644
     },
     {
       "name": "guggenheim",
@@ -204,17 +204,17 @@
     {
       "name": "morningstar",
       "ok": true,
-      "count": 190
+      "count": 189
     },
     {
       "name": "keybank",
       "ok": true,
-      "count": 566
+      "count": 564
     },
     {
       "name": "jll",
       "ok": true,
-      "count": 582
+      "count": 570
     },
     {
       "name": "intuitive",
@@ -234,12 +234,12 @@
     {
       "name": "oraclecareers",
       "ok": true,
-      "count": 2848
+      "count": 2835
     },
     {
       "name": "jpmorgan",
       "ok": true,
-      "count": 4058
+      "count": 4039
     },
     {
       "name": "commercebank",
@@ -249,7 +249,7 @@
     {
       "name": "federalreserve",
       "ok": true,
-      "count": 147
+      "count": 148
     }
   ]
 }
