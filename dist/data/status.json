@@ -1,10 +1,10 @@
 {
-  "run_time": "2026-11-18T03:57:34.964897Z",
+  "run_time": "2026-11-19T03:55:30.628647Z",
   "first_run_date": "2026-11-08",
-  "days_with_success": 11,
-  "open": 16115,
-  "new_today": 564,
-  "removed_today": 608,
+  "days_with_success": 12,
+  "open": 16159,
+  "new_today": 539,
+  "removed_today": 565,
   "sources": [
     {
       "name": "baltimoreorioles",
@@ -14,7 +14,7 @@
     {
       "name": "nflcareers",
       "ok": true,
-      "count": 39
+      "count": 37
     },
     {
       "name": "lions",
@@ -29,7 +29,7 @@
     {
       "name": "hudl",
       "ok": true,
-      "count": 44
+      "count": 48
     },
     {
       "name": "geniussports",
@@ -39,7 +39,7 @@
     {
       "name": "seatgeek",
       "ok": true,
-      "count": 37
+      "count": 34
     },
     {
       "name": "sbnation",
@@ -49,12 +49,12 @@
     {
       "name": "fanaticsfbg",
       "ok": true,
-      "count": 104
+      "count": 105
     },
     {
       "name": "theathletic",
       "ok": true,
-      "count": 11
+      "count": 12
     },
     {
       "name": "legend",
@@ -84,7 +84,7 @@
     {
       "name": "campusapps",
       "ok": true,
-      "count": 10
+      "count": 6
     },
     {
       "name": "ducerapartnerscampus",
@@ -94,7 +94,7 @@
     {
       "name": "financialtechnologypartners",
       "ok": true,
-      "count": 24
+      "count": 23
     },
     {
       "name": "glcadvisors",
@@ -119,47 +119,47 @@
     {
       "name": "fourhands",
       "ok": true,
-      "count": 30
+      "count": 29
     },
     {
       "name": "capitalfarmcredit",
       "ok": true,
-      "count": 11
+      "count": 12
     },
     {
       "name": "successacademycharterschool",
       "ok": true,
-      "count": 87
+      "count": 89
     },
     {
       "name": "taketwo",
       "ok": true,
-      "count": 32
+      "count": 33
     },
     {
       "name": "utaustin",
       "ok": true,
-      "count": 635
+      "count": 623
     },
     {
       "name": "nutrabolt",
       "ok": true,
-      "count": 21
+      "count": 22
     },
     {
       "name": "fidelity",
       "ok": true,
-      "count": 886
+      "count": 897
     },
     {
       "name": "southwest",
       "ok": true,
-      "count": 31
+      "count": 27
     },
     {
       "name": "tysonfoods",
       "ok": true,
-      "count": 772
+      "count": 747
     },
     {
       "name": "jbhunt",
@@ -169,22 +169,22 @@
     {
       "name": "uasys",
       "ok": true,
-      "count": 811
+      "count": 814
     },
     {
       "name": "q2",
       "ok": true,
-      "count": 63
+      "count": 64
     },
     {
       "name": "umb",
       "ok": true,
-      "count": 169
+      "count": 167
     },
     {
       "name": "capitalone",
       "ok": true,
-      "count": 334
+      "count": 331
     },
     {
       "name": "blackrock",
@@ -194,7 +194,7 @@
     {
       "name": "barclays",
       "ok": true,
-      "count": 669
+      "count": 681
     },
     {
       "name": "guggenheim",
@@ -204,52 +204,52 @@
     {
       "name": "morningstar",
       "ok": true,
-      "count": 194
+      "count": 189
     },
     {
       "name": "keybank",
       "ok": true,
-      "count": 573
+      "count": 605
     },
     {
       "name": "jll",
       "ok": true,
-      "count": 567
+      "count": 570
     },
     {
       "name": "intuitive",
       "ok": true,
-      "count": 853
+      "count": 848
     },
     {
       "name": "rrdonnelley",
       "ok": true,
-      "count": 615
+      "count": 620
     },
     {
       "name": "experian",
       "ok": true,
-      "count": 384
+      "count": 391
     },
     {
       "name": "oraclecareers",
       "ok": true,
-      "count": 2867
+      "count": 2876
     },
     {
       "name": "jpmorgan",
       "ok": true,
-      "count": 4003
+      "count": 4027
     },
     {
       "name": "commercebank",
       "ok": true,
-      "count": 165
+      "count": 160
     },
     {
       "name": "federalreserve",
       "ok": true,
-      "count": 150
+      "count": 148
     }
   ]
 }
