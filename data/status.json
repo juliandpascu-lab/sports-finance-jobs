@@ -1,10 +1,10 @@
 {
-  "run_time": "2026-11-22T02:44:19.688538Z",
+  "run_time": "2026-11-23T03:22:01.749371Z",
   "first_run_date": "2026-11-08",
-  "days_with_success": 15,
-  "open": 16102,
-  "new_today": 33,
-  "removed_today": 133,
+  "days_with_success": 16,
+  "open": 16023,
+  "new_today": 12,
+  "removed_today": 93,
   "sources": [
     {
       "name": "baltimoreorioles",
@@ -139,7 +139,7 @@
     {
       "name": "utaustin",
       "ok": true,
-      "count": 640
+      "count": 635
     },
     {
       "name": "nutrabolt",
@@ -149,32 +149,32 @@
     {
       "name": "fidelity",
       "ok": true,
-      "count": 879
+      "count": 875
     },
     {
       "name": "southwest",
       "ok": true,
-      "count": 27
+      "count": 26
     },
     {
       "name": "tysonfoods",
       "ok": true,
-      "count": 745
+      "count": 741
     },
     {
       "name": "jbhunt",
       "ok": true,
-      "count": 425
+      "count": 424
     },
     {
       "name": "uasys",
       "ok": true,
-      "count": 822
+      "count": 818
     },
     {
       "name": "q2",
       "ok": true,
-      "count": 61
+      "count": 60
     },
     {
       "name": "umb",
@@ -184,17 +184,17 @@
     {
       "name": "capitalone",
       "ok": true,
-      "count": 330
+      "count": 328
     },
     {
       "name": "blackrock",
       "ok": true,
-      "count": 284
+      "count": 283
     },
     {
       "name": "barclays",
       "ok": true,
-      "count": 647
+      "count": 632
     },
     {
       "name": "guggenheim",
@@ -209,22 +209,22 @@
     {
       "name": "keybank",
       "ok": true,
-      "count": 600
+      "count": 595
     },
     {
       "name": "jll",
       "ok": true,
-      "count": 571
+      "count": 560
     },
     {
       "name": "intuitive",
       "ok": true,
-      "count": 853
+      "count": 852
     },
     {
       "name": "rrdonnelley",
       "ok": true,
-      "count": 624
+      "count": 623
     },
     {
       "name": "experian",
@@ -234,12 +234,12 @@
     {
       "name": "oraclecareers",
       "ok": true,
-      "count": 2869
+      "count": 2857
     },
     {
       "name": "jpmorgan",
       "ok": true,
-      "count": 4015
+      "count": 4004
     },
     {
       "name": "commercebank",
