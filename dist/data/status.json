@@ -1,10 +1,10 @@
 {
-  "run_time": "2026-11-26T04:35:30.630810Z",
+  "run_time": "2026-11-27T04:39:29.766569Z",
   "first_run_date": "2026-11-08",
-  "days_with_success": 19,
-  "open": 16084,
-  "new_today": 386,
-  "removed_today": 401,
+  "days_with_success": 20,
+  "open": 16030,
+  "new_today": 143,
+  "removed_today": 221,
   "sources": [
     {
       "name": "baltimoreorioles",
@@ -29,12 +29,12 @@
     {
       "name": "hudl",
       "ok": true,
-      "count": 44
+      "count": 42
     },
     {
       "name": "geniussports",
       "ok": true,
-      "count": 35
+      "count": 33
     },
     {
       "name": "seatgeek",
@@ -59,7 +59,7 @@
     {
       "name": "legend",
       "ok": true,
-      "count": 25
+      "count": 22
     },
     {
       "name": "flosports",
@@ -79,7 +79,7 @@
     {
       "name": "brodie_rec_league",
       "ok": true,
-      "count": 50
+      "count": 49
     },
     {
       "name": "campusapps",
@@ -139,7 +139,7 @@
     {
       "name": "utaustin",
       "ok": true,
-      "count": 637
+      "count": 635
     },
     {
       "name": "nutrabolt",
@@ -149,27 +149,27 @@
     {
       "name": "fidelity",
       "ok": true,
-      "count": 860
+      "count": 856
     },
     {
       "name": "southwest",
       "ok": true,
-      "count": 26
+      "count": 23
     },
     {
       "name": "tysonfoods",
       "ok": true,
-      "count": 757
+      "count": 741
     },
     {
       "name": "jbhunt",
       "ok": true,
-      "count": 401
+      "count": 403
     },
     {
       "name": "uasys",
       "ok": true,
-      "count": 838
+      "count": 830
     },
     {
       "name": "q2",
@@ -184,17 +184,17 @@
     {
       "name": "capitalone",
       "ok": true,
-      "count": 330
+      "count": 331
     },
     {
       "name": "blackrock",
       "ok": true,
-      "count": 291
+      "count": 293
     },
     {
       "name": "barclays",
       "ok": true,
-      "count": 656
+      "count": 655
     },
     {
       "name": "guggenheim",
@@ -204,22 +204,22 @@
     {
       "name": "morningstar",
       "ok": true,
-      "count": 184
+      "count": 181
     },
     {
       "name": "keybank",
       "ok": true,
-      "count": 627
+      "count": 624
     },
     {
       "name": "jll",
       "ok": true,
-      "count": 556
+      "count": 546
     },
     {
       "name": "intuitive",
       "ok": true,
-      "count": 857
+      "count": 859
     },
     {
       "name": "rrdonnelley",
@@ -229,17 +229,17 @@
     {
       "name": "experian",
       "ok": true,
-      "count": 417
+      "count": 419
     },
     {
       "name": "oraclecareers",
       "ok": true,
-      "count": 2872
+      "count": 2880
     },
     {
       "name": "jpmorgan",
       "ok": true,
-      "count": 3980
+      "count": 3967
     },
     {
       "name": "commercebank",
